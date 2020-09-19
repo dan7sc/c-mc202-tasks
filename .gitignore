@@ -1,3 +1,5 @@
 *.o
 *.exe
 tarefa*/testes/*.out
+
+tarefa01/megasena
