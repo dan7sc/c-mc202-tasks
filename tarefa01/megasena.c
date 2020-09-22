@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#define NUM_APOSTADORES 1000
-#define VETOR_SIZE 6
+#define MAX_APOSTADORES 1000
+#define TAM_VETOR 6
 #define MATRIZ_LIN 6000
 #define MATRIZ_COL 10
 
@@ -19,6 +19,22 @@ void le_matriz(int lin, int col,  int matriz[][MATRIZ_COL]) {
     }
 }
 
+int obtem_matriz_linha(int elemento) {
+    return (elemento - 1) / 10;
+}
+
+int obtem_matriz_coluna(int elemento) {
+    if(elemento > 10) {
+        if(elemento % 10 == 0) {
+            return 9;
+        } else {
+            return (elemento % 10) - 1;
+        }
+    } else {
+        return elemento - 1;
+    }
+}
+
 int compara_elementos_vetor_e_submatriz
 (
  int vector[],
@@ -30,22 +46,11 @@ int compara_elementos_vetor_e_submatriz
     int elemento = 0;
     int numero_de_elementos_iguais = 0;
 
-    for(int i = 0; i < VETOR_SIZE; i++) {
+    for(int i = 0; i < TAM_VETOR; i++) {
         elemento = vector[i];
 
-        // Obtem indice da linha na matriz
-        mlin = (elemento - 1) / 10;
-
-        // Obtem indice da coluna na matriz
-        if(elemento > 10) {
-            if(elemento % 10 == 0) {
-                mcol = 9;
-            } else {
-                mcol = (elemento % 10) - 1;
-            }
-        } else {
-            mcol = elemento - 1;
-        }
+        mlin = obtem_matriz_linha(elemento);
+        mcol = obtem_matriz_coluna(elemento);
 
         if(matriz[mlin + indice_zero][mcol] == 1) {
             numero_de_elementos_iguais++;
@@ -91,9 +96,9 @@ void distribui_premios
 int main() {
     int numero_de_apostadores;
     double premio_total;
-    int numeros_sorteados[VETOR_SIZE];
+    int numeros_sorteados[TAM_VETOR];
     int volante[MATRIZ_LIN][MATRIZ_COL];
-    int numeros_sorteados_do_apostador[NUM_APOSTADORES];
+    int numeros_sorteados_do_apostador[MAX_APOSTADORES];
     int quantidade_de_premiados[] = { 0, 0, 0 };
     int inicio_submatriz = 0;
     int mlin;
@@ -104,7 +109,7 @@ int main() {
     mlin = numero_de_apostadores * 6;
 
     le_matriz(mlin, MATRIZ_COL, volante);
-    le_vetor(VETOR_SIZE, numeros_sorteados);
+    le_vetor(TAM_VETOR, numeros_sorteados);
 
     for(int i = 0; i < numero_de_apostadores; i++) {
         numeros_sorteados_do_apostador[i] =
