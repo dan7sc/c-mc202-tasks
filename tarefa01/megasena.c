@@ -11,27 +11,11 @@ void le_vetor(int size, int vetor[]) {
     }
 }
 
-void imprime_vetor(int size, int vetor[]) {
-    for (int i = 0; i < size; i++) {
-        printf("%d ", vetor[i]);
-    }
-    printf("\n");
-}
-
 void le_matriz(int lin, int col,  int matriz[][MATRIZ_COL]) {
     for(int i = 0; i < lin; i++) {
         for (int j = 0; j < col; j++) {
             scanf("%d", &matriz[i][j]);
         }
-    }
-}
-
-void imprime_matriz(int lin, int col, int matriz[][MATRIZ_COL]) {
-    for(int i = 0; i < lin; i++) {
-        for (int j = 0; j < col; j++) {
-            printf("%d ", matriz[i][j]);
-        }
-        printf("\n");
     }
 }
 
