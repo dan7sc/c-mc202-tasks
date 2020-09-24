@@ -38,8 +38,6 @@ int main() {
     scanf("%d", &num_turmas);
     scanf("%d", &num_operacoes);
 
-    /* printf("%d %d\n", num_turmas, num_operacoes); */
-
     for(int k = 0; k < num_turmas; k++) {
         scanf("%d", &turmas[k].qtd);
         for(int i = 0; i < turmas[k].qtd; i++) {
@@ -59,7 +57,10 @@ int main() {
             printf("%s\n", aluno.nome);
             break;
         case 2:
-            printf("operacao 2\n");
+            /* printf("operacao 2\n"); */
+            scanf("%d", &turma);
+            aluno = procura_velho_na_turma(turmas, num_turmas, turma);
+            printf("%s\n", aluno.sobrenome);
             break;
         case 3:
             printf("operacao 3\n");
