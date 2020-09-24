@@ -48,3 +48,19 @@ Aluno procura_velho_todas_turmas(Turma t[], int qtd_turmas) {
 
     return t[turma].alunos[mais_velho];
 }
+
+Aluno procura_novo_todas_turmas(Turma t[], int qtd_turmas) {
+    int mais_novo = 0;
+    int turma = 0;
+
+    for(int i = 0; i < qtd_turmas; i++) {
+        for(int k = 0; k < t[i].qtd; k++) {
+            if(t[turma].alunos[mais_novo].nascimento.ano <= t[i].alunos[k].nascimento.ano) {
+                mais_novo = k;
+                turma = i;
+            }
+        }
+    }
+
+    return t[turma].alunos[mais_novo];
+}

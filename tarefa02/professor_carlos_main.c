@@ -68,7 +68,9 @@ int main() {
             printf("%s\n", aluno.nome);
             break;
         case 4:
-            printf("operacao 4\n");
+            /* printf("operacao 4\n"); */
+            aluno = procura_novo_todas_turmas(turmas, num_turmas);
+            printf("%s\n", aluno.sobrenome);
             break;
         case 5:
             printf("operacao 5\n");
