@@ -64,3 +64,13 @@ Aluno procura_novo_todas_turmas(Turma t[], int qtd_turmas) {
 
     return t[turma].alunos[mais_novo];
 }
+
+int add_aluno(Turma t[], Aluno A, int j) {
+    int qtd_alunos = 0;
+    int tam_alunos = t[j].qtd;
+
+    t[j].alunos[tam_alunos] = A;
+    qtd_alunos = ++t[j].qtd;
+
+    return qtd_alunos;
+}

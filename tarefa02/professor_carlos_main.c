@@ -76,7 +76,12 @@ int main() {
             printf("operacao 5\n");
             break;
         case 6:
-            printf("operacao 6\n");
+            /* printf("operacao 6\n"); */
+            scanf("%d", &turma);
+            le_nome_completo(&aluno);
+            le_data(&aluno.nascimento);
+            turmas[turma].qtd = add_aluno(turmas, aluno, turma);
+            printf("%d\n", turmas[turma].qtd);
             break;
         case 7:
             printf("operacao 7\n");
