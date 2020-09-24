@@ -28,35 +28,55 @@ void imprime_data(Data data) {
 int main() {
     int num_turmas = 0;
     int num_operacoes = 0;
-    int num_alunos = 0;
     int operacao = 0;
     int contador = 0;
+    int turma = 0;
     Turma turmas[MAX_TURMAS];
+
+    Aluno aluno;
 
     scanf("%d", &num_turmas);
     scanf("%d", &num_operacoes);
 
-    printf("%d %d\n", num_turmas, num_operacoes);
+    /* printf("%d %d\n", num_turmas, num_operacoes); */
 
     for(int k = 0; k < num_turmas; k++) {
-        scanf("%d", &num_alunos);
-        for(int i = 0; i < num_alunos; i++) {
+        scanf("%d", &turmas[k].qtd);
+        for(int i = 0; i < turmas[k].qtd; i++) {
             le_nome_completo(&turmas[k].alunos[i]);
             le_data(&turmas[k].alunos[i].nascimento);
-        }
-
-        printf("%d\n", num_alunos);
-        for(int i = 0; i < num_alunos; i++) {
-            imprime_nome_completo(turmas[k].alunos[i]);
-            printf(" ");
-            imprime_data(turmas[k].alunos[i].nascimento);
-            printf("\n");
         }
     }
 
     while(contador < num_operacoes) {
         scanf("%d", &operacao);
-        printf("%d\n", operacao);
+
+        switch(operacao) {
+        case 1:
+            /* printf("operacao 1\n"); */
+            scanf("%d", &turma);
+            aluno = procura_novo_na_turma(turmas, num_turmas, turma);
+            printf("%s\n", aluno.nome);
+            break;
+        case 2:
+            printf("operacao 2\n");
+            break;
+        case 3:
+            printf("operacao 3\n");
+            break;
+        case 4:
+            printf("operacao 4\n");
+            break;
+        case 5:
+            printf("operacao 5\n");
+            break;
+        case 6:
+            printf("operacao 6\n");
+            break;
+        case 7:
+            printf("operacao 7\n");
+            break;
+        }
 
         contador++;
     }
