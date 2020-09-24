@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "professor_carlos.h"
 
+#define MAX_STRING 15
+
 Aluno procura_novo_na_turma(Turma t[], int qtd_turmas, int j) {
     int mais_novo = 0;
 
@@ -71,6 +73,24 @@ int add_aluno(Turma t[], Aluno A, int j) {
 
     t[j].alunos[tam_alunos] = A;
     qtd_alunos = ++t[j].qtd;
+
+    return qtd_alunos;
+}
+
+int remove_aluno(Turma t[], int j) {
+    int qtd_alunos = 0;
+    int indice = t[j].qtd - 1;
+
+    for(int i = 0; i < MAX_STRING; i++) {
+        t[j].alunos[indice].nome[i] = '\0';
+        t[j].alunos[indice].sobrenome[i] = '\0';
+    }
+
+    t[j].alunos[indice].nascimento.dia = 0;
+    t[j].alunos[indice].nascimento.mes = 0;
+    t[j].alunos[indice].nascimento.ano = 0;
+
+    qtd_alunos = --t[j].qtd;
 
     return qtd_alunos;
 }

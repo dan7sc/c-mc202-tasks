@@ -84,7 +84,9 @@ int main() {
             printf("%d\n", turmas[turma].qtd);
             break;
         case 7:
-            printf("operacao 7\n");
+            /* printf("operacao 7\n"); */
+            turmas[turma].qtd = remove_aluno(turmas, turma);
+            printf("%d\n", turmas[turma].qtd);
             break;
         }
 
