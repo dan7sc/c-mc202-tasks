@@ -11,8 +11,6 @@
 int compara_strings(char string_a[], char string_b[]) {
     int indice = IGUAL;
 
-    /* printf("A: %s\n", string_a); */
-    /* printf("B: %s\n", string_b); */
     for(int i = 0; indice == IGUAL && (string_a[i] != '\0' || string_b[i] != '\0'); i++) {
         if (string_a[i] < string_b[i]) {
             indice = MENOR;
@@ -33,25 +31,46 @@ Aluno procura_novo_na_turma(Turma t[], int qtd_turmas, int j) {
     for(int i = 0; i < qtd_turmas; i++) {
         if(i == j) {
             for(int k = 0; k < t[j].qtd; k++) {
-                if(t[j].alunos[mais_novo].nascimento.ano <= t[j].alunos[k].nascimento.ano) {
-                    if(t[j].alunos[mais_novo].nascimento.ano == t[j].alunos[k].nascimento.ano) {
-                        tam_string_a = compara_strings(t[j].alunos[mais_novo].nome, t[j].alunos[k].nome);
+                if(
+                    t[j].alunos[mais_novo].nascimento.ano < t[i].alunos[k].nascimento.ano
+                    ) {
+                    mais_novo = k;
+                }
+                else if(
+                    t[j].alunos[mais_novo].nascimento.ano == t[i].alunos[k].nascimento.ano &&
+                    t[j].alunos[mais_novo].nascimento.mes < t[i].alunos[k].nascimento.mes
+                    ) {
+                    mais_novo = k;
+                }
+                else if(
+                    t[j].alunos[mais_novo].nascimento.ano == t[i].alunos[k].nascimento.ano &&
+                    t[j].alunos[mais_novo].nascimento.mes == t[i].alunos[k].nascimento.mes &&
+                    t[j].alunos[mais_novo].nascimento.dia < t[i].alunos[k].nascimento.dia
+                    ) {
+                    mais_novo = k;
+                }
+                else if(
+                    t[j].alunos[mais_novo].nascimento.ano == t[i].alunos[k].nascimento.ano &&
+                    t[j].alunos[mais_novo].nascimento.mes == t[i].alunos[k].nascimento.mes &&
+                    t[j].alunos[mais_novo].nascimento.dia == t[i].alunos[k].nascimento.dia
+                    ) {
+                    tam_string_a = compara_strings(
+                        t[j].alunos[mais_novo].nome, t[j].alunos[k].nome
+                        );
+                    if(tam_string_a == MAIOR) {
+                        mais_novo = k;
+                    } else if(tam_string_a == IGUAL) {
+                        tam_string_a = compara_strings(
+                            t[j].alunos[mais_novo].sobrenome, t[j].alunos[k].sobrenome
+                            );
                         if(tam_string_a == MAIOR) {
                             mais_novo = k;
-                        } else if(tam_string_a == IGUAL) {
-                            tam_string_a = compara_strings(t[j].alunos[mais_novo].sobrenome, t[j].alunos[k].sobrenome);
-                            if(tam_string_a == MAIOR) {
-                                mais_novo = k;
-                            }
                         }
-                    } else {
-                        mais_novo = k;
                     }
                 }
             }
         }
     }
-
     return t[j].alunos[mais_novo];
 }
 
@@ -62,25 +81,46 @@ Aluno procura_velho_na_turma(Turma t[], int qtd_turmas, int j) {
     for(int i = 0; i < qtd_turmas; i++) {
         if(i == j) {
             for(int k = 0; k < t[j].qtd; k++) {
-                if(t[j].alunos[mais_velho].nascimento.ano >= t[j].alunos[k].nascimento.ano) {
-                    if(t[j].alunos[mais_velho].nascimento.ano == t[j].alunos[k].nascimento.ano) {
-                        tam_string_a = compara_strings(t[j].alunos[mais_velho].nome, t[j].alunos[k].nome);
+                if(
+                    t[j].alunos[mais_velho].nascimento.ano > t[i].alunos[k].nascimento.ano
+                    ) {
+                    mais_velho = k;
+                }
+                else if(
+                    t[j].alunos[mais_velho].nascimento.ano == t[i].alunos[k].nascimento.ano &&
+                    t[j].alunos[mais_velho].nascimento.mes > t[i].alunos[k].nascimento.mes
+                    ) {
+                    mais_velho = k;
+                }
+                else if(
+                    t[j].alunos[mais_velho].nascimento.ano == t[i].alunos[k].nascimento.ano &&
+                    t[j].alunos[mais_velho].nascimento.mes == t[i].alunos[k].nascimento.mes &&
+                    t[j].alunos[mais_velho].nascimento.dia > t[i].alunos[k].nascimento.dia
+                    ) {
+                    mais_velho = k;
+                }
+                else if(
+                    t[j].alunos[mais_velho].nascimento.ano == t[i].alunos[k].nascimento.ano &&
+                    t[j].alunos[mais_velho].nascimento.mes == t[i].alunos[k].nascimento.mes &&
+                    t[j].alunos[mais_velho].nascimento.dia == t[i].alunos[k].nascimento.dia
+                    ) {
+                    tam_string_a = compara_strings(
+                        t[j].alunos[mais_velho].nome, t[j].alunos[k].nome
+                        );
+                    if(tam_string_a == MAIOR) {
+                        mais_velho = k;
+                    } else if(tam_string_a == IGUAL) {
+                        tam_string_a = compara_strings(
+                            t[j].alunos[mais_velho].sobrenome, t[j].alunos[k].sobrenome
+                            );
                         if(tam_string_a == MAIOR) {
                             mais_velho = k;
-                        } else if(tam_string_a == IGUAL) {
-                            tam_string_a = compara_strings(t[j].alunos[mais_velho].sobrenome, t[j].alunos[k].sobrenome);
-                            if(tam_string_a == MAIOR) {
-                                mais_velho = k;
-                            }
                         }
-                    } else {
-                        mais_velho = k;
                     }
                 }
             }
         }
     }
-
     return t[j].alunos[mais_velho];
 }
 
@@ -91,27 +131,50 @@ Aluno procura_velho_todas_turmas(Turma t[], int qtd_turmas) {
 
     for(int i = 0; i < qtd_turmas; i++) {
         for(int k = 0; k < t[i].qtd; k++) {
-            if(t[turma].alunos[mais_velho].nascimento.ano >= t[i].alunos[k].nascimento.ano) {
-                if(t[turma].alunos[mais_velho].nascimento.ano == t[i].alunos[k].nascimento.ano) {
-                    tam_string_a = compara_strings(t[turma].alunos[mais_velho].nome, t[turma].alunos[k].nome);
+            if(
+                t[turma].alunos[mais_velho].nascimento.ano > t[i].alunos[k].nascimento.ano
+                ) {
+                mais_velho = k;
+                turma = i;
+            }
+            else if(
+                t[turma].alunos[mais_velho].nascimento.ano == t[i].alunos[k].nascimento.ano &&
+                t[turma].alunos[mais_velho].nascimento.mes > t[i].alunos[k].nascimento.mes
+                ) {
+                mais_velho = k;
+                turma = i;
+            }
+            else if(
+                t[turma].alunos[mais_velho].nascimento.ano == t[i].alunos[k].nascimento.ano &&
+                t[turma].alunos[mais_velho].nascimento.mes == t[i].alunos[k].nascimento.mes &&
+                t[turma].alunos[mais_velho].nascimento.dia > t[i].alunos[k].nascimento.dia
+                ) {
+                mais_velho = k;
+                turma = i;
+            }
+            else if(
+                t[turma].alunos[mais_velho].nascimento.ano == t[i].alunos[k].nascimento.ano &&
+                t[turma].alunos[mais_velho].nascimento.mes == t[i].alunos[k].nascimento.mes &&
+                t[turma].alunos[mais_velho].nascimento.dia == t[i].alunos[k].nascimento.dia
+                ) {
+                tam_string_a = compara_strings(
+                    t[turma].alunos[mais_velho].nome, t[turma].alunos[k].nome
+                    );
+                if(tam_string_a == MAIOR) {
+                    mais_velho = k;
+                    turma = i;
+                } else if(tam_string_a == IGUAL) {
+                    tam_string_a = compara_strings(
+                        t[turma].alunos[mais_velho].sobrenome, t[turma].alunos[k].sobrenome
+                        );
                     if(tam_string_a == MAIOR) {
                         mais_velho = k;
                         turma = i;
-                    } else if(tam_string_a == IGUAL) {
-                        tam_string_a = compara_strings(t[turma].alunos[mais_velho].sobrenome, t[turma].alunos[k].sobrenome);
-                        if(tam_string_a == MAIOR) {
-                            mais_velho = k;
-                            turma = i;
-                        }
                     }
-                } else {
-                    mais_velho = k;
-                    turma = i;
                 }
             }
         }
     }
-
     return t[turma].alunos[mais_velho];
 }
 
@@ -122,27 +185,50 @@ Aluno procura_novo_todas_turmas(Turma t[], int qtd_turmas) {
 
     for(int i = 0; i < qtd_turmas; i++) {
         for(int k = 0; k < t[i].qtd; k++) {
-            if(t[turma].alunos[mais_novo].nascimento.ano <= t[i].alunos[k].nascimento.ano) {
-                if(t[turma].alunos[mais_novo].nascimento.ano == t[i].alunos[k].nascimento.ano) {
-                    tam_string_a = compara_strings(t[turma].alunos[mais_novo].nome, t[turma].alunos[k].nome);
+            if(
+                t[turma].alunos[mais_novo].nascimento.ano < t[i].alunos[k].nascimento.ano
+                ) {
+                mais_novo = k;
+                turma = i;
+            }
+            else if(
+                t[turma].alunos[mais_novo].nascimento.ano == t[i].alunos[k].nascimento.ano &&
+                t[turma].alunos[mais_novo].nascimento.mes < t[i].alunos[k].nascimento.mes
+                ) {
+                mais_novo = k;
+                turma = i;
+            }
+            else if(
+                t[turma].alunos[mais_novo].nascimento.ano == t[i].alunos[k].nascimento.ano &&
+                t[turma].alunos[mais_novo].nascimento.mes == t[i].alunos[k].nascimento.mes &&
+                t[turma].alunos[mais_novo].nascimento.dia < t[i].alunos[k].nascimento.dia
+                ) {
+                mais_novo = k;
+                turma = i;
+            }
+            else if(
+                t[turma].alunos[mais_novo].nascimento.ano == t[i].alunos[k].nascimento.ano &&
+                t[turma].alunos[mais_novo].nascimento.mes == t[i].alunos[k].nascimento.mes &&
+                t[turma].alunos[mais_novo].nascimento.dia == t[i].alunos[k].nascimento.dia
+                ) {
+                tam_string_a = compara_strings(
+                    t[turma].alunos[mais_novo].nome, t[turma].alunos[k].nome
+                    );
+                if(tam_string_a == MAIOR) {
+                    mais_novo = k;
+                    turma = i;
+                } else if(tam_string_a == IGUAL) {
+                    tam_string_a = compara_strings(
+                        t[turma].alunos[mais_novo].sobrenome, t[turma].alunos[k].sobrenome
+                        );
                     if(tam_string_a == MAIOR) {
                         mais_novo = k;
                         turma = i;
-                    } else if(tam_string_a == IGUAL) {
-                        tam_string_a = compara_strings(t[turma].alunos[mais_novo].sobrenome, t[turma].alunos[k].sobrenome);
-                        if(tam_string_a == MAIOR) {
-                            mais_novo = k;
-                            turma = i;
-                        }
                     }
-                } else {
-                    mais_novo = k;
-                    turma = i;
                 }
             }
         }
     }
-
     return t[turma].alunos[mais_novo];
 }
 
