@@ -76,7 +76,7 @@ int main() {
             printf("%s\n", aluno.sobrenome);
             break;
         case 5:
-            printf("operacao 5\n");
+            /* printf("operacao 5\n"); */
             scanf("%s", padrao);
             num = conta_substrings(turmas, num_turmas, padrao);
             printf("%d\n", num);
@@ -91,6 +91,7 @@ int main() {
             break;
         case 7:
             /* printf("operacao 7\n"); */
+            scanf("%d", &turma);
             turmas[turma].qtd = remove_aluno(turmas, turma);
             printf("%d\n", turmas[turma].qtd);
             break;

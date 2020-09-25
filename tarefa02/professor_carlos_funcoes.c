@@ -4,15 +4,49 @@
 #define MAX_STRING 15
 #define FALSE 0
 #define TRUE 1
+#define MENOR -1
+#define MAIOR 1
+#define IGUAL 0
+
+int compara_strings(char string_a[], char string_b[]) {
+    int indice = IGUAL;
+
+    /* printf("A: %s\n", string_a); */
+    /* printf("B: %s\n", string_b); */
+    for(int i = 0; indice == IGUAL && (string_a[i] != '\0' || string_b[i] != '\0'); i++) {
+        if (string_a[i] < string_b[i]) {
+            indice = MENOR;
+        } else if (string_a[i] > string_b[i]) {
+            indice = MAIOR;
+        } else {
+            indice = IGUAL;
+        }
+     }
+
+    return indice;
+}
 
 Aluno procura_novo_na_turma(Turma t[], int qtd_turmas, int j) {
     int mais_novo = 0;
+    int tam_string_a = IGUAL;
 
     for(int i = 0; i < qtd_turmas; i++) {
         if(i == j) {
             for(int k = 0; k < t[j].qtd; k++) {
                 if(t[j].alunos[mais_novo].nascimento.ano <= t[j].alunos[k].nascimento.ano) {
-                    mais_novo = k;
+                    if(t[j].alunos[mais_novo].nascimento.ano == t[j].alunos[k].nascimento.ano) {
+                        tam_string_a = compara_strings(t[j].alunos[mais_novo].nome, t[j].alunos[k].nome);
+                        if(tam_string_a == MAIOR) {
+                            mais_novo = k;
+                        } else if(tam_string_a == IGUAL) {
+                            tam_string_a = compara_strings(t[j].alunos[mais_novo].sobrenome, t[j].alunos[k].sobrenome);
+                            if(tam_string_a == MAIOR) {
+                                mais_novo = k;
+                            }
+                        }
+                    } else {
+                        mais_novo = k;
+                    }
                 }
             }
         }
@@ -23,12 +57,25 @@ Aluno procura_novo_na_turma(Turma t[], int qtd_turmas, int j) {
 
 Aluno procura_velho_na_turma(Turma t[], int qtd_turmas, int j) {
     int mais_velho = 0;
+    int tam_string_a = IGUAL;
 
     for(int i = 0; i < qtd_turmas; i++) {
         if(i == j) {
             for(int k = 0; k < t[j].qtd; k++) {
                 if(t[j].alunos[mais_velho].nascimento.ano >= t[j].alunos[k].nascimento.ano) {
-                    mais_velho = k;
+                    if(t[j].alunos[mais_velho].nascimento.ano == t[j].alunos[k].nascimento.ano) {
+                        tam_string_a = compara_strings(t[j].alunos[mais_velho].nome, t[j].alunos[k].nome);
+                        if(tam_string_a == MAIOR) {
+                            mais_velho = k;
+                        } else if(tam_string_a == IGUAL) {
+                            tam_string_a = compara_strings(t[j].alunos[mais_velho].sobrenome, t[j].alunos[k].sobrenome);
+                            if(tam_string_a == MAIOR) {
+                                mais_velho = k;
+                            }
+                        }
+                    } else {
+                        mais_velho = k;
+                    }
                 }
             }
         }
@@ -40,12 +87,27 @@ Aluno procura_velho_na_turma(Turma t[], int qtd_turmas, int j) {
 Aluno procura_velho_todas_turmas(Turma t[], int qtd_turmas) {
     int mais_velho = 0;
     int turma = 0;
+    int tam_string_a = IGUAL;
 
     for(int i = 0; i < qtd_turmas; i++) {
         for(int k = 0; k < t[i].qtd; k++) {
             if(t[turma].alunos[mais_velho].nascimento.ano >= t[i].alunos[k].nascimento.ano) {
-                mais_velho = k;
-                turma = i;
+                if(t[turma].alunos[mais_velho].nascimento.ano == t[i].alunos[k].nascimento.ano) {
+                    tam_string_a = compara_strings(t[turma].alunos[mais_velho].nome, t[turma].alunos[k].nome);
+                    if(tam_string_a == MAIOR) {
+                        mais_velho = k;
+                        turma = i;
+                    } else if(tam_string_a == IGUAL) {
+                        tam_string_a = compara_strings(t[turma].alunos[mais_velho].sobrenome, t[turma].alunos[k].sobrenome);
+                        if(tam_string_a == MAIOR) {
+                            mais_velho = k;
+                            turma = i;
+                        }
+                    }
+                } else {
+                    mais_velho = k;
+                    turma = i;
+                }
             }
         }
     }
@@ -56,12 +118,27 @@ Aluno procura_velho_todas_turmas(Turma t[], int qtd_turmas) {
 Aluno procura_novo_todas_turmas(Turma t[], int qtd_turmas) {
     int mais_novo = 0;
     int turma = 0;
+    int tam_string_a = IGUAL;
 
     for(int i = 0; i < qtd_turmas; i++) {
         for(int k = 0; k < t[i].qtd; k++) {
             if(t[turma].alunos[mais_novo].nascimento.ano <= t[i].alunos[k].nascimento.ano) {
-                mais_novo = k;
-                turma = i;
+                if(t[turma].alunos[mais_novo].nascimento.ano == t[i].alunos[k].nascimento.ano) {
+                    tam_string_a = compara_strings(t[turma].alunos[mais_novo].nome, t[turma].alunos[k].nome);
+                    if(tam_string_a == MAIOR) {
+                        mais_novo = k;
+                        turma = i;
+                    } else if(tam_string_a == IGUAL) {
+                        tam_string_a = compara_strings(t[turma].alunos[mais_novo].sobrenome, t[turma].alunos[k].sobrenome);
+                        if(tam_string_a == MAIOR) {
+                            mais_novo = k;
+                            turma = i;
+                        }
+                    }
+                } else {
+                    mais_novo = k;
+                    turma = i;
+                }
             }
         }
     }
