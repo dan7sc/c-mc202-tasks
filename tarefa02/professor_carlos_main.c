@@ -4,6 +4,7 @@
 #define MAX_ALUNOS 40
 #define MAX_TURMAS 50
 #define MAX_OPERACOES 50
+#define MAX_STRING 15
 
 void le_string(char str[]) {
     scanf("%s", str);
@@ -32,6 +33,8 @@ int main() {
     int contador = 0;
     int turma = 0;
     Turma turmas[MAX_TURMAS];
+    char padrao[MAX_STRING];
+    int num = 0;
 
     Aluno aluno;
 
@@ -74,6 +77,9 @@ int main() {
             break;
         case 5:
             printf("operacao 5\n");
+            scanf("%s", padrao);
+            num = conta_substrings(turmas, num_turmas, padrao);
+            printf("%d\n", num);
             break;
         case 6:
             /* printf("operacao 6\n"); */
