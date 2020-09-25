@@ -10,6 +10,10 @@ void le_string(char str[]) {
     scanf("%s", str);
 }
 
+void le_int(int *num) {
+    scanf("%d", num);
+}
+
 void le_nome_completo(Aluno* aluno) {
     scanf("%s %s", aluno->nome, aluno->sobrenome);
 }
@@ -18,12 +22,12 @@ void le_data(Data* data) {
     scanf("%d %d %d", &data->dia, &data->mes, &data->ano);
 }
 
-void imprime_nome_completo(Aluno aluno) {
-    printf("%s %s", aluno.nome, aluno.sobrenome);
+void imprime_string(char str[]) {
+    printf("%s\n", str);
 }
 
-void imprime_data(Data data) {
-    printf("%d %d %d", data.dia, data.mes, data.ano);
+void imprime_int(int num) {
+    printf("%d\n", num);
 }
 
 int main() {
@@ -38,11 +42,11 @@ int main() {
 
     Aluno aluno;
 
-    scanf("%d", &num_turmas);
-    scanf("%d", &num_operacoes);
+    le_int(&num_turmas);
+    le_int(&num_operacoes);
 
     for(int k = 0; k < num_turmas; k++) {
-        scanf("%d", &turmas[k].qtd);
+        le_int(&turmas[k].qtd);
         for(int i = 0; i < turmas[k].qtd; i++) {
             le_nome_completo(&turmas[k].alunos[i]);
             le_data(&turmas[k].alunos[i].nascimento);
@@ -50,53 +54,44 @@ int main() {
     }
 
     while(contador < num_operacoes) {
-        scanf("%d", &operacao);
-
+        le_int(&operacao);
         switch(operacao) {
         case 1:
-            /* printf("operacao 1\n"); */
-            scanf("%d", &turma);
+            le_int(&turma);
             aluno = procura_novo_na_turma(turmas, num_turmas, turma);
-            printf("%s\n", aluno.nome);
+            imprime_string(aluno.nome);
             break;
         case 2:
-            /* printf("operacao 2\n"); */
-            scanf("%d", &turma);
+            le_int(&turma);
             aluno = procura_velho_na_turma(turmas, num_turmas, turma);
-            printf("%s\n", aluno.sobrenome);
+            imprime_string(aluno.sobrenome);
             break;
         case 3:
-            /* printf("operacao 3\n"); */
             aluno = procura_velho_todas_turmas(turmas, num_turmas);
-            printf("%s\n", aluno.nome);
+            imprime_string(aluno.nome);
             break;
         case 4:
-            /* printf("operacao 4\n"); */
             aluno = procura_novo_todas_turmas(turmas, num_turmas);
-            printf("%s\n", aluno.sobrenome);
+            imprime_string(aluno.sobrenome);
             break;
         case 5:
-            /* printf("operacao 5\n"); */
-            scanf("%s", padrao);
+            le_string(padrao);
             num = conta_substrings(turmas, num_turmas, padrao);
-            printf("%d\n", num);
+            imprime_int(num);
             break;
         case 6:
-            /* printf("operacao 6\n"); */
-            scanf("%d", &turma);
+            le_int(&turma);
             le_nome_completo(&aluno);
             le_data(&aluno.nascimento);
             turmas[turma].qtd = add_aluno(turmas, aluno, turma);
-            printf("%d\n", turmas[turma].qtd);
+            imprime_int(turmas[turma].qtd);
             break;
         case 7:
-            /* printf("operacao 7\n"); */
-            scanf("%d", &turma);
+            le_int(&turma);
             turmas[turma].qtd = remove_aluno(turmas, turma);
-            printf("%d\n", turmas[turma].qtd);
+            imprime_int(turmas[turma].qtd);
             break;
         }
-
         contador++;
     }
 
