@@ -19,9 +19,28 @@ int compara_strings(char string_a[], char string_b[]) {
         } else {
             indice = IGUAL;
         }
-     }
+    }
 
     return indice;
+}
+
+int compara_datas(Data data_a, Data data_b) {
+    if(data_a.ano < data_b.ano) {
+        return MENOR;
+    } else if(data_a.ano == data_b.ano &&
+              data_a.mes < data_b.mes) {
+        return MENOR;
+    } else if(data_a.ano == data_b.ano &&
+              data_a.mes == data_b.mes &&
+              data_a.dia < data_b.dia) {
+        return MENOR;
+    } else if(data_a.ano == data_b.ano &&
+              data_a.mes == data_b.mes &&
+              data_a.dia == data_b.dia) {
+        return IGUAL;
+    } else {
+        return MAIOR;
+    }
 }
 
 Aluno procura_novo_na_turma(Turma t[], int qtd_turmas, int j) {
@@ -29,35 +48,19 @@ Aluno procura_novo_na_turma(Turma t[], int qtd_turmas, int j) {
     int ordem_string_a = IGUAL;
     Aluno aluno_mais_novo;
     Aluno aluno_atual;
+    int eh_data_maior;
 
     for(int i = 0; i < qtd_turmas; i++) {
         if(i == j) {
             for(int k = 0; k < t[j].qtd; k++) {
                 aluno_mais_novo = t[j].alunos[indice_mais_novo];
                 aluno_atual = t[j].alunos[k];
-                if(
-                    aluno_mais_novo.nascimento.ano < aluno_atual.nascimento.ano
-                    ) {
+                eh_data_maior = compara_datas(
+                    aluno_mais_novo.nascimento, aluno_atual.nascimento
+                    );
+                if(eh_data_maior == MENOR) {
                     indice_mais_novo = k;
-                }
-                else if(
-                    aluno_mais_novo.nascimento.ano == aluno_atual.nascimento.ano &&
-                    aluno_mais_novo.nascimento.mes < aluno_atual.nascimento.mes
-                    ) {
-                    indice_mais_novo = k;
-                }
-                else if(
-                    aluno_mais_novo.nascimento.ano == aluno_atual.nascimento.ano &&
-                    aluno_mais_novo.nascimento.mes == aluno_atual.nascimento.mes &&
-                    aluno_mais_novo.nascimento.dia < aluno_atual.nascimento.dia
-                    ) {
-                    indice_mais_novo = k;
-                }
-                else if(
-                    aluno_mais_novo.nascimento.ano == aluno_atual.nascimento.ano &&
-                    aluno_mais_novo.nascimento.mes == aluno_atual.nascimento.mes &&
-                    aluno_mais_novo.nascimento.dia == aluno_atual.nascimento.dia
-                    ) {
+                } else if(eh_data_maior == IGUAL) {
                     ordem_string_a = compara_strings(
                         aluno_mais_novo.nome, aluno_atual.nome
                         );
@@ -84,35 +87,19 @@ Aluno procura_velho_na_turma(Turma t[], int qtd_turmas, int j) {
     int ordem_string_a = IGUAL;
     Aluno aluno_mais_velho;
     Aluno aluno_atual;
+    int eh_data_maior;
 
     for(int i = 0; i < qtd_turmas; i++) {
         if(i == j) {
             for(int k = 0; k < t[j].qtd; k++) {
                 aluno_mais_velho = t[j].alunos[indice_mais_velho];
                 aluno_atual = t[i].alunos[k];
-                if(
-                    aluno_mais_velho.nascimento.ano > aluno_atual.nascimento.ano
-                    ) {
+                eh_data_maior = compara_datas(
+                    aluno_mais_velho.nascimento, aluno_atual.nascimento
+                    );
+                if(eh_data_maior == MAIOR) {
                     indice_mais_velho = k;
-                }
-                else if(
-                    aluno_mais_velho.nascimento.ano == aluno_atual.nascimento.ano &&
-                    aluno_mais_velho.nascimento.mes > aluno_atual.nascimento.mes
-                    ) {
-                    indice_mais_velho = k;
-                }
-                else if(
-                    aluno_mais_velho.nascimento.ano == aluno_atual.nascimento.ano &&
-                    aluno_mais_velho.nascimento.mes == aluno_atual.nascimento.mes &&
-                    aluno_mais_velho.nascimento.dia > aluno_atual.nascimento.dia
-                    ) {
-                    indice_mais_velho = k;
-                }
-                else if(
-                    aluno_mais_velho.nascimento.ano == aluno_atual.nascimento.ano &&
-                    aluno_mais_velho.nascimento.mes == aluno_atual.nascimento.mes &&
-                    aluno_mais_velho.nascimento.dia == aluno_atual.nascimento.dia
-                    ) {
+                } else if(eh_data_maior == IGUAL) {
                     ordem_string_a = compara_strings(
                         aluno_mais_velho.nome, aluno_atual.nome
                         );
@@ -140,37 +127,19 @@ Aluno procura_velho_todas_turmas(Turma t[], int qtd_turmas) {
     int ordem_string_a = IGUAL;
     Aluno aluno_mais_velho;
     Aluno aluno_atual;
+    int eh_data_maior;
 
     for(int i = 0; i < qtd_turmas; i++) {
         for(int k = 0; k < t[i].qtd; k++) {
             aluno_mais_velho = t[turma].alunos[indice_mais_velho];
             aluno_atual = t[i].alunos[k];
-            if(
-                aluno_mais_velho.nascimento.ano > aluno_atual.nascimento.ano
-                ) {
+            eh_data_maior = compara_datas(
+                aluno_mais_velho.nascimento, aluno_atual.nascimento
+                );
+            if(eh_data_maior == MAIOR) {
                 indice_mais_velho = k;
                 turma = i;
-            }
-            else if(
-                aluno_mais_velho.nascimento.ano == aluno_atual.nascimento.ano &&
-                aluno_mais_velho.nascimento.mes > aluno_atual.nascimento.mes
-                ) {
-                indice_mais_velho = k;
-                turma = i;
-            }
-            else if(
-                aluno_mais_velho.nascimento.ano == aluno_atual.nascimento.ano &&
-                aluno_mais_velho.nascimento.mes == aluno_atual.nascimento.mes &&
-                aluno_mais_velho.nascimento.dia > aluno_atual.nascimento.dia
-                ) {
-                indice_mais_velho = k;
-                turma = i;
-            }
-            else if(
-                aluno_mais_velho.nascimento.ano == aluno_atual.nascimento.ano &&
-                aluno_mais_velho.nascimento.mes == aluno_atual.nascimento.mes &&
-                aluno_mais_velho.nascimento.dia == aluno_atual.nascimento.dia
-                ) {
+            } else if(eh_data_maior == IGUAL) {
                 ordem_string_a = compara_strings(
                     aluno_mais_velho.nome, aluno_atual.nome
                     );
@@ -199,37 +168,19 @@ Aluno procura_novo_todas_turmas(Turma t[], int qtd_turmas) {
     int ordem_string_a = IGUAL;
     Aluno aluno_mais_novo;
     Aluno aluno_atual;
+    int eh_data_maior = 0;
 
     for(int i = 0; i < qtd_turmas; i++) {
         for(int k = 0; k < t[i].qtd; k++) {
             aluno_mais_novo = t[turma].alunos[indice_mais_novo];
             aluno_atual = t[i].alunos[k];
-            if(
-                aluno_mais_novo.nascimento.ano < aluno_atual.nascimento.ano
-                ) {
+            eh_data_maior = compara_datas(
+                aluno_mais_novo.nascimento, aluno_atual.nascimento
+                );
+            if(eh_data_maior == MENOR) {
                 indice_mais_novo = k;
                 turma = i;
-            }
-            else if(
-                aluno_mais_novo.nascimento.ano == aluno_atual.nascimento.ano &&
-                aluno_mais_novo.nascimento.mes < aluno_atual.nascimento.mes
-                ) {
-                indice_mais_novo = k;
-                turma = i;
-            }
-            else if(
-                aluno_mais_novo.nascimento.ano == aluno_atual.nascimento.ano &&
-                aluno_mais_novo.nascimento.mes == aluno_atual.nascimento.mes &&
-                aluno_mais_novo.nascimento.dia < aluno_atual.nascimento.dia
-                ) {
-                indice_mais_novo = k;
-                turma = i;
-            }
-            else if(
-                aluno_mais_novo.nascimento.ano == aluno_atual.nascimento.ano &&
-                aluno_mais_novo.nascimento.mes == aluno_atual.nascimento.mes &&
-                aluno_mais_novo.nascimento.dia == aluno_atual.nascimento.dia
-                ) {
+            } else if(eh_data_maior == IGUAL) {
                 ordem_string_a = compara_strings(
                     aluno_mais_novo.nome, aluno_atual.nome
                     );
