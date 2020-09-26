@@ -11,7 +11,7 @@
 int compara_strings(char string_a[], char string_b[]) {
     int indice = IGUAL;
 
-    for(int i = 0; indice == IGUAL && (string_a[i] != '\0' || string_b[i] != '\0'); i++) {
+    for(int i = 0; indice == IGUAL && (string_a[i] != '\0' && string_b[i] != '\0'); i++) {
         if (string_a[i] < string_b[i]) {
             indice = MENOR;
         } else if (string_a[i] > string_b[i]) {
@@ -25,211 +25,231 @@ int compara_strings(char string_a[], char string_b[]) {
 }
 
 Aluno procura_novo_na_turma(Turma t[], int qtd_turmas, int j) {
-    int mais_novo = 0;
-    int tam_string_a = IGUAL;
+    int indice_mais_novo = 0;
+    int ordem_string_a = IGUAL;
+    Aluno aluno_mais_novo;
+    Aluno aluno_atual;
 
     for(int i = 0; i < qtd_turmas; i++) {
         if(i == j) {
             for(int k = 0; k < t[j].qtd; k++) {
+                aluno_mais_novo = t[j].alunos[indice_mais_novo];
+                aluno_atual = t[j].alunos[k];
                 if(
-                    t[j].alunos[mais_novo].nascimento.ano < t[i].alunos[k].nascimento.ano
+                    aluno_mais_novo.nascimento.ano < aluno_atual.nascimento.ano
                     ) {
-                    mais_novo = k;
+                    indice_mais_novo = k;
                 }
                 else if(
-                    t[j].alunos[mais_novo].nascimento.ano == t[i].alunos[k].nascimento.ano &&
-                    t[j].alunos[mais_novo].nascimento.mes < t[i].alunos[k].nascimento.mes
+                    aluno_mais_novo.nascimento.ano == aluno_atual.nascimento.ano &&
+                    aluno_mais_novo.nascimento.mes < aluno_atual.nascimento.mes
                     ) {
-                    mais_novo = k;
+                    indice_mais_novo = k;
                 }
                 else if(
-                    t[j].alunos[mais_novo].nascimento.ano == t[i].alunos[k].nascimento.ano &&
-                    t[j].alunos[mais_novo].nascimento.mes == t[i].alunos[k].nascimento.mes &&
-                    t[j].alunos[mais_novo].nascimento.dia < t[i].alunos[k].nascimento.dia
+                    aluno_mais_novo.nascimento.ano == aluno_atual.nascimento.ano &&
+                    aluno_mais_novo.nascimento.mes == aluno_atual.nascimento.mes &&
+                    aluno_mais_novo.nascimento.dia < aluno_atual.nascimento.dia
                     ) {
-                    mais_novo = k;
+                    indice_mais_novo = k;
                 }
                 else if(
-                    t[j].alunos[mais_novo].nascimento.ano == t[i].alunos[k].nascimento.ano &&
-                    t[j].alunos[mais_novo].nascimento.mes == t[i].alunos[k].nascimento.mes &&
-                    t[j].alunos[mais_novo].nascimento.dia == t[i].alunos[k].nascimento.dia
+                    aluno_mais_novo.nascimento.ano == aluno_atual.nascimento.ano &&
+                    aluno_mais_novo.nascimento.mes == aluno_atual.nascimento.mes &&
+                    aluno_mais_novo.nascimento.dia == aluno_atual.nascimento.dia
                     ) {
-                    tam_string_a = compara_strings(
-                        t[j].alunos[mais_novo].nome, t[j].alunos[k].nome
+                    ordem_string_a = compara_strings(
+                        aluno_mais_novo.nome, aluno_atual.nome
                         );
-                    if(tam_string_a == MAIOR) {
-                        mais_novo = k;
-                    } else if(tam_string_a == IGUAL) {
-                        tam_string_a = compara_strings(
-                            t[j].alunos[mais_novo].sobrenome, t[j].alunos[k].sobrenome
+                    if(ordem_string_a == MAIOR) {
+                        indice_mais_novo = k;
+                    } else if(ordem_string_a == IGUAL) {
+                        ordem_string_a = compara_strings(
+                            aluno_mais_novo.sobrenome, aluno_atual.sobrenome
                             );
-                        if(tam_string_a == MAIOR) {
-                            mais_novo = k;
+                        if(ordem_string_a == MAIOR) {
+                            indice_mais_novo = k;
                         }
                     }
                 }
             }
         }
     }
-    return t[j].alunos[mais_novo];
+    aluno_mais_novo = t[j].alunos[indice_mais_novo];
+    return aluno_mais_novo;
 }
 
 Aluno procura_velho_na_turma(Turma t[], int qtd_turmas, int j) {
-    int mais_velho = 0;
-    int tam_string_a = IGUAL;
+    int indice_mais_velho = 0;
+    int ordem_string_a = IGUAL;
+    Aluno aluno_mais_velho;
+    Aluno aluno_atual;
 
     for(int i = 0; i < qtd_turmas; i++) {
         if(i == j) {
             for(int k = 0; k < t[j].qtd; k++) {
+                aluno_mais_velho = t[j].alunos[indice_mais_velho];
+                aluno_atual = t[i].alunos[k];
                 if(
-                    t[j].alunos[mais_velho].nascimento.ano > t[i].alunos[k].nascimento.ano
+                    aluno_mais_velho.nascimento.ano > aluno_atual.nascimento.ano
                     ) {
-                    mais_velho = k;
+                    indice_mais_velho = k;
                 }
                 else if(
-                    t[j].alunos[mais_velho].nascimento.ano == t[i].alunos[k].nascimento.ano &&
-                    t[j].alunos[mais_velho].nascimento.mes > t[i].alunos[k].nascimento.mes
+                    aluno_mais_velho.nascimento.ano == aluno_atual.nascimento.ano &&
+                    aluno_mais_velho.nascimento.mes > aluno_atual.nascimento.mes
                     ) {
-                    mais_velho = k;
+                    indice_mais_velho = k;
                 }
                 else if(
-                    t[j].alunos[mais_velho].nascimento.ano == t[i].alunos[k].nascimento.ano &&
-                    t[j].alunos[mais_velho].nascimento.mes == t[i].alunos[k].nascimento.mes &&
-                    t[j].alunos[mais_velho].nascimento.dia > t[i].alunos[k].nascimento.dia
+                    aluno_mais_velho.nascimento.ano == aluno_atual.nascimento.ano &&
+                    aluno_mais_velho.nascimento.mes == aluno_atual.nascimento.mes &&
+                    aluno_mais_velho.nascimento.dia > aluno_atual.nascimento.dia
                     ) {
-                    mais_velho = k;
+                    indice_mais_velho = k;
                 }
                 else if(
-                    t[j].alunos[mais_velho].nascimento.ano == t[i].alunos[k].nascimento.ano &&
-                    t[j].alunos[mais_velho].nascimento.mes == t[i].alunos[k].nascimento.mes &&
-                    t[j].alunos[mais_velho].nascimento.dia == t[i].alunos[k].nascimento.dia
+                    aluno_mais_velho.nascimento.ano == aluno_atual.nascimento.ano &&
+                    aluno_mais_velho.nascimento.mes == aluno_atual.nascimento.mes &&
+                    aluno_mais_velho.nascimento.dia == aluno_atual.nascimento.dia
                     ) {
-                    tam_string_a = compara_strings(
-                        t[j].alunos[mais_velho].nome, t[j].alunos[k].nome
+                    ordem_string_a = compara_strings(
+                        aluno_mais_velho.nome, aluno_atual.nome
                         );
-                    if(tam_string_a == MAIOR) {
-                        mais_velho = k;
-                    } else if(tam_string_a == IGUAL) {
-                        tam_string_a = compara_strings(
-                            t[j].alunos[mais_velho].sobrenome, t[j].alunos[k].sobrenome
+                    if(ordem_string_a == MAIOR) {
+                        indice_mais_velho = k;
+                    } else if(ordem_string_a == IGUAL) {
+                        ordem_string_a = compara_strings(
+                            aluno_mais_velho.sobrenome, aluno_atual.sobrenome
                             );
-                        if(tam_string_a == MAIOR) {
-                            mais_velho = k;
+                        if(ordem_string_a == MAIOR) {
+                            indice_mais_velho = k;
                         }
                     }
                 }
             }
         }
     }
-    return t[j].alunos[mais_velho];
+    aluno_mais_velho = t[j].alunos[indice_mais_velho];
+    return aluno_mais_velho;
 }
 
 Aluno procura_velho_todas_turmas(Turma t[], int qtd_turmas) {
-    int mais_velho = 0;
+    int indice_mais_velho = 0;
     int turma = 0;
-    int tam_string_a = IGUAL;
+    int ordem_string_a = IGUAL;
+    Aluno aluno_mais_velho;
+    Aluno aluno_atual;
 
     for(int i = 0; i < qtd_turmas; i++) {
         for(int k = 0; k < t[i].qtd; k++) {
+            aluno_mais_velho = t[turma].alunos[indice_mais_velho];
+            aluno_atual = t[i].alunos[k];
             if(
-                t[turma].alunos[mais_velho].nascimento.ano > t[i].alunos[k].nascimento.ano
+                aluno_mais_velho.nascimento.ano > aluno_atual.nascimento.ano
                 ) {
-                mais_velho = k;
+                indice_mais_velho = k;
                 turma = i;
             }
             else if(
-                t[turma].alunos[mais_velho].nascimento.ano == t[i].alunos[k].nascimento.ano &&
-                t[turma].alunos[mais_velho].nascimento.mes > t[i].alunos[k].nascimento.mes
+                aluno_mais_velho.nascimento.ano == aluno_atual.nascimento.ano &&
+                aluno_mais_velho.nascimento.mes > aluno_atual.nascimento.mes
                 ) {
-                mais_velho = k;
+                indice_mais_velho = k;
                 turma = i;
             }
             else if(
-                t[turma].alunos[mais_velho].nascimento.ano == t[i].alunos[k].nascimento.ano &&
-                t[turma].alunos[mais_velho].nascimento.mes == t[i].alunos[k].nascimento.mes &&
-                t[turma].alunos[mais_velho].nascimento.dia > t[i].alunos[k].nascimento.dia
+                aluno_mais_velho.nascimento.ano == aluno_atual.nascimento.ano &&
+                aluno_mais_velho.nascimento.mes == aluno_atual.nascimento.mes &&
+                aluno_mais_velho.nascimento.dia > aluno_atual.nascimento.dia
                 ) {
-                mais_velho = k;
+                indice_mais_velho = k;
                 turma = i;
             }
             else if(
-                t[turma].alunos[mais_velho].nascimento.ano == t[i].alunos[k].nascimento.ano &&
-                t[turma].alunos[mais_velho].nascimento.mes == t[i].alunos[k].nascimento.mes &&
-                t[turma].alunos[mais_velho].nascimento.dia == t[i].alunos[k].nascimento.dia
+                aluno_mais_velho.nascimento.ano == aluno_atual.nascimento.ano &&
+                aluno_mais_velho.nascimento.mes == aluno_atual.nascimento.mes &&
+                aluno_mais_velho.nascimento.dia == aluno_atual.nascimento.dia
                 ) {
-                tam_string_a = compara_strings(
-                    t[turma].alunos[mais_velho].nome, t[turma].alunos[k].nome
+                ordem_string_a = compara_strings(
+                    aluno_mais_velho.nome, aluno_atual.nome
                     );
-                if(tam_string_a == MAIOR) {
-                    mais_velho = k;
+                if(ordem_string_a == MAIOR) {
+                    indice_mais_velho = k;
                     turma = i;
-                } else if(tam_string_a == IGUAL) {
-                    tam_string_a = compara_strings(
-                        t[turma].alunos[mais_velho].sobrenome, t[turma].alunos[k].sobrenome
+                } else if(ordem_string_a == IGUAL) {
+                    ordem_string_a = compara_strings(
+                        aluno_mais_velho.sobrenome, aluno_atual.sobrenome
                         );
-                    if(tam_string_a == MAIOR) {
-                        mais_velho = k;
+                    if(ordem_string_a == MAIOR) {
+                        indice_mais_velho = k;
                         turma = i;
                     }
                 }
             }
         }
     }
-    return t[turma].alunos[mais_velho];
+    aluno_mais_velho = t[turma].alunos[indice_mais_velho];
+    return aluno_mais_velho;
 }
 
 Aluno procura_novo_todas_turmas(Turma t[], int qtd_turmas) {
-    int mais_novo = 0;
+    int indice_mais_novo = 0;
     int turma = 0;
-    int tam_string_a = IGUAL;
+    int ordem_string_a = IGUAL;
+    Aluno aluno_mais_novo;
+    Aluno aluno_atual;
 
     for(int i = 0; i < qtd_turmas; i++) {
         for(int k = 0; k < t[i].qtd; k++) {
+            aluno_mais_novo = t[turma].alunos[indice_mais_novo];
+            aluno_atual = t[i].alunos[k];
             if(
-                t[turma].alunos[mais_novo].nascimento.ano < t[i].alunos[k].nascimento.ano
+                aluno_mais_novo.nascimento.ano < aluno_atual.nascimento.ano
                 ) {
-                mais_novo = k;
+                indice_mais_novo = k;
                 turma = i;
             }
             else if(
-                t[turma].alunos[mais_novo].nascimento.ano == t[i].alunos[k].nascimento.ano &&
-                t[turma].alunos[mais_novo].nascimento.mes < t[i].alunos[k].nascimento.mes
+                aluno_mais_novo.nascimento.ano == aluno_atual.nascimento.ano &&
+                aluno_mais_novo.nascimento.mes < aluno_atual.nascimento.mes
                 ) {
-                mais_novo = k;
+                indice_mais_novo = k;
                 turma = i;
             }
             else if(
-                t[turma].alunos[mais_novo].nascimento.ano == t[i].alunos[k].nascimento.ano &&
-                t[turma].alunos[mais_novo].nascimento.mes == t[i].alunos[k].nascimento.mes &&
-                t[turma].alunos[mais_novo].nascimento.dia < t[i].alunos[k].nascimento.dia
+                aluno_mais_novo.nascimento.ano == aluno_atual.nascimento.ano &&
+                aluno_mais_novo.nascimento.mes == aluno_atual.nascimento.mes &&
+                aluno_mais_novo.nascimento.dia < aluno_atual.nascimento.dia
                 ) {
-                mais_novo = k;
+                indice_mais_novo = k;
                 turma = i;
             }
             else if(
-                t[turma].alunos[mais_novo].nascimento.ano == t[i].alunos[k].nascimento.ano &&
-                t[turma].alunos[mais_novo].nascimento.mes == t[i].alunos[k].nascimento.mes &&
-                t[turma].alunos[mais_novo].nascimento.dia == t[i].alunos[k].nascimento.dia
+                aluno_mais_novo.nascimento.ano == aluno_atual.nascimento.ano &&
+                aluno_mais_novo.nascimento.mes == aluno_atual.nascimento.mes &&
+                aluno_mais_novo.nascimento.dia == aluno_atual.nascimento.dia
                 ) {
-                tam_string_a = compara_strings(
-                    t[turma].alunos[mais_novo].nome, t[turma].alunos[k].nome
+                ordem_string_a = compara_strings(
+                    aluno_mais_novo.nome, aluno_atual.nome
                     );
-                if(tam_string_a == MAIOR) {
-                    mais_novo = k;
+                if(ordem_string_a == MAIOR) {
+                    indice_mais_novo = k;
                     turma = i;
-                } else if(tam_string_a == IGUAL) {
-                    tam_string_a = compara_strings(
-                        t[turma].alunos[mais_novo].sobrenome, t[turma].alunos[k].sobrenome
+                } else if(ordem_string_a == IGUAL) {
+                    ordem_string_a = compara_strings(
+                        aluno_mais_novo.sobrenome, aluno_atual.sobrenome
                         );
-                    if(tam_string_a == MAIOR) {
-                        mais_novo = k;
+                    if(ordem_string_a == MAIOR) {
+                        indice_mais_novo = k;
                         turma = i;
                     }
                 }
             }
         }
     }
-    return t[turma].alunos[mais_novo];
+    aluno_mais_novo = t[turma].alunos[indice_mais_novo];
+    return aluno_mais_novo;
 }
 
 int add_aluno(Turma t[], Aluno A, int j) {
