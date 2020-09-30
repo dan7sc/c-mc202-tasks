@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define N 25
+#define NUM_CHAR 25
+#define NUM_ESTAT 4
 
 void le_int(int *num) {
     scanf("%d", num);
@@ -16,25 +17,32 @@ void le_string(char *str) {
 }
 
 int main() {
-    int num_termos = 0;
+    int n_termos = 0;
     int qtd_dias = 0;
-    char *nome = NULL;
-    double *num = NULL;
+    double **vetor_dados = NULL;
+    char **vetor_termos = NULL;
 
-    le_int(&num_termos);
+    le_int(&n_termos);
     le_int(&qtd_dias);
-    nome = (char *) malloc(N * sizeof(char));
-    le_string(nome);
-    num = (double *) malloc(qtd_dias * sizeof(double));
-    for(int i = 0; i < qtd_dias; i++) {
-        le_double(&num[i]);
+
+    vetor_termos = (char **) malloc(n_termos * sizeof(char *));
+    vetor_dados = (double **) malloc(n_termos * sizeof(double *));
+    for(int i = 0; i < n_termos; i++) {
+        vetor_termos[i] = (char *) malloc(NUM_CHAR * sizeof(char));
+        le_string(vetor_termos[i]);
+        vetor_dados[i] = (double *) malloc(qtd_dias * sizeof(double));
+        for(int j = 0; j < qtd_dias; j++) {
+            le_double(&vetor_dados[i][j]);
+        }
     }
 
-    printf("%d %d\n", num_termos, qtd_dias);
-    printf("%s", nome);
-    printf("\n");
-    for(int i = 0; i < qtd_dias; i++) {
-        printf("%.15lf\n", num[i]);
+    printf("%d %d\n", n_termos, qtd_dias);
+    for(int i = 0; i < n_termos; i++) {
+        printf("%s ", vetor_termos[i]);
+        for(int j = 0; j < qtd_dias; j++) {
+            printf("%.2lf ", vetor_dados[i][j]);
+        }
+        printf("\n");
     }
 
     return 0;
