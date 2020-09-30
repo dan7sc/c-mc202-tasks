@@ -4,10 +4,18 @@
 
 #define NUM_CHAR 25
 #define NUM_ESTAT 4
+#define NUM_CATEGORIA 5
+
 #define MAXIMO 0
 #define MINIMO 1
 #define MEDIA 2
 #define DPADRAO 3
+
+#define BOT 0
+#define SURPREENDENTE 1
+#define NORMAL 2
+#define LOCAL 3
+#define IRRELEVANTE 4
 
 void le_int(int *num) {
     scanf("%d", num);
@@ -21,6 +29,10 @@ void le_string(char *str) {
     scanf("%s", str);
 }
 
+void imprime_int(int n) {
+    printf("%d", n);
+}
+
 void imprime_string(char *str) {
     printf("%s ", str);
 }
@@ -32,6 +44,11 @@ char *aloca_char(int n) {
 double *aloca_double(int n) {
     return (double *)malloc(n * sizeof(double));
 }
+
+int *aloca_int(int n) {
+    return (int *)malloc(n * sizeof(int));
+}
+
 
 char **aloca_vetor_char(int n) {
     return (char **)malloc(n * sizeof(char *));
@@ -113,12 +130,37 @@ void imprime_estatistica(int indice,
     printf("\n");
 }
 
+int avalia_categoria(double *v_estatistica) {
+    if(v_estatistica[MEDIA] >= 60 &&
+       v_estatistica[DPADRAO] > 15) {
+        return BOT;
+    } else if(v_estatistica[MEDIA] >= 60 &&
+              v_estatistica[DPADRAO] <= 15) {
+        return SURPREENDENTE;
+    } else if(v_estatistica[MEDIA] < 60 &&
+             v_estatistica[MAXIMO] >= 80 &&
+             v_estatistica[MINIMO] > 20) {
+        return NORMAL;
+    } else if(v_estatistica[MEDIA] < 60 &&
+              v_estatistica[MAXIMO] >= 80 &&
+              v_estatistica[MINIMO] <= 20) {
+        return LOCAL;
+    } else if(v_estatistica[MEDIA] < 60 &&
+              v_estatistica[MAXIMO] < 80) {
+        return IRRELEVANTE;
+    }
+    return -1;
+}
+
 int main() {
     int n_termos = 0;
     int qtd_dias = 0;
     double **vetor_dados = NULL;
     char **vetor_termos = NULL;
     double **vetor_estatistica = NULL;
+    /* char **vetor_categoria = NULL; */
+    /* int *tam_categoria = NULL; */
+    int categoria = -1;
 
     le_int(&n_termos);
     le_int(&qtd_dias);
@@ -144,6 +186,17 @@ int main() {
         imprime_string(vetor_termos[i]);
         imprime_estatistica(i, vetor_estatistica);
     }
+
+    imprime_string("\nRESULTADO:\n");
+    /* vetor_categoria = aloca_vetor_char(NUM_CATEGORIA); */
+    /* tam_categoria = aloca_int(NUM_CATEGORIA);g */
+    for(int i = 0; i < n_termos; i++) {
+        categoria = avalia_categoria(vetor_estatistica[i]);
+        /* vetor_categoria[i] = aloca_char(NUM_CHAR); */
+        imprime_int(categoria);
+        imprime_string(" ");
+    }
+    imprime_string("\n");
 
     return 0;
 }
