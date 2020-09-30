@@ -17,6 +17,10 @@ void le_string(char *str) {
     scanf("%s", str);
 }
 
+void imprime_string(char *str) {
+    printf("%s ", str);
+}
+
 char *aloca_char(int n) {
     return (char *)malloc(n * sizeof(char));
 }
@@ -86,6 +90,23 @@ double calcula_desvio_padrao(int qtd_numeros,
     return dp;
 }
 
+void calcula_estatistica(int n,
+                         double *v_dados,
+                         double *v_estatistica) {
+    v_estatistica[0] = procura_maximo(n, v_dados);
+    v_estatistica[1] = procura_minimo(n, v_dados);
+    v_estatistica[2] = calcula_media(n, v_dados);
+    v_estatistica[3] = calcula_desvio_padrao(n, v_dados, v_estatistica[2]);
+}
+
+void imprime_estatistica(int indice,
+                         double **v_estatistica) {
+    for(int i = 0; i < NUM_ESTAT; i++) {
+        printf("%.2lf ", v_estatistica[indice][i]);
+    }
+    printf("\n");
+}
+
 int main() {
     int n_termos = 0;
     int qtd_dias = 0;
@@ -110,24 +131,12 @@ int main() {
     vetor_estatistica = aloca_vetor_double(n_termos);
     for(int i = 0; i < n_termos; i++) {
         vetor_estatistica[i] = aloca_double(qtd_dias);
-        vetor_estatistica[i][0] = procura_maximo(qtd_dias, vetor_dados[i]);
-        vetor_estatistica[i][1] = procura_minimo(qtd_dias, vetor_dados[i]);
-        vetor_estatistica[i][2] = calcula_media(qtd_dias, vetor_dados[i]);
-        vetor_estatistica[i][3] = calcula_desvio_padrao(
-            qtd_dias,
-            vetor_dados[i],
-            vetor_estatistica[i][2]
-            );
+        calcula_estatistica(qtd_dias, vetor_dados[i], vetor_estatistica[i]);
     }
 
-    printf("%d %d\n", n_termos, qtd_dias);
     for(int i = 0; i < n_termos; i++) {
-        printf("%s ", vetor_termos[i]);
-        printf("%.2lf %.2lf %.2lf %.2lf\n",
-               vetor_estatistica[i][0],
-               vetor_estatistica[i][1],
-               vetor_estatistica[i][2],
-               vetor_estatistica[i][3]);
+        imprime_string(vetor_termos[i]);
+        imprime_estatistica(i, vetor_estatistica);
     }
 
     return 0;
