@@ -32,11 +32,25 @@ double **aloca_vetor_double(int n) {
     return (double **)malloc(n * sizeof(double *));
 }
 
+double procura_maximo(int qtd_numeros,
+                      double *vetor_de_numeros) {
+    double max = 0.0;
+
+    for(int i = 0; i < qtd_numeros; i++) {
+        if(max < vetor_de_numeros[i]) {
+            max = vetor_de_numeros[i];
+        }
+    }
+
+    return max;
+}
+
 int main() {
     int n_termos = 0;
     int qtd_dias = 0;
     double **vetor_dados = NULL;
     char **vetor_termos = NULL;
+    double **vetor_estatistica = NULL;
 
     le_int(&n_termos);
     le_int(&qtd_dias);
@@ -52,7 +66,11 @@ int main() {
         }
     }
 
-
+    vetor_estatistica = aloca_vetor_double(n_termos);
+    for(int i = 0; i < n_termos; i++) {
+        vetor_estatistica[i] = aloca_double(qtd_dias);
+        vetor_estatistica[i][0] = procura_maximo(qtd_dias, vetor_dados[i]);
+    }
 
     printf("%d %d\n", n_termos, qtd_dias);
     for(int i = 0; i < n_termos; i++) {
@@ -61,6 +79,7 @@ int main() {
             printf("%.2lf ", vetor_dados[i][j]);
         }
         printf("\n");
+        printf("stat %.2lf\n", vetor_estatistica[i][0]);
     }
 
     return 0;
