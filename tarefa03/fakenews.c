@@ -45,6 +45,19 @@ double procura_maximo(int qtd_numeros,
     return max;
 }
 
+double procura_minimo(int qtd_numeros,
+                      double *vetor_de_numeros) {
+    double min = 101;
+
+    for(int i = 0; i < qtd_numeros; i++) {
+        if(min > vetor_de_numeros[i]) {
+            min = vetor_de_numeros[i];
+        }
+    }
+
+    return min;
+}
+
 int main() {
     int n_termos = 0;
     int qtd_dias = 0;
@@ -70,6 +83,7 @@ int main() {
     for(int i = 0; i < n_termos; i++) {
         vetor_estatistica[i] = aloca_double(qtd_dias);
         vetor_estatistica[i][0] = procura_maximo(qtd_dias, vetor_dados[i]);
+        vetor_estatistica[i][1] = procura_minimo(qtd_dias, vetor_dados[i]);
     }
 
     printf("%d %d\n", n_termos, qtd_dias);
@@ -79,7 +93,9 @@ int main() {
             printf("%.2lf ", vetor_dados[i][j]);
         }
         printf("\n");
-        printf("stat %.2lf\n", vetor_estatistica[i][0]);
+        printf("stat %.2lf %.2lf\n",
+               vetor_estatistica[i][0],
+               vetor_estatistica[i][1]);
     }
 
     return 0;
