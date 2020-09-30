@@ -58,6 +58,17 @@ double procura_minimo(int qtd_numeros,
     return min;
 }
 
+double calcula_media(int qtd_numeros,
+                     double *vetor_de_numeros) {
+    double media = 0.0;
+
+    for(int i = 0; i < qtd_numeros; i++) {
+        media += vetor_de_numeros[i];
+    }
+
+    return media / qtd_numeros;
+}
+
 int main() {
     int n_termos = 0;
     int qtd_dias = 0;
@@ -84,6 +95,7 @@ int main() {
         vetor_estatistica[i] = aloca_double(qtd_dias);
         vetor_estatistica[i][0] = procura_maximo(qtd_dias, vetor_dados[i]);
         vetor_estatistica[i][1] = procura_minimo(qtd_dias, vetor_dados[i]);
+        vetor_estatistica[i][2] = calcula_media(qtd_dias, vetor_dados[i]);
     }
 
     printf("%d %d\n", n_termos, qtd_dias);
@@ -93,9 +105,10 @@ int main() {
             printf("%.2lf ", vetor_dados[i][j]);
         }
         printf("\n");
-        printf("stat %.2lf %.2lf\n",
+        printf("stat %.2lf %.2lf %.2lf\n",
                vetor_estatistica[i][0],
-               vetor_estatistica[i][1]);
+               vetor_estatistica[i][1],
+               vetor_estatistica[i][2]);
     }
 
     return 0;
