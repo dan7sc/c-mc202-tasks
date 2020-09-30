@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #define NUM_CHAR 25
 #define NUM_ESTAT 4
@@ -69,6 +70,22 @@ double calcula_media(int qtd_numeros,
     return media / qtd_numeros;
 }
 
+double calcula_desvio_padrao(int qtd_numeros,
+                             double *vetor_de_numeros,
+                             double media) {
+    double soma = 0.0;
+    double x = 0.0;
+    double dp = 0.0;
+
+    for(int i = 0; i < qtd_numeros; i++) {
+        x = vetor_de_numeros[i] - media;
+        soma += x * x;
+    }
+    dp = sqrt(soma / qtd_numeros);
+
+    return dp;
+}
+
 int main() {
     int n_termos = 0;
     int qtd_dias = 0;
@@ -96,19 +113,21 @@ int main() {
         vetor_estatistica[i][0] = procura_maximo(qtd_dias, vetor_dados[i]);
         vetor_estatistica[i][1] = procura_minimo(qtd_dias, vetor_dados[i]);
         vetor_estatistica[i][2] = calcula_media(qtd_dias, vetor_dados[i]);
+        vetor_estatistica[i][3] = calcula_desvio_padrao(
+            qtd_dias,
+            vetor_dados[i],
+            vetor_estatistica[i][2]
+            );
     }
 
     printf("%d %d\n", n_termos, qtd_dias);
     for(int i = 0; i < n_termos; i++) {
         printf("%s ", vetor_termos[i]);
-        for(int j = 0; j < qtd_dias; j++) {
-            printf("%.2lf ", vetor_dados[i][j]);
-        }
-        printf("\n");
-        printf("stat %.2lf %.2lf %.2lf\n",
+        printf("%.2lf %.2lf %.2lf %.2lf\n",
                vetor_estatistica[i][0],
                vetor_estatistica[i][1],
-               vetor_estatistica[i][2]);
+               vetor_estatistica[i][2],
+               vetor_estatistica[i][3]);
     }
 
     return 0;
