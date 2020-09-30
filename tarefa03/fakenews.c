@@ -4,6 +4,10 @@
 
 #define NUM_CHAR 25
 #define NUM_ESTAT 4
+#define MAXIMO 0
+#define MINIMO 1
+#define MEDIA 2
+#define DPADRAO 3
 
 void le_int(int *num) {
     scanf("%d", num);
@@ -93,10 +97,12 @@ double calcula_desvio_padrao(int qtd_numeros,
 void calcula_estatistica(int n,
                          double *v_dados,
                          double *v_estatistica) {
-    v_estatistica[0] = procura_maximo(n, v_dados);
-    v_estatistica[1] = procura_minimo(n, v_dados);
-    v_estatistica[2] = calcula_media(n, v_dados);
-    v_estatistica[3] = calcula_desvio_padrao(n, v_dados, v_estatistica[2]);
+    v_estatistica[MAXIMO] = procura_maximo(n, v_dados);
+    v_estatistica[MINIMO] = procura_minimo(n, v_dados);
+    v_estatistica[MEDIA] = calcula_media(n, v_dados);
+    v_estatistica[DPADRAO] = calcula_desvio_padrao(n,
+                                                   v_dados,
+                                                   v_estatistica[MEDIA]);
 }
 
 void imprime_estatistica(int indice,
