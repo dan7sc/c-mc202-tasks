@@ -38,27 +38,27 @@ void imprime_string(char *str) {
 }
 
 char *aloca_char(int n) {
-    return (char *)malloc(n * sizeof(char));
+    return malloc(n * sizeof(char *));
 }
 
 double *aloca_double(int n) {
-    return (double *)malloc(n * sizeof(double));
+    return malloc(n * sizeof(double *));
 }
 
 int *aloca_int(int n) {
-    return (int *)malloc(n * sizeof(int));
+    return malloc(n * sizeof(int *));
 }
 
 char **aloca_vetor_char(int n) {
-    return (char **)malloc(n * sizeof(char *));
+    return malloc(n * sizeof(char **));
 }
 
 double **aloca_vetor_double(int n) {
-    return (double **)malloc(n * sizeof(double *));
+    return malloc(n * sizeof(double **));
 }
 
 int **aloca_vetor_int(int n) {
-    return (int **)malloc(n * sizeof(int *));
+    return malloc(n * sizeof(int **));
 }
 
 double procura_maximo(int qtd_numeros,
