@@ -125,14 +125,6 @@ void calcula_estatistica(int n,
                                                    v_estatistica[MEDIA]);
 }
 
-void imprime_estatistica(int indice,
-                         double **v_estatistica) {
-    for(int i = 0; i < NUM_ESTAT; i++) {
-        printf("%.2lf ", v_estatistica[indice][i]);
-    }
-    printf("\n");
-}
-
 int avalia_categoria(double *v_estatistica) {
     if(v_estatistica[MEDIA] >= 60 &&
        v_estatistica[DPADRAO] > 15) {
@@ -161,11 +153,30 @@ void inicializa_int(int n, int *v) {
     }
 }
 
+void imprime_estatistica(int indice,
+                         double **v_estatistica) {
+    for(int i = 0; i < NUM_ESTAT; i++) {
+        printf("%.2lf ", v_estatistica[indice][i]);
+    }
+    printf("\n");
+}
+
+void imprime_termo_e_estatistica(int n,
+                         char **v_termos,
+                         double **v_estatistica) {
+    for(int i = 0; i < n; i++) {
+        imprime_string(v_termos[i]);
+        printf(" ");
+        imprime_estatistica(i, v_estatistica);
+    }
+}
+
 void imprime_resultado(int *tam_categorias,
                        int **v_categorias,
                        char **v_termos) {
     int num = 0;
 
+    imprime_string("\nRESULTADO:\n");
     for(int i = 0; i < NUM_CATEGORIA; i++) {
         if(i == 0) {
             imprime_string("Bot (");
@@ -248,11 +259,7 @@ int main() {
         calcula_estatistica(qtd_dias, vetor_dados[i], vetor_estatistica[i]);
     }
 
-    for(int i = 0; i < n_termos; i++) {
-        imprime_string(vetor_termos[i]);
-        printf(" ");
-        imprime_estatistica(i, vetor_estatistica);
-    }
+    imprime_termo_e_estatistica(n_termos, vetor_termos, vetor_estatistica);
 
     vetor_categorias = aloca_vetor_int(NUM_CATEGORIA);
     tam_categorias = aloca_int(NUM_CATEGORIA);
@@ -269,7 +276,6 @@ int main() {
         tam_categorias[categoria] += 1;
     }
 
-    imprime_string("\nRESULTADO:\n");
     imprime_resultado(tam_categorias,vetor_categorias, vetor_termos);
 
     desaloca_int(tam_categorias);
