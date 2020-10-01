@@ -161,6 +161,34 @@ void inicializa_int(int n, int *v) {
     }
 }
 
+void imprime_resultado(int *tam_categorias,
+                       int **v_categorias,
+                       char **v_termos) {
+    int num = 0;
+
+    for(int i = 0; i < NUM_CATEGORIA; i++) {
+        if(i == 0) {
+            imprime_string("Bot (");
+        } else if(i == 1) {
+            imprime_string("Surpreendente (");
+        } else if(i == 2) {
+            imprime_string("Normal (");
+        } else if(i == 3) {
+            imprime_string("Local (");
+        } else if(i == 4) {
+            imprime_string("Irrelevante (");
+        }
+        imprime_int(tam_categorias[i]);
+        imprime_string("): ");
+        for(int j = 0; j < tam_categorias[i]; j++) {
+            num = v_categorias[i][j];
+            imprime_string(v_termos[num]);
+            printf(" ");
+        }
+        printf("\n");
+    }
+}
+
 int main() {
     int n_termos = 0;
     int qtd_dias = 0;
@@ -212,27 +240,7 @@ int main() {
         tam_categorias[categoria] += 1;
     }
 
-    for(int i = 0; i < NUM_CATEGORIA; i++) {
-        if(i == 0) {
-            imprime_string("Bot (");
-        } else if(i == 1) {
-            imprime_string("Surpreendente (");
-        } else if(i == 2) {
-            imprime_string("Normal (");
-        } else if(i == 3) {
-            imprime_string("Local (");
-        } else if(i == 4) {
-            imprime_string("Irrelevante (");
-        }
-        imprime_int(tam_categorias[i]);
-        imprime_string("): ");
-        for(int j = 0; j < tam_categorias[i]; j++) {
-            num = vetor_categorias[i][j];
-            imprime_string(vetor_termos[num]);
-            printf(" ");
-        }
-        printf("\n");
-    }
+    imprime_resultado(tam_categorias,vetor_categorias, vetor_termos);
 
     return 0;
 }
