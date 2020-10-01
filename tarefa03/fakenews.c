@@ -170,7 +170,7 @@ int main() {
     int **vetor_categorias = NULL;
     int *tam_categorias = NULL;
     int categoria = -1;
-    int cont = 0;
+    int num = 0;
 
     le_int(&n_termos);
     le_int(&qtd_dias);
@@ -207,8 +207,8 @@ int main() {
         if(vetor_categorias[categoria] == NULL) {
             vetor_categorias[categoria] = aloca_int(n_termos);
         }
-        cont = tam_categorias[categoria];
-        vetor_categorias[categoria][cont] = i;
+        num = tam_categorias[categoria];
+        vetor_categorias[categoria][num] = i;
         tam_categorias[categoria] += 1;
     }
 
@@ -227,7 +227,8 @@ int main() {
         imprime_int(tam_categorias[i]);
         imprime_string("): ");
         for(int j = 0; j < tam_categorias[i]; j++) {
-            imprime_int(vetor_categorias[i][j]);
+            num = vetor_categorias[i][j];
+            imprime_string(vetor_termos[num]);
             printf(" ");
         }
         printf("\n");
