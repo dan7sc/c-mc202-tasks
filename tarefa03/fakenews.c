@@ -230,11 +230,11 @@ int main() {
     vetor_categorias = aloca_vetor_int(NUM_CATEGORIA);
     tam_categorias = aloca_int(NUM_CATEGORIA);
     inicializa_int(NUM_CATEGORIA, tam_categorias);
+    for(int i = 0; i < NUM_CATEGORIA; i++) {
+        vetor_categorias[i] = aloca_int(n_termos);
+    }
     for(int i = 0; i < n_termos; i++) {
         categoria = avalia_categoria(vetor_estatistica[i]);
-        if(vetor_categorias[categoria] == NULL) {
-            vetor_categorias[categoria] = aloca_int(n_termos);
-        }
         num = tam_categorias[categoria];
         vetor_categorias[categoria][num] = i;
         tam_categorias[categoria] += 1;
