@@ -34,7 +34,7 @@ void imprime_int(int n) {
 }
 
 void imprime_string(char *str) {
-    printf("%s ", str);
+    printf("%s", str);
 }
 
 char *aloca_char(int n) {
@@ -49,13 +49,16 @@ int *aloca_int(int n) {
     return (int *)malloc(n * sizeof(int));
 }
 
-
 char **aloca_vetor_char(int n) {
     return (char **)malloc(n * sizeof(char *));
 }
 
 double **aloca_vetor_double(int n) {
     return (double **)malloc(n * sizeof(double *));
+}
+
+int **aloca_vetor_int(int n) {
+    return (int **)malloc(n * sizeof(int *));
 }
 
 double procura_maximo(int qtd_numeros,
@@ -152,15 +155,22 @@ int avalia_categoria(double *v_estatistica) {
     return -1;
 }
 
+void inicializa_int(int n, int *v) {
+    for(int i = 0; i < n; i++) {
+        v[i] = 0;
+    }
+}
+
 int main() {
     int n_termos = 0;
     int qtd_dias = 0;
     double **vetor_dados = NULL;
     char **vetor_termos = NULL;
     double **vetor_estatistica = NULL;
-    /* char **vetor_categoria = NULL; */
-    /* int *tam_categoria = NULL; */
+    int **vetor_categorias = NULL;
+    int *tam_categorias = NULL;
     int categoria = -1;
+    int cont = 0;
 
     le_int(&n_termos);
     le_int(&qtd_dias);
@@ -184,19 +194,44 @@ int main() {
 
     for(int i = 0; i < n_termos; i++) {
         imprime_string(vetor_termos[i]);
+        printf(" ");
         imprime_estatistica(i, vetor_estatistica);
     }
 
     imprime_string("\nRESULTADO:\n");
-    /* vetor_categoria = aloca_vetor_char(NUM_CATEGORIA); */
-    /* tam_categoria = aloca_int(NUM_CATEGORIA);g */
+    vetor_categorias = aloca_vetor_int(NUM_CATEGORIA);
+    tam_categorias = aloca_int(NUM_CATEGORIA);
+    inicializa_int(NUM_CATEGORIA, tam_categorias);
     for(int i = 0; i < n_termos; i++) {
         categoria = avalia_categoria(vetor_estatistica[i]);
-        /* vetor_categoria[i] = aloca_char(NUM_CHAR); */
-        imprime_int(categoria);
-        imprime_string(" ");
+        if(vetor_categorias[categoria] == NULL) {
+            vetor_categorias[categoria] = aloca_int(n_termos);
+        }
+        cont = tam_categorias[categoria];
+        vetor_categorias[categoria][cont] = i;
+        tam_categorias[categoria] += 1;
     }
-    imprime_string("\n");
+
+    for(int i = 0; i < NUM_CATEGORIA; i++) {
+        if(i == 0) {
+            imprime_string("Bot (");
+        } else if(i == 1) {
+            imprime_string("Surpreendente (");
+        } else if(i == 2) {
+            imprime_string("Normal (");
+        } else if(i == 3) {
+            imprime_string("Local (");
+        } else if(i == 4) {
+            imprime_string("Irrelevante (");
+        }
+        imprime_int(tam_categorias[i]);
+        imprime_string("): ");
+        for(int j = 0; j < tam_categorias[i]; j++) {
+            imprime_int(vetor_categorias[i][j]);
+            printf(" ");
+        }
+        printf("\n");
+    }
 
     return 0;
 }
