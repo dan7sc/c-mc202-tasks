@@ -189,6 +189,31 @@ void imprime_resultado(int *tam_categorias,
     }
 }
 
+void desaloca_int(int *v) {
+    free(v);
+}
+
+void desaloca_vetor_int(int n, int **v) {
+    for(int i = 0; i < n; i++) {
+        free(v[i]);
+    }
+    free(v);
+}
+
+void desaloca_vetor_char(int n, char **v) {
+    for(int i = 0; i < n; i++) {
+        free(v[i]);
+    }
+    free(v);
+}
+
+void desaloca_vetor_double(int n, double **v) {
+    for(int i = 0; i < n; i++) {
+        free(v[i]);
+    }
+    free(v);
+}
+
 int main() {
     int n_termos = 0;
     int qtd_dias = 0;
@@ -241,6 +266,12 @@ int main() {
     }
 
     imprime_resultado(tam_categorias,vetor_categorias, vetor_termos);
+
+    desaloca_int(tam_categorias);
+    desaloca_vetor_double(n_termos, vetor_dados);
+    desaloca_vetor_char(n_termos, vetor_termos);
+    desaloca_vetor_double(n_termos, vetor_estatistica);
+    desaloca_vetor_int(NUM_CATEGORIA, vetor_categorias);
 
     return 0;
 }
