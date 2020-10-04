@@ -180,6 +180,25 @@ int avalia_categoria(double *v_estatistica) {
     return -1;
 }
 
+void incrementa_tamanho_categoria(int categoria, int *tam_categorias) {
+    tam_categorias[categoria] += 1;
+}
+
+void analisa_categorias(int n,
+                        double **v_estatistica,
+                        int **v_categorias,
+                        int *tam_categorias) {
+    int categoria = 0;
+    int index = 0;
+
+    for(int i = 0; i < n; i++) {
+        categoria = avalia_categoria(v_estatistica[i]);
+        index = tam_categorias[categoria];
+        v_categorias[categoria][index] = i;
+        incrementa_tamanho_categoria(categoria, tam_categorias);
+    }
+}
+
 void inicializa_int(int n, int *v) {
     for(int i = 0; i < n; i++) {
         v[i] = 0;
@@ -266,8 +285,6 @@ int main() {
     double **vetor_estatistica = NULL;
     int **vetor_categorias = NULL;
     int *tam_categorias = NULL;
-    int categoria = 0;
-    int num = 0;
 
     le_int(&n_termos);
     le_int(&qtd_dias);
@@ -290,12 +307,11 @@ int main() {
                                 vetor_termos,
                                 vetor_estatistica);
 
-    for(int i = 0; i < n_termos; i++) {
-        categoria = avalia_categoria(vetor_estatistica[i]);
-        num = tam_categorias[categoria];
-        vetor_categorias[categoria][num] = i;
-        tam_categorias[categoria] += 1;
-    }
+
+    analisa_categorias(n_termos,
+           vetor_estatistica,
+           vetor_categorias,
+           tam_categorias);
 
     imprime_resultado(tam_categorias,
                       vetor_categorias,
