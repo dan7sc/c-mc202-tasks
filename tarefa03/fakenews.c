@@ -29,6 +29,15 @@ void le_string(char *str) {
     scanf("%s", str);
 }
 
+void le_termos_e_dados(int n, int m, char **v_termos, double **v_dados) {
+    for(int i = 0; i < n; i++) {
+        le_string(v_termos[i]);
+        for(int j = 0; j < m; j++) {
+            le_double(&v_dados[i][j]);
+        }
+    }
+}
+
 void imprime_int(int n) {
     printf("%d", n);
 }
@@ -270,19 +279,16 @@ int main() {
     tam_categorias = aloca_int(NUM_CATEGORIA);
     inicializa_int(NUM_CATEGORIA, tam_categorias);
 
-    for(int i = 0; i < n_termos; i++) {
-        le_string(vetor_termos[i]);
-        for(int j = 0; j < qtd_dias; j++) {
-            le_double(&vetor_dados[i][j]);
-        }
-    }
+    le_termos_e_dados(n_termos, qtd_dias, vetor_termos, vetor_dados);
 
     calcula_estatistica_n_termos(n_termos,
                                  qtd_dias,
                                  vetor_dados,
                                  vetor_estatistica);
 
-    imprime_termo_e_estatistica(n_termos, vetor_termos, vetor_estatistica);
+    imprime_termo_e_estatistica(n_termos,
+                                vetor_termos,
+                                vetor_estatistica);
 
     for(int i = 0; i < n_termos; i++) {
         categoria = avalia_categoria(vetor_estatistica[i]);
@@ -291,7 +297,9 @@ int main() {
         tam_categorias[categoria] += 1;
     }
 
-    imprime_resultado(tam_categorias,vetor_categorias, vetor_termos);
+    imprime_resultado(tam_categorias,
+                      vetor_categorias,
+                      vetor_termos);
 
     desaloca_int(tam_categorias);
     desaloca_vetor_double(n_termos, vetor_dados);
