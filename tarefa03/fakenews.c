@@ -140,6 +140,15 @@ void calcula_estatistica(int n,
                                                    v_estatistica[MEDIA]);
 }
 
+void calcula_estatistica_n_termos(int n,
+                                  int m,
+                                  double **v_dados,
+                                  double **v_estatistica) {
+    for(int i = 0; i < n; i++) {
+        calcula_estatistica(m, v_dados[i], v_estatistica[i]);
+    }
+}
+
 int avalia_categoria(double *v_estatistica) {
     if(v_estatistica[MEDIA] >= 60 &&
        v_estatistica[DPADRAO] > 15) {
@@ -256,6 +265,11 @@ int main() {
 
     vetor_termos = aloca_vetor_char(n_termos, NUM_CHAR);
     vetor_dados = aloca_vetor_double(n_termos, qtd_dias);
+    vetor_estatistica = aloca_vetor_double(n_termos, qtd_dias);
+    vetor_categorias = aloca_vetor_int(NUM_CATEGORIA, n_termos);
+    tam_categorias = aloca_int(NUM_CATEGORIA);
+    inicializa_int(NUM_CATEGORIA, tam_categorias);
+
     for(int i = 0; i < n_termos; i++) {
         le_string(vetor_termos[i]);
         for(int j = 0; j < qtd_dias; j++) {
@@ -263,16 +277,13 @@ int main() {
         }
     }
 
-    vetor_estatistica = aloca_vetor_double(n_termos, qtd_dias);
-    for(int i = 0; i < n_termos; i++) {
-        calcula_estatistica(qtd_dias, vetor_dados[i], vetor_estatistica[i]);
-    }
+    calcula_estatistica_n_termos(n_termos,
+                                 qtd_dias,
+                                 vetor_dados,
+                                 vetor_estatistica);
 
     imprime_termo_e_estatistica(n_termos, vetor_termos, vetor_estatistica);
 
-    vetor_categorias = aloca_vetor_int(NUM_CATEGORIA, n_termos);
-    tam_categorias = aloca_int(NUM_CATEGORIA);
-    inicializa_int(NUM_CATEGORIA, tam_categorias);
     for(int i = 0; i < n_termos; i++) {
         categoria = avalia_categoria(vetor_estatistica[i]);
         num = tam_categorias[categoria];
