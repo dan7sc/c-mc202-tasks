@@ -49,16 +49,31 @@ int *aloca_int(int n) {
     return malloc(n * sizeof(int));
 }
 
-char **aloca_vetor_char(int n) {
-    return malloc(n * sizeof(char *));
+char **aloca_vetor_char(int n, int m) {
+    char **v = NULL;
+    v = malloc(n * sizeof(char *));
+    for(int i = 0; i < n; i++) {
+        v[i] = malloc(m * sizeof(char));
+    }
+    return v;
 }
 
-double **aloca_vetor_double(int n) {
-    return malloc(n * sizeof(double *));
+double **aloca_vetor_double(int n, int m) {
+    double **v = NULL;
+    v = malloc(n * sizeof(double *));
+    for(int i = 0; i < n; i++) {
+        v[i] = malloc(m * sizeof(double));
+    }
+    return v;
 }
 
-int **aloca_vetor_int(int n) {
-    return malloc(n * sizeof(int *));
+int **aloca_vetor_int(int n, int m) {
+    int **v = NULL;
+    v = malloc(n * sizeof(int *));
+    for(int i = 0; i < n; i++) {
+        v[i] = malloc(m * sizeof(int));
+    }
+    return v;
 }
 
 double procura_maximo(int qtd_numeros,
@@ -239,36 +254,25 @@ int main() {
     le_int(&n_termos);
     le_int(&qtd_dias);
 
-    vetor_termos = aloca_vetor_char(n_termos);
-    vetor_dados = aloca_vetor_double(n_termos);
-
+    vetor_termos = aloca_vetor_char(n_termos, NUM_CHAR);
+    vetor_dados = aloca_vetor_double(n_termos, qtd_dias);
     for(int i = 0; i < n_termos; i++) {
-        vetor_termos[i] = aloca_char(NUM_CHAR);
-        vetor_dados[i] = aloca_double(qtd_dias);
         le_string(vetor_termos[i]);
-
         for(int j = 0; j < qtd_dias; j++) {
             le_double(&vetor_dados[i][j]);
         }
     }
 
-    vetor_estatistica = aloca_vetor_double(n_termos);
-
+    vetor_estatistica = aloca_vetor_double(n_termos, qtd_dias);
     for(int i = 0; i < n_termos; i++) {
-        vetor_estatistica[i] = aloca_double(qtd_dias);
         calcula_estatistica(qtd_dias, vetor_dados[i], vetor_estatistica[i]);
     }
 
     imprime_termo_e_estatistica(n_termos, vetor_termos, vetor_estatistica);
 
-    vetor_categorias = aloca_vetor_int(NUM_CATEGORIA);
+    vetor_categorias = aloca_vetor_int(NUM_CATEGORIA, n_termos);
     tam_categorias = aloca_int(NUM_CATEGORIA);
     inicializa_int(NUM_CATEGORIA, tam_categorias);
-
-    for(int i = 0; i < NUM_CATEGORIA; i++) {
-        vetor_categorias[i] = aloca_int(n_termos);
-    }
-
     for(int i = 0; i < n_termos; i++) {
         categoria = avalia_categoria(vetor_estatistica[i]);
         num = tam_categorias[categoria];
