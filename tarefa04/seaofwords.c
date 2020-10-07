@@ -168,10 +168,13 @@ int busca_palavra_recursivo(int lin,
 void busca_palavra(int lin,
                    int col,
                    char **matriz,
-                   char *palavra,
-                   char **visitados) {
+                   char *palavra) {
     int index = 0;
     int eh_encontrada = 0;
+    char **visitados = NULL;
+
+    visitados = aloca_matriz(lin, col);
+    inicializa_matriz_char(lin, col, visitados);
 
     for(int i = 0; i < lin && !eh_encontrada; i++) {
         for(int j = 0; j < col && !eh_encontrada; j++) {
@@ -197,7 +200,6 @@ int main() {
     int n_palavras = 0;
     char **texto = NULL;
     char **palavras = NULL;
-    char **visitados = NULL;
 
     le_int(&lin);
     le_int(&col);
@@ -205,7 +207,6 @@ int main() {
 
     texto = aloca_matriz(lin, col);
     palavras = aloca_matriz(n_palavras, N_CHAR);
-    visitados = aloca_matriz(lin, col);
 
     le_matriz_char(lin, col, texto);
     le_matriz_string(n_palavras, palavras);
@@ -220,8 +221,7 @@ int main() {
     /* imprime_matriz_string(n_palavras, palavras); */
 
     for(int i = 0; i < n_palavras; i++) {
-        inicializa_matriz_char(lin, col, visitados);
-        busca_palavra(lin, col, texto, palavras[i], visitados);
+        busca_palavra(lin, col, texto, palavras[i]);
     }
 
     return 0;
