@@ -5,6 +5,22 @@
 #define TRUE 1
 #define FALSE 0
 
+typedef struct _livro {
+    char **texto;
+    int lin;
+    int col;
+} Livro;
+
+typedef struct _palavra {
+    char *palavra;
+    int indice;
+} Palavra;
+
+typedef struct _palavras {
+    Palavra *lista;
+    int qtd;
+} Palavras;
+
 void le_int(int *num) {
     scanf("%d", num);
 }
@@ -21,9 +37,9 @@ void le_matriz_char(int lin, int col,  char **matriz) {
     }
 }
 
-void le_matriz_string(int n,  char **matriz) {
-    for(int i = 0; i < n; i++) {
-        scanf("%s", matriz[i]);
+void le_palavras(Palavras palavras) {
+    for(int i = 0; i < palavras.qtd; i++) {
+        scanf("%s", palavras.lista[i].palavra);
     }
 }
 
@@ -42,6 +58,15 @@ char **aloca_matriz(int n, int m) {
         v[i] = malloc(m * sizeof(char));
     }
     return v;
+}
+
+Palavra *aloca_palavras(int n, int m) {
+    Palavras v;
+    v.lista = malloc(n * sizeof(Palavra));
+    for(int i = 0; i < n; i++) {
+        v.lista[i].palavra = malloc(m * sizeof(char));
+    }
+    return v.lista;
 }
 
 void imprime_int(int n) {
@@ -74,6 +99,15 @@ void imprime_matriz_string(int n,  char **matriz) {
     }
 }
 
+void imprime_palavras(int n,  Palavra *lista) {
+    for(int i = 0; i < n; i++) {
+        for (int j = 0; lista[i].palavra[j] != '\0'; j++) {
+            printf("%c", lista[i].palavra[j]);
+        }
+        printf("\n");
+    }
+}
+
 int esta_nos_limites(int lin, int col, int lin_index, int col_index) {
     if(lin_index >= 0 && col_index >= 0 && lin_index < lin && col_index < col) {
         return TRUE;
@@ -81,147 +115,92 @@ int esta_nos_limites(int lin, int col, int lin_index, int col_index) {
     return FALSE;
 }
 
-int busca_palavra_recursivo(int lin,
-                            int col,
-                            char **matriz,
-                            int i,
-                            int j,
-                            char *palavra,
-                            int index,
+int busca_palavra_recursivo(Livro lv,
+                            int i, int j,
+                            Palavra lst,
                             char **visitados) {
-    int para_baixo = 0;
-    int para_direita = 0;
-    int para_cima = 0;
-    int para_esquerda = 0;
-
-    if(esta_nos_limites(lin, col, i, j) == 1 &&
-       palavra[index] != '\0' &&
+    if(esta_nos_limites(lv.lin, lv.col, i, j) == 1 &&
+       lst.palavra[lst.indice] != '\0' &&
        visitados[i][j] != '*') {
-        if(matriz[i][j] != palavra[index]) {
+        if(lv.texto[i][j] != lst.palavra[lst.indice]) {
             return 0;
         }
 
-        if(matriz[i][j] == palavra[index]) {
+        if(lv.texto[i][j] == lst.palavra[lst.indice]) {
             visitados[i][j] = '*';
-            index++;
+            lst.indice++;
 
-            i++;
-            para_baixo = busca_palavra_recursivo(lin,
-                                                 col,
-                                                 matriz,
-                                                 i,
-                                                 j,
-                                                 palavra,
-                                                 index,
-                                                 visitados);
-            i--;
-
-            j++;
-            para_direita = busca_palavra_recursivo(lin,
-                                                   col,
-                                                   matriz,
-                                                   i,
-                                                   j,
-                                                   palavra,
-                                                   index,
-                                                   visitados);
-            j--;
-
-            i--;
-            para_cima = busca_palavra_recursivo(lin,
-                                                col,
-                                                matriz,
-                                                i,
-                                                j,
-                                                palavra,
-                                                index,
-                                                visitados);
-            i++;
-
-            j--;
-            para_esquerda = busca_palavra_recursivo(lin,
-                                                    col,
-                                                    matriz,
-                                                    i,
-                                                    j,
-                                                    palavra,
-                                                    index,
-                                                    visitados);
-            j++;
+            if(busca_palavra_recursivo(lv, i + 1, j, lst, visitados)) {
+                return TRUE;
+            }
+            if(busca_palavra_recursivo(lv, i, j + 1, lst, visitados)) {
+                return TRUE;
+            }
+            if(busca_palavra_recursivo(lv, i - 1, j, lst, visitados)) {
+                return TRUE;
+            }
+            if(busca_palavra_recursivo(lv, i, j - 1, lst, visitados)) {
+                return TRUE;
+            }
         }
         visitados[i][j] = '0';
     }
 
-    if(para_baixo) return TRUE;
-    if(para_direita) return TRUE;
-    if(para_cima) return TRUE;
-    if(para_esquerda) return TRUE;
-
-    if(palavra[index] == '\0') {
+    if(lst.palavra[lst.indice] == '\0') {
         return TRUE;
     }
 
-    index--;
+    lst.indice--;
     return FALSE;
 }
 
-void busca_palavra(int lin,
-                   int col,
-                   char **matriz,
-                   char *palavra) {
-    int index = 0;
+void busca_palavra(Livro lv,
+                   Palavra lst) {
     int eh_encontrada = 0;
     char **visitados = NULL;
 
-    visitados = aloca_matriz(lin, col);
-    inicializa_matriz_char(lin, col, visitados);
+    visitados = aloca_matriz(lv.lin, lv.col);
+    inicializa_matriz_char(lv.lin, lv.col, visitados);
 
-    for(int i = 0; i < lin && !eh_encontrada; i++) {
-        for(int j = 0; j < col && !eh_encontrada; j++) {
-            if(matriz[i][j] == palavra[index]) {
-                eh_encontrada = busca_palavra_recursivo(lin,
-                                                        col,
-                                                        matriz,
-                                                        i,
-                                                        j,
-                                                        palavra,
-                                                        index,
-                                                        visitados);
+    for(int i = 0; i < lv.lin && !eh_encontrada; i++) {
+        for(int j = 0; j < lv.col && !eh_encontrada; j++) {
+            if(lv.texto[i][j] == lst.palavra[lst.indice]) {
+                eh_encontrada = busca_palavra_recursivo(lv, i, j, lst, visitados);
             }
         }
     }
-    if(eh_encontrada == 0) printf("nao\n");
-    else if(eh_encontrada == 1) printf("sim\n");
+    if(eh_encontrada) {
+        printf("sim\n");
+    } else {
+        printf("nao\n");
+    }
 }
 
 int main() {
-    int lin = 0;
-    int col = 0;
-    int n_palavras = 0;
-    char **texto = NULL;
-    char **palavras = NULL;
+    Livro livro;
+    Palavras palavras;
 
-    le_int(&lin);
-    le_int(&col);
-    le_int(&n_palavras);
+    le_int(&livro.lin);
+    le_int(&livro.col);
+    le_int(&palavras.qtd);
 
-    texto = aloca_matriz(lin, col);
-    palavras = aloca_matriz(n_palavras, N_CHAR);
+    livro.texto = aloca_matriz(livro.lin, livro.col);
+    palavras.lista = aloca_palavras(palavras.qtd, N_CHAR);
 
-    le_matriz_char(lin, col, texto);
-    le_matriz_string(n_palavras, palavras);
+    le_matriz_char(livro.lin, livro.col, livro.texto);
+    le_palavras(palavras);
 
-    /* imprime_int(lin); */
+    /* imprime_int(livro.lin); */
     /* printf(" "); */
-    /* imprime_int(col); */
+    /* imprime_int(livro.col); */
     /* printf(" "); */
-    /* imprime_int(n_palavras); */
+    /* imprime_int(palavras.qtd); */
     /* printf("\n"); */
-    /* imprime_matriz_char(lin, col, texto); */
-    /* imprime_matriz_string(n_palavras, palavras); */
+    /* imprime_matriz_char(livro.lin, livro.col, livro.texto); */
+    /* imprime_palavras(palavras.qtd, palavras.lista); */
 
-    for(int i = 0; i < n_palavras; i++) {
-        busca_palavra(lin, col, texto, palavras[i]);
+    for(int i = 0; i < palavras.qtd; i++) {
+        busca_palavra(livro, palavras.lista[i]);
     }
 
     return 0;
