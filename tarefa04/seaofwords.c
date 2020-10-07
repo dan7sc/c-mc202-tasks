@@ -64,21 +64,33 @@ void imprime_matriz_string(int n,  char **matriz) {
     }
 }
 
+void busca_palavra(int lin, int col, char **matriz, char *palavra) {
+    int index = 0;
+
+    for(int i = 0; i < lin; i++) {
+        for(int j = 0; j < col; j++) {
+            if(matriz[i][j] == palavra[index]) {
+                printf("%c %d %d\n", matriz[i][j], i, j);
+            }
+        }
+    }
+}
+
 int main() {
     int lin = 0;
     int col = 0;
     int n_palavras = 0;
-    char **matriz = NULL;
+    char **texto = NULL;
     char **palavras = NULL;
 
     le_int(&lin);
     le_int(&col);
     le_int(&n_palavras);
 
-    matriz = aloca_matriz(lin, col);
-    le_matriz_char(lin, col, matriz);
-
+    texto = aloca_matriz(lin, col);
     palavras = aloca_matriz(n_palavras, N_CHAR);
+
+    le_matriz_char(lin, col, texto);
     le_matriz_string(n_palavras, palavras);
 
     imprime_int(lin);
@@ -87,8 +99,12 @@ int main() {
     printf(" ");
     imprime_int(n_palavras);
     printf("\n");
-    imprime_matriz_char(lin, col, matriz);
+    imprime_matriz_char(lin, col, texto);
     imprime_matriz_string(n_palavras, palavras);
+
+    for(int i = 0; i < n_palavras; i++) {
+        busca_palavra(lin, col, texto, palavras[i]);
+    }
 
     return 0;
 }
