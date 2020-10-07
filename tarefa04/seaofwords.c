@@ -11,14 +11,9 @@ typedef struct _livro {
     int col;
 } Livro;
 
-typedef struct _palavra {
-    char *palavra;
-    int indice;
-} Palavra;
-
 typedef struct _palavras {
-    Palavra *lista;
-    int qtd;
+    char *palavra;
+    int indice_letra;
 } Palavras;
 
 void le_int(int *num) {
@@ -37,9 +32,9 @@ void le_matriz_char(int lin, int col,  char **matriz) {
     }
 }
 
-void le_palavras(Palavras palavras) {
-    for(int i = 0; i < palavras.qtd; i++) {
-        scanf("%s", palavras.lista[i].palavra);
+void le_palavras(int n, Palavras *palavras) {
+    for(int i = 0; i < n; i++) {
+        scanf("%s", palavras[i].palavra);
     }
 }
 
@@ -60,13 +55,28 @@ char **aloca_matriz(int n, int m) {
     return v;
 }
 
-Palavra *aloca_palavras(int n, int m) {
-    Palavras v;
-    v.lista = malloc(n * sizeof(Palavra));
+Palavras *aloca_palavras(int n, int m) {
+    Palavras *plv;
+    plv = malloc(n * sizeof(Palavras));
     for(int i = 0; i < n; i++) {
-        v.lista[i].palavra = malloc(m * sizeof(char));
+        plv[i].indice_letra = 0;
+        plv[i].palavra = malloc(m * sizeof(char));
     }
-    return v.lista;
+    return plv;
+}
+
+void desaloca_matriz(int n, char **matriz) {
+    for(int i = 0; i < n; i++) {
+        free(matriz[i]);
+    }
+    free(matriz);
+}
+
+void desaloca_palavras(int n, Palavras *plv) {
+    for(int i = 0; i < n; i++) {
+        free(plv[i].palavra);
+    }
+    free(plv);
 }
 
 void imprime_int(int n) {
@@ -99,10 +109,10 @@ void imprime_matriz_string(int n,  char **matriz) {
     }
 }
 
-void imprime_palavras(int n,  Palavra *lista) {
+void imprime_palavras(int n,  Palavras *plv) {
     for(int i = 0; i < n; i++) {
-        for (int j = 0; lista[i].palavra[j] != '\0'; j++) {
-            printf("%c", lista[i].palavra[j]);
+        for (int j = 0; plv[i].palavra[j] != '\0'; j++) {
+            printf("%c", plv[i].palavra[j]);
         }
         printf("\n");
     }
@@ -117,45 +127,45 @@ int esta_nos_limites(int lin, int col, int lin_index, int col_index) {
 
 int busca_palavra_recursivo(Livro lv,
                             int i, int j,
-                            Palavra lst,
+                            Palavras plv,
                             char **visitados) {
     if(esta_nos_limites(lv.lin, lv.col, i, j) == 1 &&
-       lst.palavra[lst.indice] != '\0' &&
+       plv.palavra[plv.indice_letra] != '\0' &&
        visitados[i][j] != '*') {
-        if(lv.texto[i][j] != lst.palavra[lst.indice]) {
+        if(lv.texto[i][j] != plv.palavra[plv.indice_letra]) {
             return 0;
         }
 
-        if(lv.texto[i][j] == lst.palavra[lst.indice]) {
+        if(lv.texto[i][j] == plv.palavra[plv.indice_letra]) {
             visitados[i][j] = '*';
-            lst.indice++;
+            plv.indice_letra++;
 
-            if(busca_palavra_recursivo(lv, i + 1, j, lst, visitados)) {
+            if(busca_palavra_recursivo(lv, i + 1, j, plv, visitados)) {
                 return TRUE;
             }
-            if(busca_palavra_recursivo(lv, i, j + 1, lst, visitados)) {
+            if(busca_palavra_recursivo(lv, i, j + 1, plv, visitados)) {
                 return TRUE;
             }
-            if(busca_palavra_recursivo(lv, i - 1, j, lst, visitados)) {
+            if(busca_palavra_recursivo(lv, i - 1, j, plv, visitados)) {
                 return TRUE;
             }
-            if(busca_palavra_recursivo(lv, i, j - 1, lst, visitados)) {
+            if(busca_palavra_recursivo(lv, i, j - 1, plv, visitados)) {
                 return TRUE;
             }
         }
         visitados[i][j] = '0';
     }
 
-    if(lst.palavra[lst.indice] == '\0') {
+    if(plv.palavra[plv.indice_letra] == '\0') {
         return TRUE;
     }
 
-    lst.indice--;
+    plv.indice_letra--;
     return FALSE;
 }
 
 void busca_palavra(Livro lv,
-                   Palavra lst) {
+                   Palavras plv) {
     int eh_encontrada = 0;
     char **visitados = NULL;
 
@@ -164,44 +174,51 @@ void busca_palavra(Livro lv,
 
     for(int i = 0; i < lv.lin && !eh_encontrada; i++) {
         for(int j = 0; j < lv.col && !eh_encontrada; j++) {
-            if(lv.texto[i][j] == lst.palavra[lst.indice]) {
-                eh_encontrada = busca_palavra_recursivo(lv, i, j, lst, visitados);
+            if(lv.texto[i][j] == plv.palavra[plv.indice_letra]) {
+                eh_encontrada = busca_palavra_recursivo(lv, i, j, plv, visitados);
             }
         }
     }
+
     if(eh_encontrada) {
         printf("sim\n");
     } else {
         printf("nao\n");
     }
+
+    desaloca_matriz(lv.lin, visitados);
 }
 
 int main() {
+    int qtd_palavras;
     Livro livro;
-    Palavras palavras;
+    Palavras *palavras;
 
     le_int(&livro.lin);
     le_int(&livro.col);
-    le_int(&palavras.qtd);
+    le_int(&qtd_palavras);
 
     livro.texto = aloca_matriz(livro.lin, livro.col);
-    palavras.lista = aloca_palavras(palavras.qtd, N_CHAR);
+    palavras = aloca_palavras(qtd_palavras, N_CHAR);
 
     le_matriz_char(livro.lin, livro.col, livro.texto);
-    le_palavras(palavras);
+    le_palavras(qtd_palavras, palavras);
 
     /* imprime_int(livro.lin); */
     /* printf(" "); */
     /* imprime_int(livro.col); */
     /* printf(" "); */
-    /* imprime_int(palavras.qtd); */
+    /* imprime_int(qtd_palavras); */
     /* printf("\n"); */
     /* imprime_matriz_char(livro.lin, livro.col, livro.texto); */
-    /* imprime_palavras(palavras.qtd, palavras.lista); */
+    /* imprime_palavras(qtd_palavras, palavras); */
 
-    for(int i = 0; i < palavras.qtd; i++) {
-        busca_palavra(livro, palavras.lista[i]);
+    for(int i = 0; i < qtd_palavras; i++) {
+        busca_palavra(livro, palavras[i]);
     }
+
+    desaloca_matriz(livro.lin, livro.texto);
+    desaloca_palavras(qtd_palavras, palavras);
 
     return 0;
 }
