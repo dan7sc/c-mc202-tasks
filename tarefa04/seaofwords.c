@@ -154,6 +154,12 @@ void busca_palavra(Livro lv,
     desaloca_matriz(lv.lin, visitados);
 }
 
+void busca_palavras(int n, Livro livro, Palavras *palavras) {
+    for(int i = 0; i < n; i++) {
+        busca_palavra(livro, palavras[i]);
+    }
+}
+
 int main() {
     int qtd_palavras;
     Livro livro;
@@ -169,9 +175,7 @@ int main() {
     le_matriz_char(livro.lin, livro.col, livro.texto);
     le_palavras(qtd_palavras, palavras);
 
-    for(int i = 0; i < qtd_palavras; i++) {
-        busca_palavra(livro, palavras[i]);
-    }
+    busca_palavras(qtd_palavras, livro, palavras);
 
     desaloca_matriz(livro.lin, livro.texto);
     desaloca_palavras(qtd_palavras, palavras);
