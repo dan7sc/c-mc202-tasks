@@ -79,43 +79,8 @@ void desaloca_palavras(int n, Palavras *plv) {
     free(plv);
 }
 
-void imprime_int(int n) {
-    printf("%d", n);
-}
-
-void imprime_char(char c) {
-    printf("%c", c);
-}
-
 void imprime_string(char *str) {
     printf("%s", str);
-}
-
-void imprime_matriz_char(int lin, int col,  char **matriz) {
-    for(int i = 0; i < lin; i++) {
-        for (int j = 0; j < col; j++) {
-            printf("%c", matriz[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-void imprime_matriz_string(int n,  char **matriz) {
-    for(int i = 0; i < n; i++) {
-        for (int j = 0; matriz[i][j] != '\0'; j++) {
-            printf("%c", matriz[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-void imprime_palavras(int n,  Palavras *plv) {
-    for(int i = 0; i < n; i++) {
-        for (int j = 0; plv[i].palavra[j] != '\0'; j++) {
-            printf("%c", plv[i].palavra[j]);
-        }
-        printf("\n");
-    }
 }
 
 int esta_nos_limites(int lin, int col, int lin_index, int col_index) {
@@ -203,15 +168,6 @@ int main() {
 
     le_matriz_char(livro.lin, livro.col, livro.texto);
     le_palavras(qtd_palavras, palavras);
-
-    /* imprime_int(livro.lin); */
-    /* printf(" "); */
-    /* imprime_int(livro.col); */
-    /* printf(" "); */
-    /* imprime_int(qtd_palavras); */
-    /* printf("\n"); */
-    /* imprime_matriz_char(livro.lin, livro.col, livro.texto); */
-    /* imprime_palavras(qtd_palavras, palavras); */
 
     for(int i = 0; i < qtd_palavras; i++) {
         busca_palavra(livro, palavras[i]);
