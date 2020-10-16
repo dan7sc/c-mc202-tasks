@@ -83,8 +83,17 @@ void imprime_string(char *str) {
     printf("%s", str);
 }
 
-int esta_nos_limites(int lin, int col, int lin_index, int col_index) {
-    if(lin_index >= 0 && col_index >= 0 && lin_index < lin && col_index < col) {
+int esta_nos_limites(Livro lv,
+                     int lin_index,
+                     int col_index,
+                     Palavras plv,
+                     char **visitados) {
+    if(lin_index >= 0 &&
+       col_index >= 0 &&
+       lin_index < lv.lin &&
+       col_index < lv.col &&
+       plv.palavra[plv.indice_letra] != '\0' &&
+       visitados[lin_index][col_index] != '*') {
         return TRUE;
     }
     return FALSE;
@@ -94,13 +103,7 @@ int busca_palavra_recursivo(Livro lv,
                             int i, int j,
                             Palavras plv,
                             char **visitados) {
-    if(esta_nos_limites(lv.lin, lv.col, i, j) == 1 &&
-       plv.palavra[plv.indice_letra] != '\0' &&
-       visitados[i][j] != '*') {
-        if(lv.texto[i][j] != plv.palavra[plv.indice_letra]) {
-            return 0;
-        }
-
+    if(esta_nos_limites(lv, i, j, plv, visitados)) {
         if(lv.texto[i][j] == plv.palavra[plv.indice_letra]) {
             visitados[i][j] = '*';
             plv.indice_letra++;
@@ -129,8 +132,7 @@ int busca_palavra_recursivo(Livro lv,
     return FALSE;
 }
 
-void busca_palavra(Livro lv,
-                   Palavras plv) {
+void busca_palavra(Livro lv, Palavras plv) {
     int eh_encontrada = 0;
     char **visitados = NULL;
 
@@ -139,9 +141,7 @@ void busca_palavra(Livro lv,
 
     for(int i = 0; i < lv.lin && !eh_encontrada; i++) {
         for(int j = 0; j < lv.col && !eh_encontrada; j++) {
-            if(lv.texto[i][j] == plv.palavra[plv.indice_letra]) {
-                eh_encontrada = busca_palavra_recursivo(lv, i, j, plv, visitados);
-            }
+            eh_encontrada = busca_palavra_recursivo(lv, i, j, plv, visitados);
         }
     }
 
