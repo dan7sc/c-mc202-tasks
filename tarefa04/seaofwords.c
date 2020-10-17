@@ -41,7 +41,7 @@ void le_palavras(int n, Palavras *palavras) {
 void inicializa_matriz_char(int lin, int col,  char **matriz) {
     for(int i = 0; i < lin; i++) {
         for (int j = 0; j < col; j++) {
-            matriz[i][j] = 0;
+            matriz[i][j] = '0';
         }
     }
 }
