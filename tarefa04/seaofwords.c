@@ -91,7 +91,7 @@ void imprime_resultado(int eh_encontrada) {
     }
 }
 
-int esta_nos_limites(Livro lv,
+int pode_continuar_busca(Livro lv,
                      int lin_index,
                      int col_index,
                      Palavras plv,
@@ -101,7 +101,8 @@ int esta_nos_limites(Livro lv,
        lin_index < lv.lin &&
        col_index < lv.col &&
        plv.palavra[plv.indice_letra] != '\0' &&
-       visitados[lin_index][col_index] != '*') {
+       visitados[lin_index][col_index] != '*' &&
+       lv.texto[lin_index][col_index] == plv.palavra[plv.indice_letra]) {
         return TRUE;
     }
     return FALSE;
@@ -111,24 +112,23 @@ int busca_palavra_recursivo(Livro lv,
                             int i, int j,
                             Palavras plv,
                             char **visitados) {
-    if(esta_nos_limites(lv, i, j, plv, visitados)) {
-        if(lv.texto[i][j] == plv.palavra[plv.indice_letra]) {
-            visitados[i][j] = '*';
-            plv.indice_letra++;
+    if(pode_continuar_busca(lv, i, j, plv, visitados)) {
+        visitados[i][j] = '*';
+        plv.indice_letra++;
 
-            if(busca_palavra_recursivo(lv, i + 1, j, plv, visitados)) {
-                return TRUE;
-            }
-            if(busca_palavra_recursivo(lv, i, j + 1, plv, visitados)) {
-                return TRUE;
-            }
-            if(busca_palavra_recursivo(lv, i - 1, j, plv, visitados)) {
-                return TRUE;
-            }
-            if(busca_palavra_recursivo(lv, i, j - 1, plv, visitados)) {
-                return TRUE;
-            }
+        if(busca_palavra_recursivo(lv, i + 1, j, plv, visitados)) {
+            return TRUE;
         }
+        if(busca_palavra_recursivo(lv, i, j + 1, plv, visitados)) {
+            return TRUE;
+        }
+        if(busca_palavra_recursivo(lv, i - 1, j, plv, visitados)) {
+            return TRUE;
+        }
+        if(busca_palavra_recursivo(lv, i, j - 1, plv, visitados)) {
+            return TRUE;
+        }
+
         visitados[i][j] = '0';
     }
 
