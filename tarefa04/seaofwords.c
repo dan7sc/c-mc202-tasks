@@ -83,6 +83,14 @@ void imprime_string(char *str) {
     printf("%s", str);
 }
 
+void imprime_resultado(int eh_encontrada) {
+    if(eh_encontrada) {
+        printf("sim\n");
+    } else {
+        printf("nao\n");
+    }
+}
+
 int esta_nos_limites(Livro lv,
                      int lin_index,
                      int col_index,
@@ -145,12 +153,7 @@ void busca_palavra(Livro lv, Palavras plv) {
         }
     }
 
-    if(eh_encontrada) {
-        printf("sim\n");
-    } else {
-        printf("nao\n");
-    }
-
+    imprime_resultado(eh_encontrada);
     desaloca_matriz(lv.lin, visitados);
 }
 
