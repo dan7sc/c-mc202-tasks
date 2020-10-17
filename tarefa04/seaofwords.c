@@ -2,8 +2,10 @@
 #include <stdlib.h>
 
 #define N_CHAR 20
-#define TRUE 1
-#define FALSE 0
+#define SIM 1
+#define NAO 0
+#define ENCONTROU 1
+#define NAO_ENCONTROU 0
 
 typedef struct _livro {
     char **texto;
@@ -103,41 +105,41 @@ int pode_continuar_busca(Livro lv,
        plv.palavra[plv.indice_letra] != '\0' &&
        visitados[lin_index][col_index] != '*' &&
        lv.texto[lin_index][col_index] == plv.palavra[plv.indice_letra]) {
-        return TRUE;
+        return SIM;
     }
-    return FALSE;
+    return NAO;
 }
 
 int busca_palavra_recursivo(Livro lv,
                             int i, int j,
                             Palavras plv,
                             char **visitados) {
+    if(plv.palavra[plv.indice_letra] == '\0') {
+        return ENCONTROU;
+    }
+
     if(pode_continuar_busca(lv, i, j, plv, visitados)) {
         visitados[i][j] = '*';
         plv.indice_letra++;
 
         if(busca_palavra_recursivo(lv, i + 1, j, plv, visitados)) {
-            return TRUE;
+            return ENCONTROU;
         }
         if(busca_palavra_recursivo(lv, i, j + 1, plv, visitados)) {
-            return TRUE;
+            return ENCONTROU;
         }
         if(busca_palavra_recursivo(lv, i - 1, j, plv, visitados)) {
-            return TRUE;
+            return ENCONTROU;
         }
         if(busca_palavra_recursivo(lv, i, j - 1, plv, visitados)) {
-            return TRUE;
+            return ENCONTROU;
         }
 
         visitados[i][j] = '0';
     }
 
-    if(plv.palavra[plv.indice_letra] == '\0') {
-        return TRUE;
-    }
-
     plv.indice_letra--;
-    return FALSE;
+    return NAO_ENCONTROU;
 }
 
 void busca_palavra(Livro lv, Palavras plv) {
