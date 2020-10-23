@@ -5,10 +5,18 @@
 
 typedef struct No {
     int dado;
-    struct No *prox;
+    struct No *anterior;
+    struct No *proximo;
 } No;
 
+typedef struct Lista {
+    No *inicio;
+    No *fim;
+} Lista;
+
 typedef struct No * PNo;
+
+typedef struct Lista * PLista;
 
 void le_int(int *num) {
     scanf("%d", num);
@@ -22,55 +30,98 @@ void le_string(char *str) {
     scanf("%s", str);
 }
 
-PNo cria_lista() {
+PNo cria_no() {
     return NULL;
 }
 
-void destroi_lista(PNo lista) {
-    if(lista != NULL) {
-        destroi_lista(lista->prox);
-        free(lista);
-    }
+PLista cria_lista() {
+    PLista lista = malloc(sizeof(Lista));
+
+    lista->inicio = NULL;
+    lista->fim = NULL;
+
+    return lista;
 }
 
-void imprime_lista(PNo lista) {
+Lista inicia() {
+    Lista lista;
+
+    lista.inicio = NULL;
+    lista.fim = NULL;
+
+    return lista;
+}
+
+void destroi_no(PNo no) {
+    free(no);
+}
+
+void destroi_lista(PLista lista) {
+    PNo temp;
+
+    while(lista->inicio != NULL) {
+        temp = lista->inicio->proximo;
+        destroi_no(lista->inicio);
+        lista->inicio = temp;
+    }
+
+    free(lista);
+}
+
+void imprime_lista(PLista lista) {
     PNo atual;
 
-    atual = lista;
+    atual = lista->inicio;
     while(atual != NULL) {
         printf("%d", atual->dado);
-        atual = atual->prox;
+        atual = atual->proximo;
     }
     printf("\n");
 }
 
-PNo adiciona_elemento(PNo lista, int dado) {
-    PNo novo;
+void imprime_resultado(Lista lista) {
+    PNo atual;
 
-    novo = malloc(sizeof(No));
-    novo->dado = dado;
-    novo->prox = lista;
-
-    return novo;
+    atual = lista.inicio;
+    while(atual != NULL) {
+        printf("%d", atual->dado);
+        atual = atual->proximo;
+    }
+    printf("\n");
 }
 
-PNo adiciona_elemento_no_fim(PNo lista, int dado) {
+
+PLista adiciona_elemento_no_inicio(PLista lista, int dado) {
     PNo novo;
-    PNo temp = lista;
 
     novo = malloc(sizeof(No));
 
     novo->dado = dado;
-    novo->prox = NULL;
+    novo->anterior = NULL;
+    novo->proximo = lista->inicio;
+    lista->inicio = novo;
 
-    if(lista == NULL) {
-        return novo;
+    return lista;
+}
+
+PLista adiciona_elemento_no_fim(PLista lista, int dado) {
+    PNo novo;
+
+    novo = malloc(sizeof(No));
+
+    novo->dado = dado;
+    novo->anterior = NULL;
+    novo->proximo = NULL;
+
+    if(lista->inicio == NULL) {
+        lista->inicio = novo;
+        lista->fim = novo;
+        return lista;
     }
 
-    while(temp->prox != NULL) {
-        temp = temp->prox;
-    }
-    temp->prox = novo;
+    novo->anterior = lista->fim;
+    lista->fim->proximo = novo;
+    lista->fim = novo;
 
     return lista;
 }
@@ -79,48 +130,47 @@ int converte_char_para_int(char c) {
     return c - '0';
 }
 
-PNo converte_string_para_lista_int(char *str_numero) {
+PLista converte_string_para_lista_int(PLista numero, char *str_numero) {
     int num;
-    PNo numero;
-
-    numero = cria_lista();
 
     for(int i = 0; str_numero[i] != '\0'; i++) {
         num = converte_char_para_int(str_numero[i]);
-        numero = adiciona_elemento_no_fim(numero, num);
+        numero = adiciona_elemento_no_inicio(numero, num);
     }
 
     return numero;
 }
 
-PNo soma() {
-    PNo resultado = cria_lista();
+Lista soma() {
+    Lista resultado;
+    resultado = inicia();
 
     printf("operacao de soma\n");
 
     return resultado;
 }
 
-PNo subtrai() {
-    PNo resultado = cria_lista();
+Lista subtrai() {
+    Lista resultado;
+    resultado = inicia();
 
     printf("operacao de subtracao\n");
 
     return resultado;
 }
 
-
-PNo multiplica() {
-    PNo resultado = cria_lista();
+Lista multiplica() {
+    Lista resultado;
+    resultado = inicia();
 
     printf("operacao de multiplicao\n");
 
     return resultado;
 }
 
-
-PNo divide() {
-    PNo resultado = cria_lista();
+Lista divide() {
+    Lista resultado;
+    resultado = inicia();
 
     printf("operacao de divisao\n");
 
@@ -128,24 +178,24 @@ PNo divide() {
 }
 
 void realiza_operacao(char op) {
-    PNo resultado = cria_lista();
+    Lista resultado;
 
     switch(op) {
     case '+':
         resultado = soma();
-        imprime_lista(resultado);
+        imprime_resultado(resultado);
         break;
     case '-':
         resultado = subtrai();
-        imprime_lista(resultado);
+        imprime_resultado(resultado);
         break;
     case '*':
         resultado = multiplica();
-        imprime_lista(resultado);
+        imprime_resultado(resultado);
         break;
     case '/':
         resultado = divide();
-        imprime_lista(resultado);
+        imprime_resultado(resultado);
         break;
     default:
         printf("operacao desconhecida\n");
@@ -158,8 +208,8 @@ int main() {
     char operacao;
     char str_numero1[TAM_STR];
     char str_numero2[TAM_STR];
-    PNo numero1;
-    PNo numero2;
+    PLista numero1;
+    PLista numero2;
 
     numero1 = cria_lista();
     numero2 = cria_lista();
@@ -169,8 +219,8 @@ int main() {
     le_string(str_numero1);
     le_string(str_numero2);
 
-    numero1 = converte_string_para_lista_int(str_numero1);
-    numero2 = converte_string_para_lista_int(str_numero2);
+    numero1 = converte_string_para_lista_int(numero1, str_numero1);
+    numero2 = converte_string_para_lista_int(numero2, str_numero2);
 
     printf("%d ", qtd_teste);
     printf("%c\n", operacao);
