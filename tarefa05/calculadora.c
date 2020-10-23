@@ -93,6 +93,66 @@ PNo converte_string_para_lista_int(char *str_numero) {
     return numero;
 }
 
+PNo soma() {
+    PNo resultado = cria_lista();
+
+    printf("operacao de soma\n");
+
+    return resultado;
+}
+
+PNo subtrai() {
+    PNo resultado = cria_lista();
+
+    printf("operacao de subtracao\n");
+
+    return resultado;
+}
+
+
+PNo multiplica() {
+    PNo resultado = cria_lista();
+
+    printf("operacao de multiplicao\n");
+
+    return resultado;
+}
+
+
+PNo divide() {
+    PNo resultado = cria_lista();
+
+    printf("operacao de divisao\n");
+
+    return resultado;
+}
+
+void realiza_operacao(char op) {
+    PNo resultado = cria_lista();
+
+    switch(op) {
+    case '+':
+        resultado = soma();
+        imprime_lista(resultado);
+        break;
+    case '-':
+        resultado = subtrai();
+        imprime_lista(resultado);
+        break;
+    case '*':
+        resultado = multiplica();
+        imprime_lista(resultado);
+        break;
+    case '/':
+        resultado = divide();
+        imprime_lista(resultado);
+        break;
+    default:
+        printf("operacao desconhecida\n");
+        break;
+    }
+}
+
 int main() {
     int qtd_teste;
     char operacao;
@@ -120,6 +180,8 @@ int main() {
 
     imprime_lista(numero1);
     imprime_lista(numero2);
+
+    realiza_operacao(operacao);
 
     destroi_lista(numero1);
     destroi_lista(numero2);
