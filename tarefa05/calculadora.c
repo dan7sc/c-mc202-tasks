@@ -2,6 +2,8 @@
 #include <stdlib.h>
 
 #define TAM_STR 25
+#define TRUE 1
+#define FALSE 0
 
 typedef struct No {
     int dado;
@@ -10,6 +12,7 @@ typedef struct No {
 } No;
 
 typedef struct Lista {
+    int tamanho;
     No *inicio;
     No *fim;
 } Lista;
@@ -37,6 +40,7 @@ PNo cria_no() {
 PLista cria_lista() {
     PLista lista = malloc(sizeof(Lista));
 
+    lista->tamanho = 0;
     lista->inicio = NULL;
     lista->fim = NULL;
 
@@ -100,6 +104,7 @@ PLista adiciona_elemento_no_inicio(PLista lista, int dado) {
     novo->anterior = NULL;
     novo->proximo = lista->inicio;
     lista->inicio = novo;
+    lista->tamanho++;
 
     return lista;
 }
@@ -116,12 +121,14 @@ PLista adiciona_elemento_no_fim(PLista lista, int dado) {
     if(lista->inicio == NULL) {
         lista->inicio = novo;
         lista->fim = novo;
+        lista->tamanho++;
         return lista;
     }
 
     novo->anterior = lista->fim;
     lista->fim->proximo = novo;
     lista->fim = novo;
+    lista->tamanho++;
 
     return lista;
 }
@@ -139,6 +146,40 @@ PLista converte_string_para_lista_int(PLista numero, char *str_numero) {
     }
 
     return numero;
+}
+
+PLista remove_zeros_iniciais(PLista lista) {
+    PNo aux;
+
+    aux = lista->inicio;
+    while(aux->dado == 0 && lista->tamanho > 1) {
+        lista->inicio = lista->inicio->proximo;
+        lista->inicio->anterior = NULL;
+        aux = aux->proximo;
+        lista->tamanho--;
+    }
+
+    return lista;
+}
+
+int eh_maior_numero(PLista lista1, PLista lista2) {
+    PNo num1 = lista1->inicio;
+    PNo num2 = lista2->inicio;
+
+    while(num1 != NULL || num2 != NULL) {
+        if(num1->dado > num2->dado) {
+            return TRUE;
+        } else if(num1->dado < num2->dado) {
+            return FALSE;
+        }
+        num1 = num1->proximo;
+        num2 = num2->proximo;
+    }
+
+    if(num2 != NULL && num1 == NULL) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 PLista soma(PLista numero1, PLista numero2) {
@@ -189,12 +230,131 @@ PLista soma(PLista numero1, PLista numero2) {
     }
 }
 
-PLista subtrai() {
+PLista subtrai(PLista numero1, PLista numero2) {
+    PNo num1;
+    PNo num2;
+    int diferenca;
+    int subtracional = 0;
+    int adicional = 0;
     PLista resultado;
+
     resultado = cria_lista();
+    num1 = numero1->fim;
+    num2 = numero2->fim;
 
-    printf("operacao de subtracao\n");
+    if(numero1->tamanho > numero2->tamanho) {
+        while(num1 != NULL && num2 != NULL) {
+            if(num1->dado >= num2->dado) {
+                diferenca = (num1->dado - subtracional) - num2->dado;
+                if(diferenca < 0) {
+                    diferenca = 9;
+                    subtracional = 1;
+                } else {
+                    subtracional = 0;
+                }
+                resultado = adiciona_elemento_no_inicio(resultado, diferenca);
+                adicional = 0;
+            } else {
+                adicional = 10;
+                diferenca = (num1->dado + adicional - subtracional) - num2->dado;
+                resultado = adiciona_elemento_no_inicio(resultado, diferenca);
+                adicional = 0;
+                subtracional = 1;
+            }
+            num1 = num1->anterior;
+            num2 = num2->anterior;
+        }
+    } else if(numero1->tamanho < numero2->tamanho) {
+        while(num1 != NULL && num2 != NULL) {
+            if(num2->dado >= num1->dado) {
+                diferenca = (num2->dado - subtracional) - num1->dado;
+                if(diferenca < 0) {
+                    diferenca = 9;
+                    subtracional = 1;
+                } else {
+                    subtracional = 0;
+                }
+                resultado = adiciona_elemento_no_inicio(resultado, diferenca);
+                adicional = 0;
+            } else {
+                adicional = 10;
+                diferenca = (num2->dado + adicional - subtracional) - num1->dado;
+                resultado = adiciona_elemento_no_inicio(resultado, diferenca);
+                adicional = 0;
+                subtracional = 1;
+            }
+            num1 = num1->anterior;
+            num2 = num2->anterior;
+        }
+    } else {
+        if(eh_maior_numero(numero1, numero2) == TRUE) {
+            while(num1 != NULL && num2 != NULL) {
+                if(num1->dado >= num2->dado) {
+                    diferenca = (num1->dado - subtracional) - num2->dado;
+                    if(diferenca < 0) {
+                        diferenca = 9;
+                        subtracional = 1;
+                    } else {
+                        subtracional = 0;
+                    }
+                    resultado = adiciona_elemento_no_inicio(resultado, diferenca);
+                    adicional = 0;
+                } else {
+                    adicional = 10;
+                    diferenca = (num1->dado + adicional - subtracional) - num2->dado;
+                    resultado = adiciona_elemento_no_inicio(resultado, diferenca);
+                    adicional = 0;
+                    subtracional = 1;
+                }
+                num1 = num1->anterior;
+                num2 = num2->anterior;
+            }
+        } else {
+            while(num1 != NULL && num2 != NULL) {
+                if(num2->dado >= num1->dado) {
+                    diferenca = (num2->dado - subtracional) - num1->dado;
+                    if(diferenca < 0) {
+                        diferenca = 9;
+                        subtracional = 1;
+                    } else {
+                        subtracional = 0;
+                    }
+                    resultado = adiciona_elemento_no_inicio(resultado, diferenca);
+                    adicional = 0;
+                } else {
+                    adicional = 10;
+                    diferenca = (num2->dado + adicional - subtracional) - num1->dado;
+                    resultado = adiciona_elemento_no_inicio(resultado, diferenca);
+                    adicional = 0;
+                    subtracional = 1;
+                }
+                num1 = num1->anterior;
+                num2 = num2->anterior;
+            }
+        }
+    }
 
+    if(num1 == NULL && num2 != NULL) {
+        while(num2 != NULL) {
+            diferenca = num2->dado - subtracional;
+            resultado = adiciona_elemento_no_inicio(resultado, diferenca);
+            num2 = num2->anterior;
+            subtracional = 0;
+        }
+    } else if(num1 != NULL && num2 == NULL) {
+        while(num1 != NULL) {
+            diferenca = num1->dado - subtracional;
+            resultado = adiciona_elemento_no_inicio(resultado, diferenca);
+            num1 = num1->anterior;
+            subtracional = 0;
+        }
+    } else {
+        if(adicional == 1) {
+            resultado = adiciona_elemento_no_inicio(resultado, adicional);
+        }
+    }
+
+    resultado = remove_zeros_iniciais(resultado);
     return resultado;
 }
 
@@ -226,7 +386,7 @@ void realiza_operacao(char op, PLista numero1, PLista numero2) {
         destroi_lista(resultado);
         break;
     case '-':
-        resultado = subtrai();
+        resultado = subtrai(numero1, numero2);
         imprime_lista(resultado);
         destroi_lista(resultado);
         break;
