@@ -94,7 +94,6 @@ void imprime_resultado(Lista lista) {
     printf("\n");
 }
 
-
 PLista adiciona_elemento_no_inicio(PLista lista, int dado) {
     PNo novo;
 
@@ -382,12 +381,56 @@ PLista subtrai(PLista numero1, PLista numero2) {
     return resultado;
 }
 
-PLista multiplica() {
+PLista multiplica(PLista numero1, PLista numero2) {
+    PNo num1;
+    PNo num2;
     PLista resultado;
+    PLista aux;
+    int multiplicacao;
+    int adicional = 0;
+    int contador = 0;
+
+    num2 = numero2->fim;
     resultado = cria_lista();
+    aux = cria_lista();
 
-    printf("operacao de multiplicao\n");
+    while(num2 != NULL) {
+        aux = cria_lista();
+        for(int i = 0; i < contador; i++) {
+            aux = adiciona_elemento_no_inicio(aux, 0);
+        }
+        contador++;
 
+        num1 = numero1->fim;
+        adicional = 0;
+
+        while(num1 != NULL) {
+            multiplicacao = (num1->dado * num2->dado) + adicional;
+            if(multiplicacao > 9) {
+                adicional = multiplicacao / 10;
+                multiplicacao %=  10;
+            } else {
+                adicional = 0;
+            }
+            aux = adiciona_elemento_no_inicio(aux, multiplicacao);
+            num1 = num1->anterior;
+        }
+
+        if(adicional > 0) {
+            aux = adiciona_elemento_no_inicio(aux, adicional);
+        }
+
+        if(resultado->inicio != NULL && aux->inicio != NULL) {
+            resultado = soma(aux, resultado);
+        } else {
+            resultado = copia_lista(aux);
+        }
+
+        num2 = num2->anterior;
+    }
+
+    destroi_lista(aux);
+    resultado = remove_zeros_iniciais(resultado);
     return resultado;
 }
 
@@ -415,7 +458,7 @@ void realiza_operacao(char op, PLista numero1, PLista numero2) {
         destroi_lista(resultado);
         break;
     case '*':
-        resultado = multiplica();
+        resultado = multiplica(numero1, numero2);
         imprime_lista(resultado);
         destroi_lista(resultado);
         break;
