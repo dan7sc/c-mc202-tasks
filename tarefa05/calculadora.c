@@ -47,15 +47,6 @@ PLista cria_lista() {
     return lista;
 }
 
-Lista cria_resultado() {
-    Lista lista;
-
-    lista.inicio = NULL;
-    lista.fim = NULL;
-
-    return lista;
-}
-
 void destroi_no(PNo no) {
     free(no);
 }
@@ -76,17 +67,6 @@ void imprime_lista(PLista lista) {
     PNo atual;
 
     atual = lista->inicio;
-    while(atual != NULL) {
-        printf("%d", atual->dado);
-        atual = atual->proximo;
-    }
-    printf("\n");
-}
-
-void imprime_resultado(Lista lista) {
-    PNo atual;
-
-    atual = lista.inicio;
     while(atual != NULL) {
         printf("%d", atual->dado);
         atual = atual->proximo;
