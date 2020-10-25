@@ -300,20 +300,21 @@ PLista multiplica(PLista numero1, PLista numero2) {
     PNo num2;
     PLista resultado;
     PLista aux;
+    PLista temp;
     int multiplicacao;
     int adicional = 0;
-    int contador = 0;
+    int zeros_a_adicionar = 0;
 
-    num2 = numero2->fim;
     resultado = cria_lista();
-    aux = cria_lista();
+    num2 = numero2->fim;
 
     while(num2 != NULL) {
         aux = cria_lista();
-        for(int i = 0; i < contador; i++) {
+        temp = aux;
+        for(int i = 0; i < zeros_a_adicionar; i++) {
             aux = adiciona_elemento_no_inicio(aux, 0);
         }
-        contador++;
+        zeros_a_adicionar++;
 
         num1 = numero1->fim;
         adicional = 0;
@@ -334,17 +335,16 @@ PLista multiplica(PLista numero1, PLista numero2) {
             aux = adiciona_elemento_no_inicio(aux, adicional);
         }
 
-        if(resultado->inicio != NULL && aux->inicio != NULL) {
-            resultado = soma(aux, resultado);
-        } else {
-            resultado = copia_lista(aux);
-        }
+        temp = resultado;
+        resultado = soma(aux, resultado);
 
+        destroi_lista(temp);
+        destroi_lista(aux);
         num2 = num2->anterior;
     }
 
-    destroi_lista(aux);
     resultado = remove_zeros_iniciais(resultado);
+
     return resultado;
 }
 
