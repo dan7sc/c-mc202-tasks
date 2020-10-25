@@ -140,13 +140,16 @@ PLista converte_string_para_lista_int(PLista numero, char *str_numero) {
 
 PLista remove_zeros_iniciais(PLista lista) {
     PNo aux;
+    PNo temp;
 
     aux = lista->inicio;
     while(aux->dado == 0 && lista->tamanho > 1) {
+        temp = aux;
         lista->inicio = lista->inicio->proximo;
         lista->inicio->anterior = NULL;
         aux = aux->proximo;
         lista->tamanho--;
+        destroi_no(temp);
     }
 
     return lista;
@@ -238,8 +241,8 @@ PLista soma(PLista numero1, PLista numero2) {
 }
 
 PLista subtrai(PLista numero1, PLista numero2) {
-    PNo num1;
-    PNo num2;
+    PNo maior;
+    PNo menor;
     int diferenca;
     int subtracional = 0;
     int adicional = 0;
@@ -247,123 +250,48 @@ PLista subtrai(PLista numero1, PLista numero2) {
     PLista resultado;
 
     resultado = cria_lista();
-    num1 = numero1->fim;
-    num2 = numero2->fim;
 
-    if(numero1->tamanho > numero2->tamanho) {
-        while(num1 != NULL && num2 != NULL) {
-            if(num1->dado >= num2->dado) {
-                diferenca = (num1->dado - subtracional) - num2->dado;
-                if(diferenca < 0) {
-                    diferenca = 9;
-                    subtracional = 1;
-                } else {
-                    subtracional = 0;
-                }
-                resultado = adiciona_elemento_no_inicio(resultado, diferenca);
-                adicional = 0;
-            } else {
-                adicional = 10;
-                diferenca = (num1->dado + adicional - subtracional) - num2->dado;
-                resultado = adiciona_elemento_no_inicio(resultado, diferenca);
-                adicional = 0;
-                subtracional = 1;
-            }
-            num1 = num1->anterior;
-            num2 = num2->anterior;
-        }
-    } else if(numero1->tamanho < numero2->tamanho) {
-        while(num1 != NULL && num2 != NULL) {
-            if(num2->dado >= num1->dado) {
-                diferenca = (num2->dado - subtracional) - num1->dado;
-                if(diferenca < 0) {
-                    diferenca = 9;
-                    subtracional = 1;
-                } else {
-                    subtracional = 0;
-                }
-                resultado = adiciona_elemento_no_inicio(resultado, diferenca);
-                adicional = 0;
-            } else {
-                adicional = 10;
-                diferenca = (num2->dado + adicional - subtracional) - num1->dado;
-                resultado = adiciona_elemento_no_inicio(resultado, diferenca);
-                adicional = 0;
-                subtracional = 1;
-            }
-            num1 = num1->anterior;
-            num2 = num2->anterior;
-        }
+    eh_maior = eh_maior_numero(numero1, numero2);
+    if(eh_maior == MAIOR) {
+        maior = numero1->fim;
+        menor = numero2->fim;
+    } else if(eh_maior == MENOR) {
+        menor = numero1->fim;
+        maior = numero2->fim;
     } else {
-        eh_maior = eh_maior_numero(numero1, numero2);
-        if(eh_maior == MAIOR || eh_maior == IGUAL) {
-            while(num1 != NULL && num2 != NULL) {
-                if(num1->dado >= num2->dado) {
-                    diferenca = (num1->dado - subtracional) - num2->dado;
-                    if(diferenca < 0) {
-                        diferenca = 9;
-                        subtracional = 1;
-                    } else {
-                        subtracional = 0;
-                    }
-                    resultado = adiciona_elemento_no_inicio(resultado, diferenca);
-                    adicional = 0;
-                } else {
-                    adicional = 10;
-                    diferenca = (num1->dado + adicional - subtracional) - num2->dado;
-                    resultado = adiciona_elemento_no_inicio(resultado, diferenca);
-                    adicional = 0;
-                    subtracional = 1;
-                }
-                num1 = num1->anterior;
-                num2 = num2->anterior;
+        resultado = adiciona_elemento_no_inicio(resultado, 0);
+        return resultado;
+    }
+
+    while(maior != NULL && menor != NULL) {
+        if(maior->dado >= menor->dado) {
+            diferenca = maior->dado - subtracional - menor->dado;
+            subtracional = 0;
+            if(diferenca < 0) {
+                diferenca = 9;
+                subtracional = 1;
             }
+            resultado = adiciona_elemento_no_inicio(resultado, diferenca);
+            adicional = 0;
         } else {
-            while(num1 != NULL && num2 != NULL) {
-                if(num2->dado >= num1->dado) {
-                    diferenca = (num2->dado - subtracional) - num1->dado;
-                    if(diferenca < 0) {
-                        diferenca = 9;
-                        subtracional = 1;
-                    } else {
-                        subtracional = 0;
-                    }
-                    resultado = adiciona_elemento_no_inicio(resultado, diferenca);
-                    adicional = 0;
-                } else {
-                    adicional = 10;
-                    diferenca = (num2->dado + adicional - subtracional) - num1->dado;
-                    resultado = adiciona_elemento_no_inicio(resultado, diferenca);
-                    adicional = 0;
-                    subtracional = 1;
-                }
-                num1 = num1->anterior;
-                num2 = num2->anterior;
-            }
+            adicional = 10;
+            diferenca = maior->dado + adicional - subtracional - menor->dado;
+            resultado = adiciona_elemento_no_inicio(resultado, diferenca);
+            adicional = 0;
+            subtracional = 1;
         }
+        maior = maior->anterior;
+        menor = menor->anterior;
     }
 
-    if(num1 == NULL && num2 != NULL) {
-        while(num2 != NULL) {
-            diferenca = num2->dado - subtracional;
-            resultado = adiciona_elemento_no_inicio(resultado, diferenca);
-            num2 = num2->anterior;
-            subtracional = 0;
-        }
-    } else if(num1 != NULL && num2 == NULL) {
-        while(num1 != NULL) {
-            diferenca = num1->dado - subtracional;
-            resultado = adiciona_elemento_no_inicio(resultado, diferenca);
-            num1 = num1->anterior;
-            subtracional = 0;
-        }
-    } else {
-        if(adicional == 1) {
-            resultado = adiciona_elemento_no_inicio(resultado, adicional);
-        }
+    while(maior != NULL) {
+        diferenca = maior->dado - subtracional;
+        resultado = adiciona_elemento_no_inicio(resultado, diferenca);
+        subtracional = 0;
+        maior = maior->anterior;
     }
-
     resultado = remove_zeros_iniciais(resultado);
+
     return resultado;
 }
 
