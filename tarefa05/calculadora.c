@@ -102,7 +102,17 @@ PLista adiciona_elemento_no_inicio(PLista lista, int dado) {
 
     novo->dado = dado;
     novo->anterior = NULL;
+    novo->proximo = NULL;
+
+    if(lista->fim == NULL) {
+        lista->inicio = novo;
+        lista->fim = novo;
+        lista->tamanho++;
+        return lista;
+    }
+
     novo->proximo = lista->inicio;
+    lista->inicio->anterior = novo;
     lista->inicio = novo;
     lista->tamanho++;
 
