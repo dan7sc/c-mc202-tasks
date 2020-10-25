@@ -192,6 +192,20 @@ int eh_maior_numero(PLista lista1, PLista lista2) {
     return TRUE;
 }
 
+PLista copia_lista(PLista lista) {
+    PNo aux;
+    PLista lcopia;
+
+    lcopia = cria_lista();
+    aux = lista->fim;
+    while(aux != NULL) {
+        adiciona_elemento_no_inicio(lcopia, aux->dado);
+        aux = aux->anterior;
+    }
+
+    return lcopia;
+}
+
 PLista soma(PLista numero1, PLista numero2) {
     PNo num1;
     PNo num2;
