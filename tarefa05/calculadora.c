@@ -2,8 +2,9 @@
 #include <stdlib.h>
 
 #define TAM_STR 25
-#define TRUE 1
-#define FALSE 0
+#define MAIOR 1
+#define IGUAL 0
+#define MENOR -1
 
 typedef struct No {
     int dado;
@@ -155,20 +156,22 @@ int eh_maior_numero(PLista lista1, PLista lista2) {
     PNo num1 = lista1->inicio;
     PNo num2 = lista2->inicio;
 
-    while(num1 != NULL || num2 != NULL) {
-        if(num1->dado > num2->dado) {
-            return TRUE;
-        } else if(num1->dado < num2->dado) {
-            return FALSE;
+    if(lista1->tamanho > lista2->tamanho) {
+        return MAIOR;
+    } else if(lista1->tamanho < lista2->tamanho) {
+        return MENOR;
+    } else {
+        while(num1 != NULL && num2 != NULL) {
+            if(num1->dado > num2->dado) {
+                return MAIOR;
+            } else if(num1->dado < num2->dado) {
+                return MENOR;
+            }
+            num1 = num1->proximo;
+            num2 = num2->proximo;
         }
-        num1 = num1->proximo;
-        num2 = num2->proximo;
+        return IGUAL;
     }
-
-    if(num2 != NULL && num1 == NULL) {
-        return FALSE;
-    }
-    return TRUE;
 }
 
 PLista copia_lista(PLista lista) {
@@ -239,6 +242,7 @@ PLista subtrai(PLista numero1, PLista numero2) {
     int diferenca;
     int subtracional = 0;
     int adicional = 0;
+    int eh_maior;
     PLista resultado;
 
     resultado = cria_lista();
@@ -290,7 +294,8 @@ PLista subtrai(PLista numero1, PLista numero2) {
             num2 = num2->anterior;
         }
     } else {
-        if(eh_maior_numero(numero1, numero2) == TRUE) {
+        eh_maior = eh_maior_numero(numero1, numero2);
+        if(eh_maior == MAIOR || eh_maior == IGUAL) {
             while(num1 != NULL && num2 != NULL) {
                 if(num1->dado >= num2->dado) {
                     diferenca = (num1->dado - subtracional) - num2->dado;
