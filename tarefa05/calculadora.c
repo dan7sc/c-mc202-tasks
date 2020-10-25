@@ -188,6 +188,19 @@ PLista copia_lista(PLista lista) {
     return lcopia;
 }
 
+PLista soma_elementos_restantes(PLista lista, PNo no, int num) {
+    int adicional = num;
+
+    while(no != NULL) {
+        num = no->dado + adicional;
+        lista = adiciona_elemento_no_inicio(lista, num);
+        no = no->anterior;
+        adicional = 0;
+    }
+
+    return lista;
+}
+
 PLista soma(PLista numero1, PLista numero2) {
     PNo num1;
     PNo num2;
@@ -201,11 +214,10 @@ PLista soma(PLista numero1, PLista numero2) {
 
     while(num1 != NULL && num2 != NULL) {
         soma = num1->dado + num2->dado + adicional;
+        adicional = 0;
         if(soma > 9) {
-            soma = soma - 10;
+            soma -= 10;
             adicional = 1;
-        } else {
-            adicional = 0;
         }
         resultado = adiciona_elemento_no_inicio(resultado, soma);
         num1 = num1->anterior;
@@ -213,27 +225,16 @@ PLista soma(PLista numero1, PLista numero2) {
     }
 
     if(num1 == NULL && num2 != NULL) {
-        while(num2 != NULL) {
-            soma = num2->dado + adicional;
-            resultado = adiciona_elemento_no_inicio(resultado, soma);
-            num2 = num2->anterior;
-            adicional = 0;
-        }
-        return resultado;
+        resultado = soma_elementos_restantes(resultado, num2, adicional);
     } else if(num1 != NULL && num2 == NULL) {
-        while(num1 != NULL) {
-            soma = num1->dado + adicional;
-            resultado = adiciona_elemento_no_inicio(resultado, soma);
-            num1 = num1->anterior;
-            adicional = 0;
-        }
-        return resultado;
+        resultado = soma_elementos_restantes(resultado, num1, adicional);
     } else {
         if(adicional == 1) {
             resultado = adiciona_elemento_no_inicio(resultado, adicional);
         }
-        return resultado;
     }
+
+    return resultado;
 }
 
 PLista subtrai(PLista numero1, PLista numero2) {
