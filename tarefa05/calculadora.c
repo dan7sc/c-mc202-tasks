@@ -194,47 +194,57 @@ PLista copia_lista(PLista lista) {
 PLista soma_elementos_restantes(PLista lista, PNo no, int num) {
     int adicional = num;
 
-    while(no != NULL) {
-        num = no->dado + adicional;
-        lista = adiciona_elemento_no_inicio(lista, num);
-        no = no->anterior;
+    while(no != NULL || adicional == 1) {
+        if(no != NULL) {
+            num = no->dado + adicional;
+            no = no->anterior;
+        } else {
+            num = adicional;
+        }
         adicional = 0;
+        if(num > 9) {
+            num -= 10;
+            adicional = 1;
+        }
+        lista = adiciona_elemento_no_inicio(lista, num);
     }
 
     return lista;
 }
 
 PLista soma(PLista numero1, PLista numero2) {
-    PNo num1;
-    PNo num2;
+    PNo maior;
+    PNo menor;
     int soma;
     int adicional = 0;
     PLista resultado;
 
     resultado = cria_lista();
-    num1 = numero1->fim;
-    num2 = numero2->fim;
 
-    while(num1 != NULL && num2 != NULL) {
-        soma = num1->dado + num2->dado + adicional;
+    if(eh_maior_numero(numero1, numero2) == MENOR) {
+        menor = numero1->fim;
+        maior = numero2->fim;
+    } else {
+        maior = numero1->fim;
+        menor = numero2->fim;
+    }
+
+    while(menor != NULL) {
+        soma = maior->dado + menor->dado + adicional;
         adicional = 0;
         if(soma > 9) {
             soma -= 10;
             adicional = 1;
         }
         resultado = adiciona_elemento_no_inicio(resultado, soma);
-        num1 = num1->anterior;
-        num2 = num2->anterior;
+        maior = maior->anterior;
+        menor = menor->anterior;
     }
 
-    if(num1 == NULL && num2 != NULL) {
-        resultado = soma_elementos_restantes(resultado, num2, adicional);
-    } else if(num1 != NULL && num2 == NULL) {
-        resultado = soma_elementos_restantes(resultado, num1, adicional);
+    if(maior == NULL && adicional == 1) {
+        resultado = adiciona_elemento_no_inicio(resultado, adicional);
     } else {
-        if(adicional == 1) {
-            resultado = adiciona_elemento_no_inicio(resultado, adicional);
-        }
+        resultado = soma_elementos_restantes(resultado, maior, adicional);
     }
 
     return resultado;
