@@ -212,6 +212,27 @@ PLista soma_elementos_restantes(PLista lista, PNo no, int num) {
     return lista;
 }
 
+PLista subtrai_elementos_restantes(PLista lista, PNo no, int num) {
+    int subtracional = num;
+
+    while(no != NULL || subtracional == 1) {
+        if(no != NULL) {
+            num = no->dado - subtracional;
+            no = no->anterior;
+        } else {
+            num = subtracional;
+        }
+        subtracional = 0;
+        if(num < 0) {
+            num = 9;
+            subtracional = 1;
+        }
+        lista = adiciona_elemento_no_inicio(lista, num);
+    }
+
+    return lista;
+}
+
 PLista soma(PLista numero1, PLista numero2) {
     PNo maior;
     PNo menor;
@@ -294,12 +315,12 @@ PLista subtrai(PLista numero1, PLista numero2) {
         menor = menor->anterior;
     }
 
-    while(maior != NULL) {
-        diferenca = maior->dado - subtracional;
-        resultado = adiciona_elemento_no_inicio(resultado, diferenca);
-        subtracional = 0;
-        maior = maior->anterior;
+    if(maior == NULL && subtracional == 1) {
+        resultado = adiciona_elemento_no_inicio(resultado, subtracional);
+    } else {
+        resultado = subtrai_elementos_restantes(resultado, maior, subtracional);
     }
+
     resultado = remove_zeros_iniciais(resultado);
 
     return resultado;
