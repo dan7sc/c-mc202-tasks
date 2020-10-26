@@ -352,18 +352,50 @@ PLista multiplica(PLista numero1, PLista numero2) {
         destroi_lista(aux);
         num2 = num2->anterior;
     }
-
     resultado = remove_zeros_iniciais(resultado);
 
     return resultado;
 }
 
-PLista divide() {
+PLista divide(PLista numero1, PLista numero2) {
+    int eh_maior;
+    PLista aux;
+    PLista temp;
     PLista resultado;
+    PLista l_unidade;
+
     resultado = cria_lista();
+    aux = cria_lista();
+    l_unidade = cria_lista();
+    l_unidade = adiciona_elemento_no_inicio(l_unidade, 1);
+    temp = copia_lista(numero2);
 
-    printf("operacao de divisao\n");
+    if(numero2->inicio->dado == 1 && numero2->tamanho == 1) {
+        resultado = copia_lista(numero1);
+        destroi_lista(l_unidade);
+        destroi_lista(temp);
+        destroi_lista(aux);
+        return resultado;
+    }
 
+    eh_maior = eh_maior_numero(numero1, numero2);
+    if(eh_maior == IGUAL) {
+        resultado = adiciona_elemento_no_inicio(resultado, 1);
+    } else if(eh_maior == MENOR) {
+        resultado = adiciona_elemento_no_inicio(resultado, 0);
+    } else {
+        while(eh_maior == MAIOR || eh_maior == IGUAL) {
+            aux = soma(temp, numero2);
+            destroi_lista(temp);
+            temp = copia_lista(aux);
+            resultado = soma(resultado, l_unidade);
+            eh_maior = eh_maior_numero(numero1, aux);
+            destroi_lista(aux);
+        }
+    }
+
+    destroi_lista(l_unidade);
+    destroi_lista(temp);
     return resultado;
 }
 
@@ -387,7 +419,7 @@ void realiza_operacao(char op, PLista numero1, PLista numero2) {
         destroi_lista(resultado);
         break;
     case '/':
-        resultado = divide();
+        resultado = divide(numero1, numero2);
         imprime_lista(resultado);
         destroi_lista(resultado);
         break;
