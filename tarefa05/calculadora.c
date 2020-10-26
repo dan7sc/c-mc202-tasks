@@ -184,7 +184,7 @@ PLista copia_lista(PLista lista) {
     lcopia = cria_lista();
     aux = lista->fim;
     while(aux != NULL) {
-        adiciona_elemento_no_inicio(lcopia, aux->dado);
+        lcopia = adiciona_elemento_no_inicio(lcopia, aux->dado);
         aux = aux->anterior;
     }
 
