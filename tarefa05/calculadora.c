@@ -75,6 +75,17 @@ void imprime_lista(PLista lista) {
     printf("\n");
 }
 
+void imprime_lista_reversa(PLista lista) {
+    PNo atual;
+
+    atual = lista->fim;
+    while(atual != NULL) {
+        printf("%d", atual->dado);
+        atual = atual->anterior;
+    }
+    printf("\n");
+}
+
 PLista adiciona_elemento_no_inicio(PLista lista, int dado) {
     PNo novo;
 
