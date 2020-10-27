@@ -202,6 +202,64 @@ PLista copia_lista(PLista lista) {
     return lcopia;
 }
 
+PLista copia_sub_lista(PLista lista, int inicio, int tam) {
+    PLista l;
+    PNo p;
+    int tamanho = 0;
+
+    l = copia_lista(lista);
+
+    if(inicio == 0 && tam > 0) {
+        p = l->inicio;
+        for(int i = 1; i < tam && p != NULL; i++) {
+            tamanho++;
+            if(p->proximo == NULL){
+                return NULL;
+            }
+            /* tamanho++; */
+            p = p->proximo;
+        }
+        l->tamanho = tamanho + 1;
+        l->fim = p;
+        l->fim->proximo = NULL;
+    } else if(tam == 0 && inicio > 0) {
+        p = l->inicio;
+        for(int i = 1; i < inicio; i++) {
+            tamanho++;
+            if(p->proximo == NULL) {
+                return NULL;
+            }
+            /* tamanho++; */
+            p = p->proximo;
+        }
+        l->tamanho -= tamanho;
+        l->inicio = p;
+        l->inicio->anterior = NULL;
+    }
+
+    return l;
+}
+
+PLista concatena_listas(PLista lista1, PLista lista2) {
+    PLista l1;
+    PLista l2;
+    PLista lista;
+
+    l1 = copia_lista(lista1);
+    l2 = copia_lista(lista2);
+
+    l1->fim->proximo = l2->inicio;
+    l2->inicio->anterior = l1->fim;
+    l1->fim = l2->fim;
+    l2->inicio = l1->inicio;
+
+    lista = copia_lista(l1);
+    lista->tamanho = lista1->tamanho + lista2->tamanho;
+    destroi_lista(l1);
+
+    return lista;
+}
+
 PLista soma_elementos_restantes(PLista lista, PNo no, int num) {
     int adicional = num;
 
