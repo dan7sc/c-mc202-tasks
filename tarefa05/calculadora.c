@@ -441,49 +441,61 @@ PLista multiplica(PLista numero1, PLista numero2) {
     PNo num1;
     PNo num2;
     PLista resultado;
-    PLista aux;
-    PLista temp;
-    int multiplicacao;
-    int adicional = 0;
-    int zeros_a_adicionar = 0;
+    PLista produto_a_somar; // armazena o resultado da multiplicação para cada iteração
+    PLista temp; // ponteiro temporário
+    int produto;
+    int unidade_a_adicionar = 0;
+    int posicao_multiplicador = 1;
 
     resultado = cria_lista();
+    /* começa multiplicação pelo fim da lista */
     num2 = numero2->fim;
 
     while(num2 != NULL) {
-        aux = cria_lista();
-        temp = aux;
-        for(int i = 0; i < zeros_a_adicionar; i++) {
-            aux = adiciona_elemento_no_inicio(aux, 0);
-        }
-        zeros_a_adicionar++;
-
         num1 = numero1->fim;
-        adicional = 0;
+        produto_a_somar = cria_lista();
 
+        /* produto a partir do segundo número do multiplicador */
+        /* acrescenta zeros no resultado */
+        for(int i = 1; i < posicao_multiplicador; i++) {
+            produto_a_somar = adiciona_elemento_no_inicio(produto_a_somar, 0);
+        }
+        posicao_multiplicador++;
+
+        unidade_a_adicionar = 0;
+        /* aqui acontece a multiplicação de um número do multiplicador */
+        /* pelos números do multiplicando */
+        /* resultado do produto é armazenado na lista produto_a_somar */
         while(num1 != NULL) {
-            multiplicacao = (num1->dado * num2->dado) + adicional;
-            if(multiplicacao > 9) {
-                adicional = multiplicacao / 10;
-                multiplicacao %=  10;
+            produto = (num1->dado * num2->dado) + unidade_a_adicionar;
+            /* produto dos números tem duas unidades decimais */
+            /* logo remove uma unidade decimal para adicionar no nó anterior */
+            if(produto > 9) {
+                unidade_a_adicionar = produto / 10;
+                produto %=  10;
             } else {
-                adicional = 0;
+                unidade_a_adicionar = 0;
             }
-            aux = adiciona_elemento_no_inicio(aux, multiplicacao);
+            /* adiciona apenas número com uma casa decimal */
+            produto_a_somar = adiciona_elemento_no_inicio(produto_a_somar, produto);
             num1 = num1->anterior;
         }
 
-        if(adicional > 0) {
-            aux = adiciona_elemento_no_inicio(aux, adicional);
+        /* ainda há uma casa decimal a adicionar */
+        if(unidade_a_adicionar > 0) {
+            produto_a_somar = adiciona_elemento_no_inicio(produto_a_somar, unidade_a_adicionar);
         }
 
+        /* guarda referencia a memoria alocada da lista resultado */
         temp = resultado;
-        resultado = soma(aux, resultado);
+        /* soma o resultado dos produtos */
+        resultado = soma(produto_a_somar, resultado);
+        num2 = num2->anterior;
 
         destroi_lista(temp);
-        destroi_lista(aux);
-        num2 = num2->anterior;
+        destroi_lista(produto_a_somar);
     }
+
     resultado = remove_zeros_iniciais(resultado);
 
     return resultado;
