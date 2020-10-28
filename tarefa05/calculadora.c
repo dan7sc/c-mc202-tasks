@@ -64,6 +64,18 @@ void destroi_lista(PLista lista) {
     free(lista);
 }
 
+PLista limpa_lista(PLista lista) {
+    PNo temp;
+
+    while(lista->inicio != NULL) {
+        temp = lista->inicio->proximo;
+        destroi_no(lista->inicio);
+        lista->inicio = temp;
+    }
+
+    return lista;
+}
+
 void imprime_lista(PLista lista) {
     PNo atual;
 
@@ -499,25 +511,22 @@ void die(char *str, int n) {
 PLista divide(PLista numero1, PLista numero2) {
     int eh_maior;
     int tam_dif;
-    PLista aux;
-    PLista aux_temp;
-    PLista temp;
-    PLista l_unidade;
-    PLista resultado;
-
-    resultado = cria_lista();
-    aux = cria_lista();
-    temp = cria_lista();
-    l_unidade = cria_lista();
-    l_unidade = adiciona_elemento_no_inicio(l_unidade, 1);
-    temp = copia_lista(numero2);
+    PLista aux = NULL;
+    PLista aux_temp = NULL;
+    PLista lmulti = NULL;
+    PLista lsoma = NULL;
+    PLista l_unidade = NULL;
+    PLista resultado = NULL;
+    PLista vazia = NULL;
 
     if(numero2->inicio->dado == 1 && numero2->tamanho == 1) {
         resultado = copia_lista(numero1);
-        destroi_lista(temp);
-        destroi_lista(l_unidade);
         return resultado;
     }
+
+    resultado = cria_lista();
+    l_unidade = cria_lista();
+    l_unidade = adiciona_elemento_no_inicio(l_unidade, 1);
 
     eh_maior = eh_maior_numero(numero1, numero2);
     if(eh_maior == IGUAL) {
@@ -526,51 +535,40 @@ PLista divide(PLista numero1, PLista numero2) {
         resultado = adiciona_elemento_no_inicio(resultado, 0);
     } else {
         tam_dif = numero1->tamanho - numero2->tamanho;
-        /* if(tam_dif < 2) { */
-        /*     while(eh_maior == MAIOR || eh_maior == IGUAL) { */
-        /*         aux = soma(temp, numero2); */
-        /*         destroi_lista(temp); */
-        /*         temp = copia_lista(aux); */
-        /*         resultado = soma(resultado, l_unidade); */
-        /*         eh_maior = eh_maior_numero(numero1, aux); */
-        /*         destroi_lista(aux); */
-        /*     } */
-        /*     return resultado; */
-        /* } else { */
-            while(tam_dif >= 0) {
-                aux = cria_lista();
-                aux_temp = cria_lista();
+        while(tam_dif >= 0) {
+            aux = cria_lista();
+            aux = adiciona_elemento_no_inicio(aux, 1);
+            for(int i = 0; i < tam_dif; i++) {
+                aux = adiciona_elemento_no_fim(aux, 0);
+            }
 
-                aux = adiciona_elemento_no_inicio(aux, 1);
-                for(int i = 0; i < tam_dif; i++) {
-                    aux = adiciona_elemento_no_fim(aux, 0);
-                }
-
-                temp = multiplica(aux, numero2);
-                eh_maior = eh_maior_numero(temp, numero1);
-                if(eh_maior == MENOR || eh_maior == IGUAL) {
-                    aux_temp = copia_lista(aux);
-                    for(int i = 0; i < 10; i++) {
-                        aux_temp->inicio->dado = i;
-                        temp = soma(resultado, aux_temp);
-                        temp = multiplica(temp, numero2);
-                        eh_maior = eh_maior_numero(temp, numero1);
-                        if(eh_maior == MENOR || eh_maior == IGUAL) {
-                            aux->inicio->dado = i;
-                        }
+            lmulti = multiplica(aux, numero2);
+            eh_maior = eh_maior_numero(lmulti, numero1);
+            destroi_lista(lmulti);
+            if(eh_maior == MENOR || eh_maior == IGUAL) {
+                aux_temp = copia_lista(aux);
+                for(int i = 0; i < 10; i++) {
+                    aux_temp->inicio->dado = i;
+                    vazia = soma(resultado, aux_temp);
+                    lsoma = multiplica(vazia, numero2);
+                    destroi_lista(vazia);
+                    eh_maior = eh_maior_numero(lsoma, numero1);
+                    destroi_lista(lsoma);
+                    if(eh_maior == MENOR || eh_maior == IGUAL) {
+                        aux->inicio->dado = i;
                     }
-
-                    resultado = soma(resultado, aux);
                 }
-                tam_dif -= 1;
-                /* destroi_lista(aux); */
-                /* destroi_lista(temp); */
-            /* } */
+                destroi_lista(aux_temp);
+                vazia = resultado;
+                resultado = soma(resultado, aux);
+                destroi_lista(vazia);
+            }
+            tam_dif -= 1;
+
+            destroi_lista(aux);
         }
     }
 
-    destroi_lista(aux);
-    destroi_lista(temp);
     destroi_lista(l_unidade);
 
     return resultado;
