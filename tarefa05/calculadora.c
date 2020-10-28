@@ -272,25 +272,28 @@ PLista concatena_listas(PLista lista1, PLista lista2) {
     return lista;
 }
 
-PLista soma_elementos_restantes(PLista lista, PNo no, int num) {
-    int adicional = num;
+PLista soma_elementos_restantes(PLista numero, PNo inicio, int num) {
+    int unidade_a_adicionar = num;
 
-    while(no != NULL || adicional == 1) {
-        if(no != NULL) {
-            num = no->dado + adicional;
-            no = no->anterior;
+    while(inicio != NULL || unidade_a_adicionar == 1) {
+        if(inicio != NULL) {
+            num = inicio->dado + unidade_a_adicionar;
+            inicio = inicio->anterior;
         } else {
-            num = adicional;
+            num = unidade_a_adicionar;
         }
-        adicional = 0;
+        unidade_a_adicionar = 0;
+        /* se soma tem duas casas decimais então subtrai unidade a mais */
+        /* e guarda unidade decimal excedente para somar no nó anterior  */
         if(num > 9) {
             num -= 10;
-            adicional = 1;
+            unidade_a_adicionar = 1;
         }
-        lista = adiciona_elemento_no_inicio(lista, num);
+        /* adiciona apenas número com uma casa decimal */
+        numero = adiciona_elemento_no_inicio(numero, num);
     }
 
-    return lista;
+    return numero;
 }
 
 PLista subtrai_elementos_restantes(PLista lista, PNo no, int num) {
@@ -318,11 +321,13 @@ PLista soma(PLista numero1, PLista numero2) {
     PNo maior;
     PNo menor;
     int soma;
-    int adicional = 0;
-    PLista resultado;
+    int unidade_a_adicionar = 0;
+    PLista l_soma;
 
-    resultado = cria_lista();
+    l_soma = cria_lista();
 
+    /* nó maior aponta para o fim do maior numero */
+    /* e nó menor para o fim do  menor numero */
     if(eh_maior_numero(numero1, numero2) == MENOR) {
         menor = numero1->fim;
         maior = numero2->fim;
@@ -331,25 +336,29 @@ PLista soma(PLista numero1, PLista numero2) {
         menor = numero2->fim;
     }
 
+    /* Soma elementos começando pelo fim */
     while(menor != NULL) {
-        soma = maior->dado + menor->dado + adicional;
-        adicional = 0;
+        soma = maior->dado + menor->dado + unidade_a_adicionar;
+        unidade_a_adicionar = 0;
+        /* se soma tem duas casas decimais então subtrai unidade a mais */
+        /* e guarda unidade decimal excedente para somar no nó anterior  */
         if(soma > 9) {
             soma -= 10;
-            adicional = 1;
+            unidade_a_adicionar = 1;
         }
-        resultado = adiciona_elemento_no_inicio(resultado, soma);
+        /* adiciona apenas número com uma casa decimal */
+        l_soma = adiciona_elemento_no_inicio(l_soma, soma);
         maior = maior->anterior;
         menor = menor->anterior;
     }
 
-    if(maior == NULL && adicional == 1) {
-        resultado = adiciona_elemento_no_inicio(resultado, adicional);
+    if(maior == NULL && unidade_a_adicionar == 1) {
+        l_soma = adiciona_elemento_no_inicio(l_soma, unidade_a_adicionar);
     } else {
-        resultado = soma_elementos_restantes(resultado, maior, adicional);
+        l_soma = soma_elementos_restantes(l_soma, maior, unidade_a_adicionar);
     }
 
-    return resultado;
+    return l_soma;
 }
 
 PLista subtrai(PLista numero1, PLista numero2) {
