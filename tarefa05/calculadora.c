@@ -275,6 +275,7 @@ PLista concatena_listas(PLista lista1, PLista lista2) {
 PLista soma_elementos_restantes(PLista numero, PNo inicio, int num) {
     int unidade_a_adicionar = num;
 
+    /* lista não terminou e/ou ainda há elementos a adicionar */
     while(inicio != NULL || unidade_a_adicionar == 1) {
         if(inicio != NULL) {
             num = inicio->dado + unidade_a_adicionar;
@@ -296,25 +297,30 @@ PLista soma_elementos_restantes(PLista numero, PNo inicio, int num) {
     return numero;
 }
 
-PLista subtrai_elementos_restantes(PLista lista, PNo no, int num) {
-    int subtracional = num;
+PLista subtrai_elementos_restantes(PLista numero, PNo inicio, int num) {
+    int unidade_a_subtrair = num;
 
-    while(no != NULL || subtracional == 1) {
-        if(no != NULL) {
-            num = no->dado - subtracional;
-            no = no->anterior;
+    /* lista não terminou e/ou ainda há elementos a subtrair */
+    while(inicio != NULL || unidade_a_subtrair == 1) {
+        if(inicio != NULL) {
+            num = inicio->dado - unidade_a_subtrair;
+            inicio = inicio->anterior;
         } else {
-            num = subtracional;
+            num = unidade_a_subtrair;
         }
-        subtracional = 0;
+        unidade_a_subtrair = 0;
+        /* se diferença for negativa é porque está somando com zero */
+        /* e subtraindo uma unidade logo diferença passa a ser nove */
+        /* e guarda unidade decimal para subtrair no nó anterior  */
         if(num < 0) {
             num = 9;
-            subtracional = 1;
+            unidade_a_subtrair = 1;
         }
-        lista = adiciona_elemento_no_inicio(lista, num);
+        /* num tem apenas número com uma casa decimal */
+        numero = adiciona_elemento_no_inicio(numero, num);
     }
 
-    return lista;
+    return numero;
 }
 
 PLista soma(PLista numero1, PLista numero2) {
@@ -353,6 +359,7 @@ PLista soma(PLista numero1, PLista numero2) {
     }
 
     if(maior == NULL && unidade_a_adicionar == 1) {
+        /* lista maior terminaou mas ainda há uma unidade decimal a adicionar */
         l_soma = adiciona_elemento_no_inicio(l_soma, unidade_a_adicionar);
     } else {
         l_soma = soma_elementos_restantes(l_soma, maior, unidade_a_adicionar);
@@ -365,13 +372,16 @@ PLista subtrai(PLista numero1, PLista numero2) {
     PNo maior;
     PNo menor;
     int diferenca;
-    int subtracional = 0;
-    int adicional = 0;
+    int unidade_a_subtrair = 0;
+    int unidade_a_adicionar = 0;
     int eh_maior;
-    PLista resultado;
+    PLista l_subtracao;
 
-    resultado = cria_lista();
+    l_subtracao = cria_lista();
 
+    /* nó maior aponta para o fim do maior numero */
+    /* e nó menor para o fim do  menor numero */
+    /* se numeros forem iguais retorna lista com zero */
     eh_maior = eh_maior_numero(numero1, numero2);
     if(eh_maior == MAIOR) {
         maior = numero1->fim;
@@ -380,40 +390,50 @@ PLista subtrai(PLista numero1, PLista numero2) {
         menor = numero1->fim;
         maior = numero2->fim;
     } else {
-        resultado = adiciona_elemento_no_inicio(resultado, 0);
-        return resultado;
+        l_subtracao = adiciona_elemento_no_inicio(l_subtracao, 0);
+        return l_subtracao;
     }
 
+    /* subtrai elementos começando pelo fim */
     while(maior != NULL && menor != NULL) {
         if(maior->dado >= menor->dado) {
-            diferenca = maior->dado - subtracional - menor->dado;
-            subtracional = 0;
+            diferenca = maior->dado - unidade_a_subtrair - menor->dado;
+            unidade_a_subtrair = 0;
+            /* se diferença for negativa é porque está somando nós */
+            /* com dois zeros e subtraindo uma unidade */
+            /* logo diferença passa a ser nove */
+            /* e guarda unidade decimal para subtrair no nó anterior  */
             if(diferenca < 0) {
                 diferenca = 9;
-                subtracional = 1;
+                unidade_a_subtrair = 1;
             }
-            resultado = adiciona_elemento_no_inicio(resultado, diferenca);
-            adicional = 0;
+            l_subtracao = adiciona_elemento_no_inicio(l_subtracao, diferenca);
+            unidade_a_adicionar = 0;
         } else {
-            adicional = 10;
-            diferenca = maior->dado + adicional - subtracional - menor->dado;
-            resultado = adiciona_elemento_no_inicio(resultado, diferenca);
-            adicional = 0;
-            subtracional = 1;
+            /* número do nó maior é menor que o do nó menor */
+            /* logo acrescenta uma dezena vinda do nó anterior */
+            /* resultado terá sempre uma casa decimal */
+            unidade_a_adicionar = 10;
+            diferenca = maior->dado + unidade_a_adicionar - unidade_a_subtrair - menor->dado;
+            /* adiciona apenas número com uma casa decimal */
+            l_subtracao = adiciona_elemento_no_inicio(l_subtracao, diferenca);
+            unidade_a_adicionar = 0;
+            unidade_a_subtrair = 1;
         }
         maior = maior->anterior;
         menor = menor->anterior;
     }
 
-    if(maior == NULL && subtracional == 1) {
-        resultado = adiciona_elemento_no_inicio(resultado, subtracional);
+    if(maior == NULL && unidade_a_subtrair == 1) {
+        /* lista maior terminaou mas ainda há uma unidade decimal a subtrair */
+        l_subtracao = adiciona_elemento_no_inicio(l_subtracao, unidade_a_subtrair);
     } else {
-        resultado = subtrai_elementos_restantes(resultado, maior, subtracional);
+        l_subtracao = subtrai_elementos_restantes(l_subtracao, maior, unidade_a_subtrair);
     }
 
-    resultado = remove_zeros_iniciais(resultado);
+    l_subtracao = remove_zeros_iniciais(l_subtracao);
 
-    return resultado;
+    return l_subtracao;
 }
 
 PLista multiplica(PLista numero1, PLista numero2) {
