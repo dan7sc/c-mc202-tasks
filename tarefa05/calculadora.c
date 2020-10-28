@@ -447,7 +447,7 @@ PLista multiplica(PLista numero1, PLista numero2) {
     return resultado;
 }
 
-PLista old_divide(PLista numero1, PLista numero2) {
+PLista divide_versao_1(PLista numero1, PLista numero2) {
     int eh_maior;
     PLista aux;
     PLista temp;
@@ -489,7 +489,94 @@ PLista old_divide(PLista numero1, PLista numero2) {
     return resultado;
 }
 
+void die(char *str, int n) {
+    printf("********   ");
+    printf(" %s ", str);
+    printf(" %d ", n);
+    printf("   ********\n");
+}
+
 PLista divide(PLista numero1, PLista numero2) {
+    int eh_maior;
+    int tam_dif;
+    PLista aux;
+    PLista aux_temp;
+    PLista temp;
+    PLista l_unidade;
+    PLista resultado;
+
+    resultado = cria_lista();
+    aux = cria_lista();
+    temp = cria_lista();
+    l_unidade = cria_lista();
+    l_unidade = adiciona_elemento_no_inicio(l_unidade, 1);
+    temp = copia_lista(numero2);
+
+    if(numero2->inicio->dado == 1 && numero2->tamanho == 1) {
+        resultado = copia_lista(numero1);
+        destroi_lista(temp);
+        destroi_lista(l_unidade);
+        return resultado;
+    }
+
+    eh_maior = eh_maior_numero(numero1, numero2);
+    if(eh_maior == IGUAL) {
+        resultado = adiciona_elemento_no_inicio(resultado, 1);
+    } else if(eh_maior == MENOR) {
+        resultado = adiciona_elemento_no_inicio(resultado, 0);
+    } else {
+        tam_dif = numero1->tamanho - numero2->tamanho;
+        if(tam_dif < 2) {
+            while(eh_maior == MAIOR || eh_maior == IGUAL) {
+                aux = soma(temp, numero2);
+                destroi_lista(temp);
+                temp = copia_lista(aux);
+                resultado = soma(resultado, l_unidade);
+                eh_maior = eh_maior_numero(numero1, aux);
+                destroi_lista(aux);
+            }
+            return resultado;
+        } else {
+            while(tam_dif >= 0) {
+                aux = cria_lista();
+                aux_temp = cria_lista();
+
+                aux = adiciona_elemento_no_inicio(aux, 1);
+                for(int i = 0; i < tam_dif; i++) {
+                    aux = adiciona_elemento_no_fim(aux, 0);
+                }
+
+                temp = multiplica(aux, numero2);
+                eh_maior = eh_maior_numero(temp, numero1);
+                if(eh_maior == MENOR || eh_maior == IGUAL) {
+                    aux_temp = copia_lista(aux);
+                    for(int i = 0; i < 10; i++) {
+                        aux_temp->inicio->dado = i;
+                        temp = soma(resultado, aux_temp);
+                        temp = multiplica(temp, numero2);
+                        eh_maior = eh_maior_numero(temp, numero1);
+                        if(eh_maior == MENOR || eh_maior == IGUAL) {
+                            aux->inicio->dado = i;
+                        }
+                    }
+
+                    resultado = soma(resultado, aux);
+                }
+                tam_dif -= 1;
+                /* destroi_lista(aux); */
+                /* destroi_lista(temp); */
+            }
+        }
+    }
+
+    destroi_lista(aux);
+    destroi_lista(temp);
+    destroi_lista(l_unidade);
+
+    return resultado;
+}
+
+PLista divide_versao_2(PLista numero1, PLista numero2) {
     int eh_maior;
     PLista aux;
     PLista temp;
@@ -521,53 +608,35 @@ PLista divide(PLista numero1, PLista numero2) {
     } else if(eh_maior == MENOR) {
         resultado = adiciona_elemento_no_inicio(resultado, 0);
     } else {
-        if(numero2->tamanho > numero1->tamanho - 2) {
-            while(eh_maior == MAIOR || eh_maior == IGUAL) {
-                aux = soma(temp, numero2);
-                destroi_lista(temp);
-                temp = copia_lista(aux);
-                resultado = soma(resultado, l_unidade);
-                eh_maior = eh_maior_numero(numero1, aux);
-                destroi_lista(aux);
+        tam = numero2->tamanho + 1;
+        continua = 1;
+        while(continua == 1) {
+            dividendo_a = copia_lista(dividendo);
+            dividendo_a = copia_sub_lista(dividendo_a, 0, tam);
+
+            dividendo_b = copia_lista(dividendo);
+            dividendo_b = copia_sub_lista(dividendo_b, tam + 1, 0);
+
+            eh_maior = MENOR;
+            temp = cria_lista();
+            while(eh_maior == MENOR || eh_maior == IGUAL) {
+                temp = soma(temp, l_unidade);
+                aux = multiplica(temp, divisor);
+                eh_maior = eh_maior_numero(aux, dividendo_a);
             }
-        } else {
-            if(numero2->inicio->dado == 1 && numero2->tamanho == 1) {
-                resultado = copia_lista(numero1);
-                destroi_lista(l_unidade);
-                destroi_lista(temp);
-                destroi_lista(aux);
-                return resultado;
+            temp = subtrai(temp, l_unidade);
+            aux = subtrai(aux, divisor);
+            resultado = adiciona_elemento_no_fim(resultado, temp->inicio->dado);
+
+            continua = 0;
+            dividendo = subtrai(dividendo_a, aux);
+            if(dividendo_b != NULL) {
+                dividendo = concatena_listas(dividendo, dividendo_b);
             }
-            tam = numero2->tamanho + 1;
-            continua = 1;
-            while(continua == 1) {
-                dividendo_a = copia_lista(dividendo);
-                dividendo_a = copia_sub_lista(dividendo_a, 0, tam);
-
-                dividendo_b = copia_lista(dividendo);
-                dividendo_b = copia_sub_lista(dividendo_b, tam + 1, 0);
-
-                eh_maior = MENOR;
-                temp = cria_lista();
-                while(eh_maior == MENOR || eh_maior == IGUAL) {
-                    temp = soma(temp, l_unidade);
-                    aux = multiplica(temp, divisor);
-                    eh_maior = eh_maior_numero(aux, dividendo_a);
-                }
-                temp = subtrai(temp, l_unidade);
-                aux = subtrai(aux, divisor);
-                resultado = adiciona_elemento_no_fim(resultado, temp->inicio->dado);
-
+            if(dividendo->tamanho > tam - 1) {
+                continua = 1;
+            } else {
                 continua = 0;
-                dividendo = subtrai(dividendo_a, aux);
-                if(dividendo_b != NULL) {
-                    dividendo = concatena_listas(dividendo, dividendo_b);
-                }
-                if(dividendo->tamanho > tam - 1) {
-                    continua = 1;
-                } else {
-                    continua = 0;
-                }
             }
         }
     }
