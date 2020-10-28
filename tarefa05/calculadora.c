@@ -34,10 +34,6 @@ void le_string(char *str) {
     scanf("%s", str);
 }
 
-PNo cria_no() {
-    return NULL;
-}
-
 PLista cria_lista() {
     PLista lista = malloc(sizeof(Lista));
 
@@ -48,32 +44,16 @@ PLista cria_lista() {
     return lista;
 }
 
-void destroi_no(PNo no) {
-    free(no);
-}
-
 void destroi_lista(PLista lista) {
     PNo temp;
 
     while(lista->inicio != NULL) {
         temp = lista->inicio->proximo;
-        destroi_no(lista->inicio);
+        free(lista->inicio);
         lista->inicio = temp;
     }
 
     free(lista);
-}
-
-PLista limpa_lista(PLista lista) {
-    PNo temp;
-
-    while(lista->inicio != NULL) {
-        temp = lista->inicio->proximo;
-        destroi_no(lista->inicio);
-        lista->inicio = temp;
-    }
-
-    return lista;
 }
 
 void imprime_lista(PLista lista) {
@@ -83,17 +63,6 @@ void imprime_lista(PLista lista) {
     while(atual != NULL) {
         printf("%d", atual->dado);
         atual = atual->proximo;
-    }
-    printf("\n");
-}
-
-void imprime_lista_reversa(PLista lista) {
-    PNo atual;
-
-    atual = lista->fim;
-    while(atual != NULL) {
-        printf("%d", atual->dado);
-        atual = atual->anterior;
     }
     printf("\n");
 }
@@ -146,15 +115,11 @@ PLista adiciona_elemento_no_fim(PLista lista, int dado) {
     return lista;
 }
 
-int converte_char_para_int(char c) {
-    return c - '0';
-}
-
-PLista converte_string_para_lista_int(PLista numero, char *str_numero) {
+PLista converte_string_para_lista_int(PLista numero, char *str) {
     int num;
 
-    for(int i = 0; str_numero[i] != '\0'; i++) {
-        num = converte_char_para_int(str_numero[i]);
+    for(int i = 0; str[i] != '\0'; i++) {
+        num = str[i] - '0';
         numero = adiciona_elemento_no_fim(numero, num);
     }
 
@@ -172,7 +137,7 @@ PLista remove_zeros_iniciais(PLista lista) {
         lista->inicio->anterior = NULL;
         aux = aux->proximo;
         lista->tamanho--;
-        destroi_no(temp);
+        free(temp);
     }
 
     return lista;
@@ -212,64 +177,6 @@ PLista copia_lista(PLista lista) {
     }
 
     return lcopia;
-}
-
-PLista copia_sub_lista(PLista lista, int inicio, int tam) {
-    PLista l;
-    PNo p;
-    int tamanho = 0;
-
-    l = copia_lista(lista);
-
-    if(inicio == 0 && tam > 0) {
-        p = l->inicio;
-        for(int i = 1; i < tam && p != NULL; i++) {
-            tamanho++;
-            if(p->proximo == NULL){
-                return NULL;
-            }
-            /* tamanho++; */
-            p = p->proximo;
-        }
-        l->tamanho = tamanho + 1;
-        l->fim = p;
-        l->fim->proximo = NULL;
-    } else if(tam == 0 && inicio > 0) {
-        p = l->inicio;
-        for(int i = 1; i < inicio; i++) {
-            tamanho++;
-            if(p->proximo == NULL) {
-                return NULL;
-            }
-            /* tamanho++; */
-            p = p->proximo;
-        }
-        l->tamanho -= tamanho;
-        l->inicio = p;
-        l->inicio->anterior = NULL;
-    }
-
-    return l;
-}
-
-PLista concatena_listas(PLista lista1, PLista lista2) {
-    PLista l1;
-    PLista l2;
-    PLista lista;
-
-    l1 = copia_lista(lista1);
-    l2 = copia_lista(lista2);
-
-    l1->fim->proximo = l2->inicio;
-    l2->inicio->anterior = l1->fim;
-    l1->fim = l2->fim;
-    l2->inicio = l1->inicio;
-
-    lista = copia_lista(l1);
-    lista->tamanho = lista1->tamanho + lista2->tamanho;
-    destroi_lista(l1);
-
-    return lista;
 }
 
 PLista soma_elementos_restantes(PLista numero, PNo inicio, int num) {
@@ -579,125 +486,6 @@ PLista divide(PLista numero1, PLista numero2) {
         }
     }
 
-    return resultado;
-}
-
-PLista divide_versao_1(PLista numero1, PLista numero2) {
-    int eh_maior;
-    PLista aux;
-    PLista temp;
-    PLista resultado;
-    PLista l_unidade;
-
-    resultado = cria_lista();
-    aux = cria_lista();
-    l_unidade = cria_lista();
-    l_unidade = adiciona_elemento_no_inicio(l_unidade, 1);
-    temp = copia_lista(numero2);
-
-    if(numero2->inicio->dado == 1 && numero2->tamanho == 1) {
-        resultado = copia_lista(numero1);
-        destroi_lista(l_unidade);
-        destroi_lista(temp);
-        destroi_lista(aux);
-        return resultado;
-    }
-
-    eh_maior = eh_maior_numero(numero1, numero2);
-    if(eh_maior == IGUAL) {
-        resultado = adiciona_elemento_no_inicio(resultado, 1);
-    } else if(eh_maior == MENOR) {
-        resultado = adiciona_elemento_no_inicio(resultado, 0);
-    } else {
-        while(eh_maior == MAIOR || eh_maior == IGUAL) {
-            aux = soma(temp, numero2);
-            destroi_lista(temp);
-            temp = copia_lista(aux);
-            resultado = soma(resultado, l_unidade);
-            eh_maior = eh_maior_numero(numero1, aux);
-            destroi_lista(aux);
-        }
-    }
-
-    destroi_lista(l_unidade);
-    destroi_lista(temp);
-    return resultado;
-}
-
-void die(char *str, int n) {
-    printf("********   ");
-    printf(" %s ", str);
-    printf(" %d ", n);
-    printf("   ********\n");
-}
-
-PLista divide_versao_2(PLista numero1, PLista numero2) {
-    int eh_maior;
-    PLista aux;
-    PLista temp;
-    PLista resultado;
-    PLista l_unidade;
-
-    PLista divisor;
-    PLista dividendo;
-    PLista dividendo_a;
-    PLista dividendo_b;
-
-    int tam;
-    int continua = 0;
-
-    resultado = cria_lista();
-    aux = cria_lista();
-    l_unidade = cria_lista();
-    l_unidade = adiciona_elemento_no_inicio(l_unidade, 1);
-    temp = copia_lista(numero2);
-
-    divisor = copia_lista(numero2);
-    dividendo = copia_lista(numero1);
-    dividendo_a = copia_lista(numero1);
-    dividendo_b = copia_lista(numero1);
-
-    eh_maior = eh_maior_numero(numero1, numero2);
-    if(eh_maior == IGUAL) {
-        resultado = adiciona_elemento_no_inicio(resultado, 1);
-    } else if(eh_maior == MENOR) {
-        resultado = adiciona_elemento_no_inicio(resultado, 0);
-    } else {
-        tam = numero2->tamanho + 1;
-        continua = 1;
-        while(continua == 1) {
-            dividendo_a = copia_lista(dividendo);
-            dividendo_a = copia_sub_lista(dividendo_a, 0, tam);
-
-            dividendo_b = copia_lista(dividendo);
-            dividendo_b = copia_sub_lista(dividendo_b, tam + 1, 0);
-
-            eh_maior = MENOR;
-            temp = cria_lista();
-            while(eh_maior == MENOR || eh_maior == IGUAL) {
-                temp = soma(temp, l_unidade);
-                aux = multiplica(temp, divisor);
-                eh_maior = eh_maior_numero(aux, dividendo_a);
-            }
-            temp = subtrai(temp, l_unidade);
-            aux = subtrai(aux, divisor);
-            resultado = adiciona_elemento_no_fim(resultado, temp->inicio->dado);
-
-            continua = 0;
-            dividendo = subtrai(dividendo_a, aux);
-            if(dividendo_b != NULL) {
-                dividendo = concatena_listas(dividendo, dividendo_b);
-            }
-            if(dividendo->tamanho > tam - 1) {
-                continua = 1;
-            } else {
-                continua = 0;
-            }
-        }
-    }
-
-    destroi_lista(l_unidade);
-    destroi_lista(temp);
     return resultado;
 }
 
