@@ -526,17 +526,17 @@ PLista divide(PLista numero1, PLista numero2) {
         resultado = adiciona_elemento_no_inicio(resultado, 0);
     } else {
         tam_dif = numero1->tamanho - numero2->tamanho;
-        if(tam_dif < 2) {
-            while(eh_maior == MAIOR || eh_maior == IGUAL) {
-                aux = soma(temp, numero2);
-                destroi_lista(temp);
-                temp = copia_lista(aux);
-                resultado = soma(resultado, l_unidade);
-                eh_maior = eh_maior_numero(numero1, aux);
-                destroi_lista(aux);
-            }
-            return resultado;
-        } else {
+        /* if(tam_dif < 2) { */
+        /*     while(eh_maior == MAIOR || eh_maior == IGUAL) { */
+        /*         aux = soma(temp, numero2); */
+        /*         destroi_lista(temp); */
+        /*         temp = copia_lista(aux); */
+        /*         resultado = soma(resultado, l_unidade); */
+        /*         eh_maior = eh_maior_numero(numero1, aux); */
+        /*         destroi_lista(aux); */
+        /*     } */
+        /*     return resultado; */
+        /* } else { */
             while(tam_dif >= 0) {
                 aux = cria_lista();
                 aux_temp = cria_lista();
@@ -565,7 +565,7 @@ PLista divide(PLista numero1, PLista numero2) {
                 tam_dif -= 1;
                 /* destroi_lista(aux); */
                 /* destroi_lista(temp); */
-            }
+            /* } */
         }
     }
 
