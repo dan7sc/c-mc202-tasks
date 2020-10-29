@@ -254,6 +254,23 @@ PLista obtem_potencia_de_dez(int tamanho) {
     return lista;
 }
 
+PLista obtem_potencia_de_dez_int(int inteiro, int tamanho) {
+    PLista lista;
+
+    lista = cria_lista();
+    lista = adiciona_elemento_no_inicio(lista, inteiro);
+
+    if(tamanho == 0) {
+        return lista;
+    }
+
+    for(int i = 0; i < tamanho; i++) {
+        lista = adiciona_elemento_no_fim(lista, 0);
+    }
+
+    return lista;
+}
+
 PLista soma(PLista numero1, PLista numero2) {
     PNo maior;
     PNo menor;
@@ -420,7 +437,7 @@ PLista multiplica(PLista numero1, PLista numero2) {
     return resultado;
 }
 
-PLista divide(PLista numero1, PLista numero2) {
+PLista divideX(PLista numero1, PLista numero2) {
     int eh_maior;
     int tam; // diferença de tamanho entre numero1 e numero2
     PLista quociente;
@@ -489,6 +506,68 @@ PLista divide(PLista numero1, PLista numero2) {
     return resultado;
 }
 
+PLista divide(PLista numero1, PLista numero2) {
+    int eh_maior;
+    int tam; // diferença de tamanho entre numero1 e numero2
+    PLista quociente;
+    PLista l_produto;
+    PLista l_soma;
+    PLista resultado;
+    PLista l_a_somar;
+    PLista temp;  // ponteiro temporário
+
+    /* se o divisor é um retorna o dividendo */
+    if(numero2->inicio->dado == 1 && numero2->tamanho == 1) {
+        resultado = copia_lista(numero1);
+        return resultado;
+    }
+
+    resultado = cria_lista();
+
+    eh_maior = eh_maior_numero(numero1, numero2);
+    if(eh_maior == IGUAL) {
+        /* se os números são iguais retorn lita com um */
+        resultado = adiciona_elemento_no_inicio(resultado, 1);
+    } else if(eh_maior == MENOR) {
+        /* se o dividendo é menor que o divisor retorn lita com zero */
+        resultado = adiciona_elemento_no_inicio(resultado, 0);
+    } else {
+        tam = numero1->tamanho - numero2->tamanho;
+        while(tam >= 0) {
+            l_a_somar = cria_lista();
+            for(int i = 1; i < 10; i++) {
+                /* obtem potència de dez que multiplicada pelo divisor */
+                /* dá como resultado o menor número mais próximo do dividendo */
+                quociente = obtem_potencia_de_dez_int(i, tam);
+                l_soma = soma(resultado, quociente);
+                l_produto = multiplica(l_soma, numero2);
+                /* verifica se o produto é menor que o divisor  */
+                eh_maior = eh_maior_numero(l_produto, numero1);
+                destroi_lista(l_produto);
+                /* se for menor então encontramos o maior número que  */
+                /* multiplicado pelo divisor chega próximo ao dividendo */
+                if(eh_maior == MENOR || eh_maior == IGUAL) {
+                    temp = l_a_somar;
+                    l_a_somar = copia_lista(quociente);
+                    destroi_lista(temp);
+                }
+                destroi_lista(quociente);
+                destroi_lista(l_soma);
+            }
+            /* guarda referencia a memoria alocada da lista resultado */
+            temp = resultado;
+            /* resultado é a soma dos quocientes obtidos iterativamente */
+            resultado = soma(resultado, l_a_somar);
+            tam -= 1;
+
+            destroi_lista(temp);
+            destroi_lista(l_a_somar);
+        }
+    }
+
+    return resultado;
+}
+
 void realiza_operacao(char op, PLista numero1, PLista numero2) {
     PLista resultado;
 
@@ -514,7 +593,6 @@ void realiza_operacao(char op, PLista numero1, PLista numero2) {
         destroi_lista(resultado);
         break;
     default:
-        printf("operacao desconhecida\n");
         break;
     }
 }
