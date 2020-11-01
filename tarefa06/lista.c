@@ -2,6 +2,23 @@
 #include <stdlib.h>
 #include "lista.h"
 
+char *converte_enum_para_string(EPrioridade prior) {
+    char *strings[] = { "normal", "preferencial" };
+
+    return strings[prior];
+}
+
+EPrioridade converte_string_para_enum(char *str) {
+    EPrioridade prioridade = 0;
+    char *strings[] = { "normal", "preferencial" };
+
+    if(str[0] == strings[1][0]) {
+        prioridade = 1;
+    }
+
+    return prioridade;
+}
+
 PLista cria_lista() {
     PLista lista = malloc(sizeof(Lista));
 
@@ -30,19 +47,26 @@ void imprime_lista_atendimento(PLista lista) {
     atual = lista->inicio;
     while(atual != NULL) {
         printf("%d ", atual->dado.especialidade.id);
+
         atual = atual->proximo;
     }
 }
 
 void imprime_lista_paciente(PLista lista) {
     PNo atual;
+    EPrioridade prioridade;
+    char *str;
 
     atual = lista->inicio;
     while(atual != NULL) {
+        prioridade = atual->dado.paciente.prioridade;
+        str = converte_enum_para_string(prioridade);
+
         printf("%s ", atual->dado.paciente.nome);
-        printf("%s ", atual->dado.paciente.prioridade);
+        printf("%s ", str);
         imprime_lista_atendimento(atual->dado.paciente.lista_atendimento);
         printf("\n");
+
         atual = atual->proximo;
     }
 }

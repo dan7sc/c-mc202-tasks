@@ -4,9 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define TAM_STR 50
+#define TAM_NOME 50
 
-typedef struct _Atendimento {
+typedef enum Prioridade {
+    normal = 0,
+    preferencial = 1
+} EPrioridade;
+
+typedef struct Atendimento {
     int id;
 } Atendimento;
 
@@ -15,8 +20,8 @@ typedef struct Atendimento * PAtendimento;
 typedef struct Lista * PLista;
 
 typedef struct paciente {
-    char nome[TAM_STR];
-    char prioridade[TAM_STR];
+    char nome[TAM_NOME];
+    EPrioridade prioridade;
     PLista lista_atendimento;
 } Paciente;
 
@@ -42,6 +47,10 @@ typedef struct Lista {
 typedef struct No * PNo;
 
 typedef struct Lista * PLista;
+
+char *converte_enum_para_string(EPrioridade prior);
+
+EPrioridade converte_string_para_enum(char *str);
 
 PLista cria_lista();
 
