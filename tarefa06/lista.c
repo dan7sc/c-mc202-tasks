@@ -30,13 +30,19 @@ PLista cria_lista() {
 }
 
 void destroi_lista(PLista lista) {
-    PNo temp;
+    PNo no = NULL;
+    PNo temp = NULL;
 
-    while(lista->inicio != NULL) {
-        temp = lista->inicio->proximo;
-        free(lista->inicio);
-        lista->inicio = temp;
+    no = lista->inicio;
+    while (no != NULL) {
+        temp = no;
+        no = no->proximo;
+        free(temp);
     }
+
+    lista->inicio = NULL;
+    lista->fim = NULL;
+    lista->tamanho = 0;
 
     free(lista);
 }
@@ -46,7 +52,7 @@ void imprime_lista_atendimento(PLista lista) {
 
     atual = lista->inicio;
     while(atual != NULL) {
-        printf("%d ", atual->dado.especialidade.id);
+        printf("%d ", atual->dado.id);
 
         atual = atual->proximo;
     }
@@ -75,9 +81,7 @@ PLista adiciona_elemento_no_inicio(PLista lista, TDado dado) {
     PNo novo;
 
     novo = malloc(sizeof(No));
-
     novo->dado = dado;
-
     novo->anterior = NULL;
     novo->proximo = NULL;
 
@@ -100,7 +104,6 @@ PLista adiciona_elemento_no_fim(PLista lista, TDado dado) {
     PNo novo;
 
     novo = malloc(sizeof(No));
-
     novo->dado = dado;
     novo->anterior = NULL;
     novo->proximo = NULL;

@@ -11,12 +11,6 @@ typedef enum Prioridade {
     preferencial = 1
 } EPrioridade;
 
-typedef struct Atendimento {
-    int id;
-} Atendimento;
-
-typedef struct Atendimento * PAtendimento;
-
 typedef struct Lista * PLista;
 
 typedef struct paciente {
@@ -24,11 +18,10 @@ typedef struct paciente {
     EPrioridade prioridade;
     PLista lista_atendimento;
 } Paciente;
-
 typedef struct Paciente * PPaciente;
 
 typedef union TDado {
-    Atendimento especialidade;
+    int id;
     Paciente paciente;
 } TDado;
 
@@ -37,16 +30,13 @@ typedef struct No {
     struct No *anterior;
     struct No *proximo;
 } No;
+typedef struct No * PNo;
 
 typedef struct Lista {
     int tamanho;
     No *inicio;
     No *fim;
 } Lista;
-
-typedef struct No * PNo;
-
-typedef struct Lista * PLista;
 
 char *converte_enum_para_string(EPrioridade prior);
 
