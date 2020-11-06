@@ -133,9 +133,19 @@ PLista remove_elemento_no_fim(PLista lista) {
 
     temp = lista->fim;
     novo_fim = lista->fim->anterior;
-    novo_fim->proximo = NULL;
-    lista->fim->anterior = NULL;
+
+    if(novo_fim == NULL) {
+        lista->inicio = NULL;
+        lista->fim = NULL;
+
+        free(temp);
+
+        return lista;
+    }
+
     lista->fim = novo_fim;
+    novo_fim->proximo = NULL;
+    temp->anterior = NULL;
     lista->tamanho--;
 
     free(temp);
@@ -153,9 +163,19 @@ PLista remove_elemento_no_inicio(PLista lista) {
 
     temp = lista->inicio;
     novo_inicio = lista->inicio->proximo;
-    novo_inicio->anterior = NULL;
-    lista->inicio->proximo = NULL;
+
+    if(novo_inicio == NULL) {
+        lista->inicio = NULL;
+        lista->fim = NULL;
+
+        free(temp);
+
+        return lista;
+    }
+
     lista->inicio = novo_inicio;
+    novo_inicio->anterior = NULL;
+    temp->proximo = NULL;
     lista->tamanho--;
 
     free(temp);
