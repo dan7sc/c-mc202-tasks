@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 #define TAM_NOME 50
+#define NUM_ESPECIALISTAS 9
 
 typedef enum Prioridade {
     normal = 0,
@@ -20,9 +21,18 @@ typedef struct paciente {
 } Paciente;
 typedef struct Paciente * PPaciente;
 
+typedef struct atendimento {
+    int id;
+    int num_especialistas;
+    int num_ocupados;
+    PLista pacientes_em_atendimento;
+} Atendimento;
+typedef struct atendimento * PAtendimento;
+
 typedef union TDado {
     int id;
     Paciente paciente;
+    Atendimento atendimento;
 } TDado;
 
 typedef struct No {

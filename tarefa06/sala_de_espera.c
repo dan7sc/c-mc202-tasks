@@ -33,11 +33,14 @@ void le_string_entre_aspas(char *str) {
 
 int main() {
     PLista fila_pacientes;
+    PLista fila_atendimentos;
     PNo no;
     TDado t_paciente;
     TDado t_atendimento;
+    TDado t_especialista;
     int x = 1;
     char nome[15];
+    int qtde_profissionais_por_id[9] = { 10, 2, 5, 3, 4, 7, 2, 1, 4 };
 
     fila_pacientes = cria_lista();
     while(x > -1) {
@@ -65,12 +68,30 @@ int main() {
 
     imprime_lista_paciente(fila_pacientes);
 
+    fila_atendimentos = cria_lista();
+    for(int i = 0; i < NUM_ESPECIALISTAS; i++) {
+        t_especialista.atendimento.id = i + 1;
+        t_especialista.atendimento.num_especialistas = qtde_profissionais_por_id[i];
+        t_especialista.atendimento.num_ocupados = 0;
+        t_especialista.atendimento.pacientes_em_atendimento = cria_lista();
+
+        adiciona_elemento_no_fim(fila_atendimentos, t_especialista);
+    }
+
     no = fila_pacientes->inicio;
     while(no != NULL) {
         destroi_lista(no->dado.paciente.lista_atendimento);
         no = no->proximo;
     }
+
+    no = fila_atendimentos->inicio;
+    while(no != NULL) {
+        destroi_lista(no->dado.atendimento.pacientes_em_atendimento);
+        no = no->proximo;
+    }
+
     destroi_lista(fila_pacientes);
+    destroi_lista(fila_atendimentos);
 
     return 0;
 }
