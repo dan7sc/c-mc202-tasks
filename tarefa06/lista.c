@@ -123,42 +123,14 @@ PLista adiciona_elemento_no_fim(PLista lista, TDado dado) {
     return lista;
 }
 
-PLista remove_elemento_no_fim(PLista lista) {
-    PNo novo_fim;
-    PNo temp;
-
-    if(lista->fim == NULL) {
-        return lista;
-    }
-
-    temp = lista->fim;
-    novo_fim = lista->fim->anterior;
-
-    if(novo_fim == NULL) {
-        lista->inicio = NULL;
-        lista->fim = NULL;
-
-        free(temp);
-
-        return lista;
-    }
-
-    lista->fim = novo_fim;
-    novo_fim->proximo = NULL;
-    temp->anterior = NULL;
-    lista->tamanho--;
-
-    free(temp);
-
-    return lista;
-}
-
-PLista remove_elemento_no_inicio(PLista lista) {
+TDado *remove_elemento_no_inicio(PLista lista) {
     PNo novo_inicio;
     PNo temp;
+    TDado *elemento;
 
     if(lista->inicio == NULL) {
-        return lista;
+        elemento = &lista->inicio->dado;
+        return elemento;
     }
 
     temp = lista->inicio;
@@ -167,10 +139,9 @@ PLista remove_elemento_no_inicio(PLista lista) {
     if(novo_inicio == NULL) {
         lista->inicio = NULL;
         lista->fim = NULL;
+        elemento = &temp->dado;
 
-        free(temp);
-
-        return lista;
+        return elemento;
     }
 
     lista->inicio = novo_inicio;
@@ -178,7 +149,67 @@ PLista remove_elemento_no_inicio(PLista lista) {
     temp->proximo = NULL;
     lista->tamanho--;
 
-    free(temp);
+    elemento = &temp->dado;
 
-    return lista;
+    return elemento;
 }
+
+/* PLista remove_elemento_no_fim(PLista lista) { */
+/*     PNo novo_fim; */
+/*     PNo temp; */
+
+/*     if(lista->fim == NULL) { */
+/*         return lista; */
+/*     } */
+
+/*     temp = lista->fim; */
+/*     novo_fim = lista->fim->anterior; */
+
+/*     if(novo_fim == NULL) { */
+/*         lista->inicio = NULL; */
+/*         lista->fim = NULL; */
+
+/*         free(temp); */
+
+/*         return lista; */
+/*     } */
+
+/*     lista->fim = novo_fim; */
+/*     novo_fim->proximo = NULL; */
+/*     temp->anterior = NULL; */
+/*     lista->tamanho--; */
+
+/*     free(temp); */
+
+/*     return lista; */
+/* } */
+
+/* PLista remove_elemento_no_inicio(PLista lista) { */
+/*     PNo novo_inicio; */
+/*     PNo temp; */
+
+/*     if(lista->inicio == NULL) { */
+/*         return lista; */
+/*     } */
+
+/*     temp = lista->inicio; */
+/*     novo_inicio = lista->inicio->proximo; */
+
+/*     if(novo_inicio == NULL) { */
+/*         lista->inicio = NULL; */
+/*         lista->fim = NULL; */
+
+/*         free(temp); */
+
+/*         return lista; */
+/*     } */
+
+/*     lista->inicio = novo_inicio; */
+/*     novo_inicio->anterior = NULL; */
+/*     temp->proximo = NULL; */
+/*     lista->tamanho--; */
+
+/*     free(temp); */
+
+/*     return lista; */
+/* } */

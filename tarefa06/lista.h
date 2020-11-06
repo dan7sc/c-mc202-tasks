@@ -64,8 +64,10 @@ PLista adiciona_elemento_no_inicio(PLista lista, TDado dado);
 
 PLista adiciona_elemento_no_fim(PLista lista, TDado dado);
 
-PLista remove_elemento_no_fim(PLista lista);
+TDado *remove_elemento_no_inicio(PLista lista);
 
-PLista remove_elemento_no_inicio(PLista lista);
+/* PLista remove_elemento_no_fim(PLista lista); */
+
+/* PLista remove_elemento_no_inicio(PLista lista); */
 
 #endif

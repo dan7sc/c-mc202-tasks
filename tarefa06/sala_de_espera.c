@@ -34,11 +34,13 @@ void le_string_entre_aspas(char *str) {
 int main() {
     PLista fila_pacientes;
     PLista fila_atendimentos;
-    PLista fila_atendimentos_finalizados;
+    PLista lista_pacientes_finalizados;
     PNo no;
     TDado t_paciente;
     TDado t_atendimento;
     TDado t_especialista;
+    TDado *paciente_removido;
+    TDado *atendimento_removido;
     int x = 1;
     char nome[15];
     int qtde_profissionais_por_id[] = { 10, 2, 5, 3, 4, 7, 2, 1, 4 };
@@ -76,15 +78,24 @@ int main() {
         t_especialista.atendimento.num_ocupados = 0;
         t_especialista.atendimento.pacientes_em_atendimento = cria_lista();
 
-        adiciona_elemento_no_fim(fila_atendimentos, t_especialista);
+        fila_atendimentos = adiciona_elemento_no_fim(fila_atendimentos, t_especialista);
     }
 
-    fila_atendimentos_finalizados = cria_lista();
+    lista_pacientes_finalizados = cria_lista();
     while(fila_pacientes->inicio != NULL) {
-        fila_pacientes = remove_elemento_no_inicio(fila_pacientes);
+        paciente_removido = remove_elemento_no_inicio(fila_pacientes);
+        /* printf("%s\n", ((Paciente *)(paciente_removido))->nome); */
+        atendimento_removido = remove_elemento_no_inicio(((Paciente *)(paciente_removido))->lista_atendimento);
+        /* printf("%d\n", *(int *)(atendimento_removido)); */
+
+        fila_atendimentos->inicio->dado.atendimento.pacientes_em_atendimento = adiciona_elemento_no_fim(fila_atendimentos->inicio->dado.atendimento.pacientes_em_atendimento, *paciente_removido);
+
+        /* fila_pacientes = adiciona_elemento_no_fim(fila_pacientes, *paciente_removido); */
+        lista_pacientes_finalizados = adiciona_elemento_no_inicio(lista_pacientes_finalizados, *paciente_removido);
     }
 
     imprime_lista_paciente(fila_pacientes);
+    imprime_lista_paciente(lista_pacientes_finalizados);
 
     no = fila_pacientes->inicio;
     while(no != NULL) {
@@ -98,15 +109,17 @@ int main() {
         no = no->proximo;
     }
 
-    no = fila_atendimentos_finalizados->inicio;
+    /* printf("****\n"); */
+    no = lista_pacientes_finalizados->inicio;
     while(no != NULL) {
-        destroi_lista(no->dado.atendimento.pacientes_em_atendimento);
+        destroi_lista(no->dado.paciente.lista_atendimento);
+        /* destroi_lista(no->dado.atendimento.pacientes_em_atendimento); */
         no = no->proximo;
     }
 
     destroi_lista(fila_pacientes);
     destroi_lista(fila_atendimentos);
-    destroi_lista(fila_atendimentos_finalizados);
+    destroi_lista(lista_pacientes_finalizados);
 
     return 0;
 }
