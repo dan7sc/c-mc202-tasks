@@ -47,6 +47,8 @@ int main() {
     int ordem_de_chegada = 1;
     int tamanho_fila_entrada = 0;
     int tamanho_fila_saida;
+    int duracao_total = 600; // em segundos
+    int duracao_atendimento_incremento = 600; // em segundos
     int x = 1;
     char nome[15];
     int qtde_profissionais_por_id[] = { 10, 2, 5, 3, 4, 7, 2, 1, 4 };
@@ -59,6 +61,7 @@ int main() {
         le_string_entre_aspas(t_paciente.paciente.nome);
         le_string(nome);
         t_paciente.paciente.prioridade = converte_string_para_enum(nome);
+        t_paciente.paciente.horario_de_saida = 0;
 
         x = 1;
         while(x > 0) {
@@ -106,9 +109,9 @@ int main() {
     lista_pacientes_finalizados = cria_lista();
     tamanho_fila_saida = lista_pacientes_finalizados->tamanho;
     while(tamanho_fila_saida < tamanho_fila_entrada) {
-        printf("TAM: %d %d\n", tamanho_fila_saida, tamanho_fila_entrada);
+        /* printf("TAM: %d %d\n", tamanho_fila_saida, tamanho_fila_entrada); */
         for(int i = 0; i < NUM_ESPECIALISTAS; i++) {
-            while(filas_atendimentos[i]->inicio != NULL && qtde_ocupados_por_id[i] <= qtde_profissionais_por_id[i]) {
+            while(filas_atendimentos[i]->inicio != NULL && qtde_ocupados_por_id[i] < qtde_profissionais_por_id[i]) {
                 t_paciente_removido = remove_elemento_no_inicio(filas_atendimentos[i]);
                 filas_pacientes_em_atendimento[i] = adiciona_elemento_no_fim(filas_pacientes_em_atendimento[i], *t_paciente_removido);
                 qtde_ocupados_por_id[i] += 1;
@@ -118,6 +121,7 @@ int main() {
         for(int i = 0; i < NUM_ESPECIALISTAS; i++) {
             while(filas_pacientes_em_atendimento[i]->inicio != NULL && qtde_ocupados_por_id[i] > 0) {
                 t_paciente_removido = remove_elemento_no_inicio(filas_pacientes_em_atendimento[i]);
+                t_paciente_removido->paciente.horario_de_saida = duracao_total;
                 paciente_removido = (Paciente *) t_paciente_removido;
                 t_atendimento_removido = remove_elemento_no_inicio(paciente_removido->lista_atendimento);
                 if(t_atendimento_removido != NULL) {
@@ -129,6 +133,7 @@ int main() {
                 qtde_ocupados_por_id[i] -= 1;
             }
         }
+        duracao_total += duracao_atendimento_incremento;
 
         tamanho_fila_saida = lista_pacientes_finalizados->tamanho;
     }
@@ -137,10 +142,10 @@ int main() {
     for(int i = 0; i < NUM_ESPECIALISTAS; i++) {
         imprime_lista_paciente(filas_pacientes_em_atendimento[i]);
     }
-    imprime_lista_paciente(lista_pacientes_finalizados);
+    imprime_lista_saida_pacientes(lista_pacientes_finalizados);
 
     /* imprime_lista_paciente(fila_pacientes); */
-    printf("####\n");
+
     /* for(int i = 0; i < NUM_ESPECIALISTAS; i++) { */
     /*     imprime_lista_paciente(filas_atendimentos[i]); */
     /* } */

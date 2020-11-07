@@ -78,6 +78,31 @@ void imprime_lista_paciente(PLista lista) {
     }
 }
 
+Horario converte_segundos_em_horas_minutos(int segundos) {
+    Horario horario;
+
+    segundos += 28800;
+    horario.horas = segundos / 3600;
+    horario.minutos = (segundos - (3600 * horario.horas)) / 60;
+
+    return horario;
+}
+
+void imprime_lista_saida_pacientes(PLista lista) {
+    PNo atual;
+    Horario horario;
+
+    atual = lista->inicio;
+    while(atual != NULL) {
+        horario = converte_segundos_em_horas_minutos(atual->dado.paciente.horario_de_saida);
+        printf("%.2d:%.2d ", horario.horas, horario.minutos);
+        printf("%s ", atual->dado.paciente.nome);
+        printf("\n");
+
+        atual = atual->proximo;
+    }
+}
+
 PLista adiciona_elemento_no_inicio(PLista lista, TDado dado) {
     PNo novo;
 

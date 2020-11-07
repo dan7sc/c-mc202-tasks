@@ -14,10 +14,16 @@ typedef enum Prioridade {
 
 typedef struct Lista * PLista;
 
+typedef struct horario {
+    int horas;
+    int minutos;
+} Horario;
+
 typedef struct paciente {
     char nome[TAM_NOME];
     EPrioridade prioridade;
     int ordem_de_chegada;
+    int horario_de_saida;
     PLista lista_atendimento;
 } Paciente;
 typedef struct Paciente * PPaciente;
@@ -59,6 +65,10 @@ void destroi_lista(PLista lista);
 void imprime_lista_atendimento(PLista lista);
 
 void imprime_lista_paciente(PLista lista);
+
+Horario converte_segundos_em_horas_minutos(int segundos);
+
+void imprime_lista_saida_pacientes(PLista lista);
 
 PLista adiciona_elemento_no_inicio(PLista lista, TDado dado);
 
