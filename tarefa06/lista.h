@@ -17,6 +17,7 @@ typedef struct Lista * PLista;
 typedef struct paciente {
     char nome[TAM_NOME];
     EPrioridade prioridade;
+    int ordem_de_chegada;
     PLista lista_atendimento;
 } Paciente;
 typedef struct Paciente * PPaciente;

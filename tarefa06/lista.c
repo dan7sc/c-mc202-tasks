@@ -68,6 +68,7 @@ void imprime_lista_paciente(PLista lista) {
         prioridade = atual->dado.paciente.prioridade;
         str = converte_enum_para_string(prioridade);
 
+        printf("%d: ", atual->dado.paciente.ordem_de_chegada);
         printf("%s ", atual->dado.paciente.nome);
         printf("%s ", str);
         imprime_lista_atendimento(atual->dado.paciente.lista_atendimento);
