@@ -126,7 +126,10 @@ int main() {
                 t_atendimento_removido = remove_elemento_no_inicio(paciente_removido->lista_atendimento);
                 if(t_atendimento_removido != NULL) {
                     atendimento_removido = (int *) t_atendimento_removido;
-                    filas_atendimentos[*atendimento_removido - 1] = adiciona_elemento_no_fim(filas_atendimentos[*atendimento_removido - 1], *t_paciente_removido);
+                    if(paciente_removido->prioridade == normal) {
+                        filas_atendimentos[*atendimento_removido - 1] = adiciona_elemento_no_fim(filas_atendimentos[*atendimento_removido - 1], *t_paciente_removido);
+                    } else {
+                        filas_atendimentos[*atendimento_removido - 1] = adiciona_elemento_no_inicio(filas_atendimentos[*atendimento_removido - 1], *t_paciente_removido);                    }
                 } else {
                     lista_pacientes_finalizados = adiciona_elemento_no_fim(lista_pacientes_finalizados, *t_paciente_removido);
                 }
