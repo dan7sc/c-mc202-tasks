@@ -72,7 +72,7 @@ int main() {
         }
 
         t_paciente.paciente.ordem_de_chegada = ordem_de_chegada;
-        if(t_paciente.paciente.prioridade == 0) {
+        if(t_paciente.paciente.prioridade == normal) {
             fila_pacientes = adiciona_elemento_no_fim(fila_pacientes, t_paciente);
         } else {
             fila_pacientes = adiciona_elemento_no_inicio(fila_pacientes, t_paciente);
