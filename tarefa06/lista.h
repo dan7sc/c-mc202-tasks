@@ -22,9 +22,8 @@ typedef struct paciente {
 typedef struct Paciente * PPaciente;
 
 typedef struct atendimento {
-    int id;
-    int num_especialistas;
-    int num_ocupados;
+    int qtde_profissionais_por_id[9];
+    int qtde_ocupados_por_id[9];
     PLista pacientes_em_atendimento;
 } Atendimento;
 typedef struct atendimento * PAtendimento;
