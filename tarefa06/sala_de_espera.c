@@ -226,6 +226,11 @@ int main() {
         destroi_lista(filas_pacientes_em_atendimento[i]);
     }
 
+    no = lista_pacientes_finalizados->inicio;
+    while(no != NULL) {
+        free(no->dado.paciente.lista_atendimento);
+        no = no->proximo;
+    }
     destroi_lista(lista_pacientes_finalizados);
 
     return 0;
