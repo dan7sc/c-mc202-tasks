@@ -165,11 +165,24 @@ int main() {
                 t_paciente_removido = remove_elemento_no_inicio(filas_pacientes_em_atendimento[i]);
                 // atualiza duração do paciente no hospital
                 t_paciente_removido->paciente.horario_de_saida = duracao_total;
-                // paciente entra no vetor com pacientes que serão inseridos de novo nas filas de atendimento
-                vetor_desempate[indice_desempate] = t_paciente_removido;
-                indice_desempate += 1;
-                // conta pacientes que foram atendidos e serão ordenados pela função qsort
-                num_pacientes_para_desempate += 1;
+                paciente_removido = *(Paciente *) t_paciente_removido;
+                if(paciente_removido.prioridade == normal) {
+                    // paciente entra no vetor com pacientes que serão inseridos de novo nas filas de atendimento
+                    vetor_desempate[indice_desempate] = t_paciente_removido;
+                    indice_desempate += 1;
+                    // conta pacientes que foram atendidos e serão ordenados pela função qsort
+                    num_pacientes_para_desempate += 1;
+                } else {
+                    t_atendimento_removido = remove_elemento_no_inicio(paciente_removido.lista_atendimento);
+                    if(t_atendimento_removido != NULL) {
+                        atendimento_removido = *(int *) t_atendimento_removido;
+                        // pacientes preferenciais são armazenados no início da fila
+                        filas_atendimentos[atendimento_removido - 1] = adiciona_elemento_no_inicio(filas_atendimentos[atendimento_removido - 1], *t_paciente_removido);
+                    } else {
+                        lista_pacientes_finalizados = adiciona_elemento_no_fim(lista_pacientes_finalizados, *t_paciente_removido);
+                    }
+                    free(t_atendimento_removido);
+                }
                 // quando um paciente termina de ser atendido um profissional para cada especialidade i está vago
                 qtde_ocupados_por_id[i] -= 1;
             }
@@ -186,12 +199,8 @@ int main() {
             t_atendimento_removido = remove_elemento_no_inicio(paciente_removido.lista_atendimento);
             if(t_atendimento_removido != NULL) {
                 atendimento_removido = *(int *) t_atendimento_removido;
-                if(paciente_removido.prioridade == normal) {
-                    // pacientes normais são armazenados no fim da fila
-                    filas_atendimentos[atendimento_removido - 1] = adiciona_elemento_no_fim(filas_atendimentos[atendimento_removido - 1], *t_paciente_removido);
-                } else {
-                    // pacientes preferenciais são armazenados no início da fila
-                    filas_atendimentos[atendimento_removido - 1] = adiciona_elemento_no_inicio(filas_atendimentos[atendimento_removido - 1], *t_paciente_removido);                    }
+                // pacientes normais são armazenados no fim da fila
+                filas_atendimentos[atendimento_removido - 1] = adiciona_elemento_no_fim(filas_atendimentos[atendimento_removido - 1], *t_paciente_removido);
             } else {
                 lista_pacientes_finalizados = adiciona_elemento_no_fim(lista_pacientes_finalizados, *t_paciente_removido);
             }
