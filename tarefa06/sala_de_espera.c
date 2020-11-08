@@ -220,6 +220,7 @@ int main() {
     // imprime, em ordem, os horários e nomes de cada paciente que saiu do hospital
     imprime_lista_saida_pacientes(lista_pacientes_finalizados);
 
+    // destroi todas as filas/listas criadas
     no = fila_pacientes->inicio;
     while(no != NULL) {
         destroi_lista(no->dado.paciente.lista_atendimento);
