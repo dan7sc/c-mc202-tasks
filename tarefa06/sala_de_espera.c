@@ -117,19 +117,19 @@ int main() {
         for(int i = 0; i < NUM_ESPECIALISTAS; i++) {
             while(filas_atendimentos[i]->inicio != NULL && qtde_ocupados_por_id[i] < qtde_profissionais_por_id[i]) {
                 t_paciente_removido = remove_elemento_no_inicio(filas_atendimentos[i]);
+                paciente_removido = (Paciente *) t_paciente_removido;
                 filas_pacientes_em_atendimento[i] = adiciona_elemento_no_fim(filas_pacientes_em_atendimento[i], *t_paciente_removido);
                 qtde_ocupados_por_id[i] += 1;
+                free(paciente_removido);
             }
         }
+
         j = 0;
         n = 0;
-        fila_do_desempate = cria_lista();
         for(int i = 0; i < NUM_ESPECIALISTAS; i++) {
             while(filas_pacientes_em_atendimento[i]->inicio != NULL && qtde_ocupados_por_id[i] > 0) {
                 t_paciente_removido = remove_elemento_no_inicio(filas_pacientes_em_atendimento[i]);
                 t_paciente_removido->paciente.horario_de_saida = duracao_total;
-                paciente_removido = (Paciente *) t_paciente_removido;
-
                 v_desempate[j] = t_paciente_removido;
                 j++;
                 n++;
@@ -138,6 +138,7 @@ int main() {
         }
         qsort(v_desempate, n, sizeof(Paciente **), ordena_elementos);
 
+        fila_do_desempate = cria_lista();
         for(int i = 0; i < n; i++) {
             fila_do_desempate = adiciona_elemento_no_fim(fila_do_desempate, *v_desempate[i]);
         }
@@ -146,7 +147,6 @@ int main() {
             t_paciente_removido = remove_elemento_no_inicio(fila_do_desempate);
             t_paciente_removido->paciente.horario_de_saida = duracao_total;
             paciente_removido = (Paciente *) t_paciente_removido;
-
             t_atendimento_removido = remove_elemento_no_inicio(paciente_removido->lista_atendimento);
             if(t_atendimento_removido != NULL) {
                 atendimento_removido = (int *) t_atendimento_removido;
@@ -157,6 +157,8 @@ int main() {
             } else {
                 lista_pacientes_finalizados = adiciona_elemento_no_fim(lista_pacientes_finalizados, *t_paciente_removido);
             }
+            free(t_atendimento_removido);
+            free(paciente_removido);
         }
         duracao_total += duracao_atendimento_incremento;
 
@@ -180,6 +182,7 @@ int main() {
         destroi_lista(filas_pacientes_em_atendimento[i]);
     }
 
+    destroi_lista(fila_do_desempate);
     destroi_lista(lista_pacientes_finalizados);
 
     return 0;
