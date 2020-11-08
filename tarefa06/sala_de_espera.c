@@ -52,7 +52,6 @@ int main() {
     PLista filas_atendimentos[9]; // filas para cada um dos 9 tipos de especialidades diferentes de atendimento
     PLista filas_pacientes_em_atendimento[9]; // filas de paciente para cada especialidade
     PLista lista_pacientes_finalizados; // lista com os pacientes que já foram atendidos
-    PLista fila_pacientes_ordenados; // fila em que pacientes que chegaram antes vem no inicio após desempate usando qsort
     PNo no; // apenas um ponteiro para nó para auxiliar na destruição das listas ligadas
     TDado t_paciente; // union do tipo Paciente para armazenar paciente
     TDado t_atendimento; // union do tipo int para armazenar atendimento do paciente
@@ -178,14 +177,10 @@ int main() {
         // ordena vetor de desempate
         qsort(vetor_desempate, num_pacientes_para_desempate, sizeof(Paciente *), compara_elementos);
 
-        fila_pacientes_ordenados = cria_lista();
-        // adiciona pacientes ordenados pela função qsort
-        for(int i = 0; i < num_pacientes_para_desempate; i++) {
-            fila_pacientes_ordenados = adiciona_elemento_no_fim(fila_pacientes_ordenados, *vetor_desempate[i]);
-        }
-
-        while(fila_pacientes_ordenados->inicio != NULL) {
-            t_paciente_removido = remove_elemento_no_inicio(fila_pacientes_ordenados);
+        indice_desempate = 0;
+        while(indice_desempate < num_pacientes_para_desempate) {
+            /* t_paciente_removido = remove_elemento_no_inicio(fila_pacientes_ordenados); */
+            t_paciente_removido = vetor_desempate[indice_desempate];
             t_paciente_removido->paciente.horario_de_saida = duracao_total;
             paciente_removido = *(Paciente *) t_paciente_removido;
             t_atendimento_removido = remove_elemento_no_inicio(paciente_removido.lista_atendimento);
@@ -207,6 +202,8 @@ int main() {
                     lista_pacientes_finalizados = adiciona_elemento_no_inicio(lista_pacientes_finalizados, *t_paciente_removido);
                 }
             }
+            indice_desempate += 1;
+
             free(t_atendimento_removido);
             free(t_paciente_removido);
         }
@@ -236,7 +233,6 @@ int main() {
         destroi_lista(filas_pacientes_em_atendimento[i]);
     }
 
-    destroi_lista(fila_pacientes_ordenados);
     destroi_lista(lista_pacientes_finalizados);
 
     return 0;
