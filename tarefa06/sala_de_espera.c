@@ -193,14 +193,7 @@ int main() {
                     // pacientes preferenciais são armazenados no início da fila
                     filas_atendimentos[atendimento_removido - 1] = adiciona_elemento_no_inicio(filas_atendimentos[atendimento_removido - 1], *t_paciente_removido);                    }
             } else {
-                // pacientes que já terminaram todos os seus atendimentos são armazenados na lista de pacientes finalizados
-                if(paciente_removido.prioridade == normal) {
-                    // pacientes normais são armazenados no fim da fila
-                    lista_pacientes_finalizados = adiciona_elemento_no_fim(lista_pacientes_finalizados, *t_paciente_removido);
-                } else {
-                    // pacientes preferenciais são armazenados no início da fila
-                    lista_pacientes_finalizados = adiciona_elemento_no_inicio(lista_pacientes_finalizados, *t_paciente_removido);
-                }
+                lista_pacientes_finalizados = adiciona_elemento_no_fim(lista_pacientes_finalizados, *t_paciente_removido);
             }
             indice_desempate += 1;
 
