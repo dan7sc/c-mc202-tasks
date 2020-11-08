@@ -6,6 +6,7 @@
 
 #define TAM_NOME 50
 #define NUM_ESPECIALISTAS 9
+#define NUM_PROFISSIONAIS 38
 
 typedef enum Prioridade {
     normal = 0,
