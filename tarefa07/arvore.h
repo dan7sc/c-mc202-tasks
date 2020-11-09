@@ -21,4 +21,8 @@ PNo insere_no(PNo no, int dado);
 
 Arvore insere(Arvore av, int dado);
 
+PNo busca_no(PNo no, int dado);
+
+int busca(Arvore av, int dado);
+
 #endif

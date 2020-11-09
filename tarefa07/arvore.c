@@ -43,3 +43,29 @@ Arvore insere(Arvore av, int dado) {
 
     return av;
 }
+
+PNo busca_no(PNo no, int dado) {
+    if(no == NULL  || dado == no->dado) {
+        return no;
+    }
+
+    if(dado < no->dado) {
+        return busca_no(no->esq, dado);
+    } else {
+        return busca_no(no->dir, dado);
+    }
+}
+
+int busca(Arvore av, int dado) {
+    PNo no;
+
+    if(av.raiz == NULL || dado == av.raiz->dado) {
+        return av.raiz->dado;
+    } else {
+        no = busca_no(av.raiz, dado);
+        if(no == NULL) {
+            return -1;
+        }
+        return no->dado;
+    }
+}

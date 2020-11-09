@@ -4,16 +4,17 @@
 
 int main() {
     Arvore av = cria_arvore();
+    int x;
 
     av = insere(av, 2);
     av = insere(av, 1);
     av = insere(av, 3);
     av = insere(av, 4);
 
-    printf("%d\n", av.raiz->dado);
-    printf("%d\n", av.raiz->esq->dado);
-    printf("%d\n", av.raiz->dir->dado);
-    printf("%d\n", av.raiz->dir->dir->dado);
+    for(int i = 1; i < 6; i++) {
+        x = busca(av, i);
+        printf("%d\n", x);
+    }
 
     return 0;
 }
