@@ -17,4 +17,8 @@ PNo cria_no(int dado, PNo esq, PNo dir);
 
 Arvore cria_arvore();
 
+PNo insere_no(PNo no, int dado);
+
+Arvore insere(Arvore av, int dado);
+
 #endif

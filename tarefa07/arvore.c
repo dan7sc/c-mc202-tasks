@@ -19,3 +19,27 @@ Arvore cria_arvore() {
 
     return av;
 }
+
+PNo insere_no(PNo no, int dado) {
+    PNo novo_no;
+
+    if(no == NULL) {
+        novo_no = cria_no(dado, NULL, NULL);
+        no = novo_no;
+        return no;
+    }
+
+    if(dado <= no->dado) {
+        no->esq = insere_no(no->esq, dado);
+    } else {
+        no->dir = insere_no(no->dir, dado);
+    }
+
+    return no;
+}
+
+Arvore insere(Arvore av, int dado) {
+    av.raiz = insere_no(av.raiz, dado);
+
+    return av;
+}
