@@ -242,19 +242,7 @@ PLista subtrai_elementos_restantes(PLista numero, PNo inicio, int num) {
     return numero;
 }
 
-PLista obtem_potencia_de_dez(int tamanho) {
-    PLista lista;
-
-    lista = cria_lista();
-    lista = adiciona_elemento_no_inicio(lista, 1);
-    for(int i = 0; i < tamanho; i++) {
-        lista = adiciona_elemento_no_fim(lista, 0);
-    }
-
-    return lista;
-}
-
-PLista obtem_potencia_de_dez_int(int inteiro, int tamanho) {
+PLista obtem_potencia_de_dez(int inteiro, int tamanho) {
     PLista lista;
 
     lista = cria_lista();
@@ -437,75 +425,6 @@ PLista multiplica(PLista numero1, PLista numero2) {
     return resultado;
 }
 
-PLista divideX(PLista numero1, PLista numero2) {
-    int eh_maior;
-    int tam; // diferença de tamanho entre numero1 e numero2
-    PLista quociente;
-    PLista quociente_aux;
-    PLista l_produto;
-    PLista l_soma;
-    PLista resultado;
-    PLista temp;  // ponteiro temporário
-
-    /* se o divisor é um retorna o dividendo */
-    if(numero2->inicio->dado == 1 && numero2->tamanho == 1) {
-        resultado = copia_lista(numero1);
-        return resultado;
-    }
-
-    resultado = cria_lista();
-
-    eh_maior = eh_maior_numero(numero1, numero2);
-    if(eh_maior == IGUAL) {
-        /* se os números são iguais retorn lita com um */
-        resultado = adiciona_elemento_no_inicio(resultado, 1);
-    } else if(eh_maior == MENOR) {
-        /* se o dividendo é menor que o divisor retorn lita com zero */
-        resultado = adiciona_elemento_no_inicio(resultado, 0);
-    } else {
-        tam = numero1->tamanho - numero2->tamanho;
-        while(tam >= 0) {
-            /* quociente = cria_lista(); */
-            /* obtem potència de dez que multiplicada pelo divisor */
-            /* dá como resultado o menor número mais próximo do dividendo */
-            quociente = obtem_potencia_de_dez(tam);
-            l_produto = multiplica(quociente, numero2);
-            eh_maior = eh_maior_numero(l_produto, numero1);
-            destroi_lista(l_produto);
-            /* se for menor multiplica a potência de dez achada por 1, 2...9 */
-            /* até achar o maior número mais próximo do dividendo */
-            if(eh_maior == MENOR || eh_maior == IGUAL) {
-                quociente_aux = copia_lista(quociente);
-                for(int i = 0; i < 10; i++) {
-                    quociente_aux->inicio->dado = i;
-                    /* soma o quociente achado no resultado até agora obtido */
-                    l_soma = soma(resultado, quociente_aux);
-                    /* verifica se o produto é menor que o divisor  */
-                    l_produto = multiplica(l_soma, numero2);
-                    eh_maior = eh_maior_numero(l_produto, numero1);
-                    destroi_lista(l_soma);
-                    destroi_lista(l_produto);
-                    /* se for menor então encontramos o maior número que  */
-                    /* multiplicado pelo divisor chega próximo ao dividendo */
-                    if(eh_maior == MENOR || eh_maior == IGUAL) {
-                        quociente->inicio->dado = i;
-                    }
-                }
-                destroi_lista(quociente_aux);
-                /* guarda referencia a memoria alocada da lista resultado */
-                temp = resultado;
-                /* resultado é a soma dos quocientes obtidos iterativamente */
-                resultado = soma(resultado, quociente);
-                destroi_lista(temp);
-            }
-            tam -= 1;
-            destroi_lista(quociente);
-        }
-    }
-
-    return resultado;
-}
-
 PLista divide(PLista numero1, PLista numero2) {
     int eh_maior;
     int tam; // diferença de tamanho entre numero1 e numero2
@@ -538,7 +457,7 @@ PLista divide(PLista numero1, PLista numero2) {
             for(int i = 1; i < 10; i++) {
                 /* obtem potència de dez que multiplicada pelo divisor */
                 /* dá como resultado o menor número mais próximo do dividendo */
-                quociente = obtem_potencia_de_dez_int(i, tam);
+                quociente = obtem_potencia_de_dez(i, tam);
                 l_soma = soma(resultado, quociente);
                 l_produto = multiplica(l_soma, numero2);
                 /* verifica se o produto é menor que o divisor  */
