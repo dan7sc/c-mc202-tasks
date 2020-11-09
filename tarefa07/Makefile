@@ -6,7 +6,10 @@ LDFLAGS = -lm
 all: mensageiro
 
 mensageiro: mensageiro.c
-	gcc $(CFLAGS) *.c -o mensageiro $(LDFLAGS)
+	gcc $(CFLAGS) -c arvore.c $(LDFLAGS)
+	gcc $(CFLAGS) -c mensageiro.c $(LDFLAGS)
+	gcc $(CFLAGS) -o mensageiro mensageiro.o arvore.o $(LDFLAGS)
 
 clean:
 	rm -f mensageiro
+	rm -f *.o
