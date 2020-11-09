@@ -69,3 +69,44 @@ int busca(Arvore av, int dado) {
         return no->dado;
     }
 }
+
+void percorre_pre_ordem(PNo no) {
+    if(no != NULL) {
+        printf("%d ", no->dado);
+        percorre_pre_ordem(no->esq);
+        percorre_pre_ordem(no->dir);
+    }
+}
+
+void percorre_in_ordem(PNo no) {
+    if(no != NULL) {
+        percorre_in_ordem(no->esq);
+        printf("%d ", no->dado);
+        percorre_in_ordem(no->dir);
+    }
+}
+
+void percorre_pos_ordem(PNo no) {
+    if(no != NULL) {
+        percorre_pos_ordem(no->esq);
+        percorre_pos_ordem(no->dir);
+        printf("%d ", no->dado);
+    }
+}
+
+void percorre(Arvore av, EPercurso percurso) {
+    switch(percurso) {
+    case 0:
+        percorre_pre_ordem(av.raiz);
+        break;
+    case 1:
+        percorre_in_ordem(av.raiz);
+        break;
+    case 2:
+        percorre_pos_ordem(av.raiz);
+        break;
+    default:
+        break;
+    }
+    printf("\n");
+}

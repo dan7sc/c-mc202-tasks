@@ -16,5 +16,9 @@ int main() {
         printf("%d\n", x);
     }
 
+    percorre(av, pre_ordem);
+    percorre(av, in_ordem);
+    percorre(av, pos_ordem);
+
     return 0;
 }
