@@ -88,37 +88,28 @@ int main() {
 
     n = 1;
     while(n > -1) {
-        while(n > 0) {
-            le_int(&num_cartoes);
+        n = le_int(&num_cartoes);
+        if(n > -1) {
             le_int(&num_autoridades);
 
-            if(n > 0) {
-                pares = cria_arvore();
-            }
+            pares = cria_arvore();
             for(int i = 0; i < num_cartoes; i++) {
                 cartao = malloc(sizeof(Cartao));
                 le_int(&cartao->numero);
                 le_string_entre_aspas(cartao->texto);
-                if(n > 0) {
-                    pares = insere(pares, cartao, compara_cartao_numero);
-                }
+                pares = insere(pares, cartao, compara_cartao_numero);
             }
 
-            if(n > 0) {
-                autoridades = cria_arvore();
-            }
+            autoridades = cria_arvore();
             for(int i = 0; i < num_autoridades; i++) {
                 autoridade = malloc(sizeof(Autoridade));
-                n = le_int(&autoridade->numero);
-                if(n > 0) {
-                    autoridades = insere(autoridades, autoridade, compara_autoridade_numero);
-                }
+                le_int(&autoridade->numero);
+                autoridades = insere(autoridades, autoridade, compara_autoridade_numero);
             }
-            if(n > 0) {
-                printf("%d %d\n", num_cartoes, num_autoridades);
-                percorre(pares, pre_ordem, imprime_cartao);
-                percorre(autoridades, pre_ordem, imprime_autoridade);
-            }
+
+            printf("%d %d\n", num_cartoes, num_autoridades);
+            percorre(pares, pre_ordem, imprime_cartao);
+            percorre(autoridades, pre_ordem, imprime_autoridade);
 
             destroi_arvore(pares);
             destroi_arvore(autoridades);
