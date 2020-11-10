@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "arvore.h"
 
-PNo cria_no(int dado, PNo esq, PNo dir) {
+PNo cria_no(void *dado, PNo esq, PNo dir) {
     PNo raiz = malloc(sizeof(No));
 
     raiz->dado = dado;
@@ -20,7 +20,20 @@ Arvore cria_arvore() {
     return av;
 }
 
-PNo insere_no(PNo no, int dado) {
+void destroi_no(PNo no) {
+    if(no != NULL) {
+        destroi_no(no->esq);
+        destroi_no(no->dir);
+        free(no->dado);
+        free(no);
+    }
+}
+
+void destroi_arvore(Arvore av) {
+    destroi_no(av.raiz);
+}
+
+PNo insere_no(PNo no, void *dado, int (*compara)(void *, void *)) {
     PNo novo_no;
 
     if(no == NULL) {
@@ -29,81 +42,81 @@ PNo insere_no(PNo no, int dado) {
         return no;
     }
 
-    if(dado <= no->dado) {
-        no->esq = insere_no(no->esq, dado);
+    if((*compara)(dado, no->dado) == 0) {
+        no->esq = insere_no(no->esq, dado, compara);
     } else {
-        no->dir = insere_no(no->dir, dado);
+        no->dir = insere_no(no->dir, dado, compara);
     }
 
     return no;
 }
 
-Arvore insere(Arvore av, int dado) {
-    av.raiz = insere_no(av.raiz, dado);
+Arvore insere(Arvore av, void *dado, int (*compara)(void *, void *)) {
+    av.raiz = insere_no(av.raiz, dado, compara);
 
     return av;
 }
 
-PNo busca_no(PNo no, int dado) {
-    if(no == NULL  || dado == no->dado) {
+PNo busca_no(PNo no, void *dado, int (*compara)(void *, void *)) {
+    if(no == NULL || (*compara)(dado, no->dado) == 0) {
         return no;
     }
 
-    if(dado < no->dado) {
-        return busca_no(no->esq, dado);
+    if((*compara)(dado, no->dado) == 0) {
+        return busca_no(no->esq, dado, compara);
     } else {
-        return busca_no(no->dir, dado);
+        return busca_no(no->dir, dado, compara);
     }
 }
 
-int busca(Arvore av, int dado) {
+PNo busca(Arvore av, void *dado, int (*compara)(void *, void *)) {
     PNo no;
 
-    if(av.raiz == NULL || dado == av.raiz->dado) {
+    if(av.raiz == NULL || (*compara)(dado, av.raiz->dado) == 0) {
         return av.raiz->dado;
     } else {
-        no = busca_no(av.raiz, dado);
+        no = busca_no(av.raiz, dado, compara);
         if(no == NULL) {
-            return -1;
+            return NULL;
         }
         return no->dado;
     }
 }
 
-void percorre_pre_ordem(PNo no) {
+void percorre_pre_ordem(PNo no, void (*imprime)(void *)) {
     if(no != NULL) {
-        printf("%d ", no->dado);
-        percorre_pre_ordem(no->esq);
-        percorre_pre_ordem(no->dir);
+        (*imprime)(no->dado);
+        percorre_pre_ordem(no->esq, imprime);
+        percorre_pre_ordem(no->dir, imprime);
     }
 }
 
-void percorre_in_ordem(PNo no) {
+void percorre_in_ordem(PNo no, void (*imprime)(void *)) {
     if(no != NULL) {
-        percorre_in_ordem(no->esq);
-        printf("%d ", no->dado);
-        percorre_in_ordem(no->dir);
+        percorre_in_ordem(no->esq, imprime);
+        (*imprime)(no->dado);
+        percorre_in_ordem(no->dir, imprime);
     }
 }
 
-void percorre_pos_ordem(PNo no) {
+void percorre_pos_ordem(PNo no, void (*imprime)(void *)) {
     if(no != NULL) {
-        percorre_pos_ordem(no->esq);
-        percorre_pos_ordem(no->dir);
-        printf("%d ", no->dado);
+        percorre_pos_ordem(no->esq, imprime);
+        percorre_pos_ordem(no->dir, imprime);
+        (*imprime)(no->dado);
     }
 }
 
-void percorre(Arvore av, EPercurso percurso) {
+void percorre(Arvore av, EPercurso percurso, void (*imprime)(void *)) {
     switch(percurso) {
     case 0:
-        percorre_pre_ordem(av.raiz);
+        percorre_pre_ordem(av.raiz, imprime);
         break;
     case 1:
-        percorre_in_ordem(av.raiz);
+        percorre_in_ordem(av.raiz, imprime);
         break;
     case 2:
-        percorre_pos_ordem(av.raiz);
+        percorre_pos_ordem(av.raiz, imprime);
         break;
     default:
         break;
