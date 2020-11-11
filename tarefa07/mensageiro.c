@@ -6,10 +6,6 @@ int le_int(int *num) {
     return scanf("%d", num);
 }
 
-void le_char(char *ch) {
-    scanf(" %c", ch);
-}
-
 // le string entre aspas e nao armazena as aspas
 void le_string_entre_aspas(char *str) {
     char ch;
@@ -66,15 +62,30 @@ int compara_autoridade_numero(void *numero, void *autoridade) {
 }
 
 void imprime_cartao(void *cartao) {
-    Cartao *c = (Cartao *) cartao;
+    Cartao c = *(Cartao *) cartao;
 
-    printf("%d %s ", c->numero, c->texto);
+    printf("%d %s ", c.numero, c.texto);
 }
 
 void imprime_autoridade(void *autoridade) {
-    Autoridade *aut = (Autoridade *) autoridade;
+    Autoridade aut = *(Autoridade *) autoridade;
 
-    printf("%d ", aut->numero);
+    printf("%d ", aut.numero);
+}
+
+void concatena_cartao(void *cartao) {
+    Cartao c = *(Cartao *) cartao;
+
+    for(int i = 1; c.texto[i] != '\0'; i++) {
+        printf("%c", c.texto[i]);
+    }
+}
+
+int soma(void *a, void *b) {
+    int num = *(int *) a;
+    Cartao c = *(Cartao *) b;
+
+    return num + c.numero;
 }
 
 int main() {
@@ -105,11 +116,14 @@ int main() {
                 autoridade = malloc(sizeof(Autoridade));
                 le_int(&autoridade->numero);
                 autoridades = insere(autoridades, autoridade, compara_autoridade_numero);
+                conta_triade(pares, autoridade->numero, soma);
             }
 
             printf("%d %d\n", num_cartoes, num_autoridades);
-            percorre(pares, pre_ordem, imprime_cartao);
-            percorre(autoridades, pre_ordem, imprime_autoridade);
+            percorre(pares, pos_ordem, imprime_cartao);
+            percorre(autoridades, in_ordem, imprime_autoridade);
+
+            percorre(pares, in_ordem, concatena_cartao);
 
             destroi_arvore(pares);
             destroi_arvore(autoridades);

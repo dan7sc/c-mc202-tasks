@@ -123,3 +123,30 @@ void percorre(Arvore av, EPercurso percurso, void (*imprime)(void *)) {
     }
     printf("\n");
 }
+
+Contagem conta_triade_no(PNo no, int autoridade, Contagem *contagem, int (*soma)(void *, void *)) {
+    if(no != NULL) {
+        conta_triade_no(no->esq, autoridade, contagem, soma);
+        conta_triade_no(no->dir, autoridade, contagem, soma);
+        if(contagem->contador < 3 && (
+               (*soma)(contagem, no->dado) == autoridade || (*soma)(contagem, no->dado) < autoridade)
+            ) {
+            contagem->soma = (*soma)(contagem, no->dado);
+            contagem->contador++;
+        }
+    }
+
+    return *contagem;
+}
+
+void conta_triade(Arvore av, int autoridade, int (*soma)(void *, void *)) {
+    Contagem *contagem;
+
+    contagem = malloc(sizeof(Contagem));
+    contagem->soma = 0;
+    contagem->contador = 0;
+
+    *contagem = conta_triade_no(av.raiz, autoridade, contagem, soma);
+
+    free(contagem);
+}

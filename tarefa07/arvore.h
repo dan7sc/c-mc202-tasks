@@ -9,6 +9,11 @@ typedef enum percurso {
     pos_ordem = 2
 } EPercurso;
 
+typedef struct contagem {
+    int soma;
+    int contador;
+} Contagem;
+
 typedef struct cartao {
     int numero;
     char texto[TAM_STR];
@@ -53,5 +58,9 @@ void percorre_in_ordem(PNo no, void (*imprime)(void *));
 void percorre_pos_ordem(PNo no, void (*imprime)(void *));
 
 void percorre(Arvore av, EPercurso percurso, void (*imprime)(void *));
+
+Contagem conta_triade_no(PNo no, int numero, Contagem *contagem, int (*soma)(void *, void *));
+
+void conta_triade(Arvore av, int numero, int (*soma)(void *, void *));
 
 #endif
