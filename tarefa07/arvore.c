@@ -114,29 +114,25 @@ PNo remove_no(Arvore av, void *dado, int (*compara)(void *, void *)) {
 }
 
 PNo busca_no(PNo no, void *dado, int (*compara)(void *, void *)) {
-    if(no == NULL || (*compara)(dado, no->dado) == -1) {
+    if(no == NULL) {
         return no;
     }
 
     if((*compara)(dado, no->dado) == -1) {
         return busca_no(no->esq, dado, compara);
-    } else {
+    } else if((*compara)(dado, no->dado) == 1) {
         return busca_no(no->dir, dado, compara);
+    } else {
+        return no;
     }
 }
 
 PNo busca(Arvore av, void *dado, int (*compara)(void *, void *)) {
     PNo no;
 
-    if(av.raiz == NULL || (*compara)(dado, av.raiz->dado) == -1) {
-        return av.raiz->dado;
-    } else {
-        no = busca_no(av.raiz, dado, compara);
-        if(no == NULL) {
-            return NULL;
-        }
-        return no->dado;
-    }
+    no = busca_no(av.raiz, dado, compara);
+
+    return no;
 }
 
 void percorre_pre_ordem(PNo no, void (*imprime)(void *)) {
