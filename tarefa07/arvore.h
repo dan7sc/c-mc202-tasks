@@ -27,6 +27,7 @@ typedef struct no {
     void *dado;
     struct no *esq;
     struct no *dir;
+    struct no *pai;
 } No;
 typedef struct no * PNo;
 
@@ -35,7 +36,7 @@ typedef struct arvore {
 } Arvore;
 typedef struct arvore * PArvore;
 
-PNo cria_no(void *dado, PNo esq, PNo dir);
+PNo cria_no(void *dado, PNo esq, PNo dir, PNo pai);
 
 Arvore cria_arvore();
 

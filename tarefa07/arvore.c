@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include "arvore.h"
 
-PNo cria_no(void *dado, PNo esq, PNo dir) {
+PNo cria_no(void *dado, PNo esq, PNo dir, PNo pai) {
     PNo raiz = malloc(sizeof(No));
 
     raiz->dado = dado;
     raiz->esq = esq;
     raiz->dir = dir;
+    raiz->pai = pai;
 
     return raiz;
 }
@@ -37,15 +38,19 @@ PNo insere_no(PNo no, void *dado, int (*compara)(void *, void *)) {
     PNo novo_no;
 
     if(no == NULL) {
-        novo_no = cria_no(dado, NULL, NULL);
+        novo_no = cria_no(dado, NULL, NULL, NULL);
         no = novo_no;
         return no;
     }
 
-    if((*compara)(dado, no->dado) == 0) {
-        no->esq = insere_no(no->esq, dado, compara);
-    } else {
-        no->dir = insere_no(no->dir, dado, compara);
+    if((*compara)(dado, no->dado) == -1) {
+        novo_no = insere_no(no->esq, dado, compara);
+        no->esq = novo_no;
+        novo_no->pai = no;
+    } else if((*compara)(dado, no->dado) == 1) {
+        novo_no = insere_no(no->dir, dado, compara);
+        no->dir = novo_no;
+        novo_no->pai = no;
     }
 
     return no;
