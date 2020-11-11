@@ -57,12 +57,68 @@ Arvore insere(Arvore av, void *dado, int (*compara)(void *, void *)) {
     return av;
 }
 
+PNo remove_sucessor(PNo no) {
+    PNo max = no->esq;
+    PNo pai = no;
+
+    if(no->esq == NULL) {
+        return NULL;
+    }
+
+    // procura maximo na subarvore esquerda
+    while(max->dir != NULL) {
+        pai = max;
+        max = max->dir;
+    }
+
+    if(pai->dir == max) {
+        pai->dir = max->dir;
+    } else {
+        pai->esq = max->dir;
+    }
+
+    no->dado = max->dado;
+    return max;
+}
+
+PNo remove_no_recursivo(PNo no, void *dado, int (*compara)(void *, void *)) {
+    if(no == NULL) {
+        return NULL;
+    }
+
+    if((*compara)(dado, no->dado) == -1) {
+        no->esq = remove_no_recursivo(no->esq, dado, compara);
+        return no;
+    } else if((*compara)(dado, no->dado) == 1) {
+        no->dir = remove_no_recursivo(no->dir, dado, compara);
+        return no;
+    } else {
+        if(no->esq == NULL && no->dir != NULL) {
+            no = no->dir;
+            return no;
+        } else if(no->dir == NULL && no->esq != NULL) {
+            no = no->esq;
+            return no;
+        } else {
+            return remove_sucessor(no);
+        }
+    }
+}
+
+PNo remove_no(Arvore av, void *dado, int (*compara)(void *, void *)) {
+    PNo no;
+
+    no = remove_no_recursivo(av.raiz, dado, compara);
+
+    return no;
+}
+
 PNo busca_no(PNo no, void *dado, int (*compara)(void *, void *)) {
-    if(no == NULL || (*compara)(dado, no->dado) == 0) {
+    if(no == NULL || (*compara)(dado, no->dado) == -1) {
         return no;
     }
 
-    if((*compara)(dado, no->dado) == 0) {
+    if((*compara)(dado, no->dado) == -1) {
         return busca_no(no->esq, dado, compara);
     } else {
         return busca_no(no->dir, dado, compara);
@@ -72,7 +128,7 @@ PNo busca_no(PNo no, void *dado, int (*compara)(void *, void *)) {
 PNo busca(Arvore av, void *dado, int (*compara)(void *, void *)) {
     PNo no;
 
-    if(av.raiz == NULL || (*compara)(dado, av.raiz->dado) == 0) {
+    if(av.raiz == NULL || (*compara)(dado, av.raiz->dado) == -1) {
         return av.raiz->dado;
     } else {
         no = busca_no(av.raiz, dado, compara);

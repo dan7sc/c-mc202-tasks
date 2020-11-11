@@ -44,9 +44,11 @@ int compara_cartao_numero(void *numero, void *cartao) {
     Cartao *c = (Cartao *) cartao;
 
     if(*num < c->numero) {
-        return 0;
-    } else {
+        return -1;
+    } else if(*num > c->numero) {
         return 1;
+    } else {
+        return 0;
     }
 }
 
@@ -55,9 +57,11 @@ int compara_autoridade_numero(void *numero, void *autoridade) {
     Autoridade *aut = (Autoridade *) autoridade;
 
     if(*num < aut->numero) {
-        return 0;
-    } else {
+        return -1;
+    } else if(*num < aut->numero) {
         return 1;
+    } else {
+        return 0;
     }
 }
 
@@ -96,6 +100,7 @@ int main() {
     Autoridade *autoridade;
     Arvore pares;
     Arvore autoridades;
+    int num_cartao_a_remover;
 
     n = 1;
     while(n > -1) {
@@ -119,11 +124,14 @@ int main() {
                 conta_triade(pares, autoridade->numero, soma);
             }
 
+            num_cartao_a_remover = 16;
+            pares.raiz = remove_no(pares, &num_cartao_a_remover, compara_cartao_numero);
+
             printf("%d %d\n", num_cartoes, num_autoridades);
-            percorre(pares, pos_ordem, imprime_cartao);
+            percorre(pares, pre_ordem, imprime_cartao);
             percorre(autoridades, in_ordem, imprime_autoridade);
 
-            percorre(pares, in_ordem, concatena_cartao);
+            percorre(pares, pre_ordem, concatena_cartao);
 
             destroi_arvore(pares);
             destroi_arvore(autoridades);

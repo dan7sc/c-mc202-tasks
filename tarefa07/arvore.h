@@ -47,6 +47,12 @@ PNo insere_no(PNo no, void *dado, int (*compara)(void *, void *));
 
 Arvore insere(Arvore av, void *dado, int (*compara)(void *, void *));
 
+PNo remove_sucessor(PNo no);
+
+PNo remove_no_recursivo(PNo no, void *dado, int (*compara)(void *, void *));
+
+PNo remove_no(Arvore av, void *dado, int (*compara)(void *, void *));
+
 PNo busca_no(PNo no, void *dado, int (*compara)(void *, void *));
 
 PNo busca(Arvore av, void *dado, int (*compara)(void *, void *));
