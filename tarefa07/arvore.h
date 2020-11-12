@@ -36,11 +36,13 @@ typedef struct arvore {
 } Arvore;
 typedef struct arvore * PArvore;
 
-PNo cria_no(void *dado, PNo esq, PNo dir, PNo pai);
+PNo cria_no(void *dado);
 
 Arvore cria_arvore();
 
 void destroi_no(PNo no);
+
+void destroi_arvore_recursivo(PNo no);
 
 void destroi_arvore(Arvore av);
 
@@ -50,9 +52,17 @@ Arvore insere(Arvore av, void *dado, int (*compara)(void *, void *));
 
 PNo remove_sucessor(PNo no);
 
+PNo obtem_sucessor_esq(PNo no);
+
+PNo obtem_sucessor_dir(PNo no);
+
+PNo obtem_minimo(PNo no);
+
+PNo obtem_maximo(PNo no);
+
 PNo remove_no_recursivo(PNo no, void *dado, int (*compara)(void *, void *));
 
-PNo remove_no(Arvore av, void *dado, int (*compara)(void *, void *));
+Arvore remove_no(Arvore av, void *dado, int (*compara)(void *, void *));
 
 PNo busca_no(PNo no, void *dado, int (*compara)(void *, void *));
 

@@ -1,14 +1,34 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "arvore.h"
 
-PNo cria_no(void *dado, PNo esq, PNo dir, PNo pai) {
+void troca_dados(PNo no_a, PNo no_b) {
+    PNo aux = malloc(sizeof(No));
+
+    aux->dado = no_a->dado;
+    no_a->dado = no_b->dado;
+    no_b->dado = aux->dado;
+
+    free(aux);
+}
+
+PNo copia_dado(PNo no, PNo no_a_copiar) {
+    int tamanho = sizeof(Cartao);
+
+    no->dado = malloc(tamanho);
+    memcpy(no->dado, no_a_copiar->dado, tamanho);
+
+    return no;
+}
+
+PNo cria_no(void *dado) {
     PNo raiz = malloc(sizeof(No));
 
     raiz->dado = dado;
-    raiz->esq = esq;
-    raiz->dir = dir;
-    raiz->pai = pai;
+    raiz->esq = NULL;
+    raiz->dir = NULL;
+    raiz->pai = NULL;
 
     return raiz;
 }
@@ -23,22 +43,28 @@ Arvore cria_arvore() {
 
 void destroi_no(PNo no) {
     if(no != NULL) {
-        destroi_no(no->esq);
-        destroi_no(no->dir);
         free(no->dado);
         free(no);
     }
 }
 
+void destroi_arvore_recursivo(PNo no) {
+    if(no != NULL) {
+        destroi_arvore_recursivo(no->esq);
+        destroi_arvore_recursivo(no->dir);
+        destroi_no(no);
+    }
+}
+
 void destroi_arvore(Arvore av) {
-    destroi_no(av.raiz);
+    destroi_arvore_recursivo(av.raiz);
 }
 
 PNo insere_no(PNo no, void *dado, int (*compara)(void *, void *)) {
     PNo novo_no;
 
     if(no == NULL) {
-        novo_no = cria_no(dado, NULL, NULL, NULL);
+        novo_no = cria_no(dado);
         no = novo_no;
         return no;
     }
@@ -46,11 +72,11 @@ PNo insere_no(PNo no, void *dado, int (*compara)(void *, void *)) {
     if((*compara)(dado, no->dado) == -1) {
         novo_no = insere_no(no->esq, dado, compara);
         no->esq = novo_no;
-        novo_no->pai = no;
+        /* novo_no->pai = no; */
     } else if((*compara)(dado, no->dado) == 1) {
         novo_no = insere_no(no->dir, dado, compara);
         no->dir = novo_no;
-        novo_no->pai = no;
+        /* novo_no->pai = no; */
     }
 
     return no;
@@ -77,48 +103,96 @@ PNo remove_sucessor(PNo no) {
     }
 
     if(pai->dir == max) {
-        pai->dir = max->dir;
+        pai->dir = max->esq;
     } else {
-        pai->esq = max->dir;
+        pai->esq = max->esq;
     }
 
-    no->dado = max->dado;
+    troca_dados(no, max);
+
     return max;
 }
 
+PNo obtem_minimo(PNo no) {
+    if(no == NULL || no->esq == NULL) {
+        return no;
+    }
+    return obtem_minimo(no->esq);
+}
+
+PNo obtem_maximo(PNo no) {
+    if(no == NULL || no->dir == NULL) {
+        return no;
+    }
+    return obtem_maximo(no->dir);
+}
+
+PNo obtem_sucessor_esq(PNo no) {
+    PNo sucessor = no->esq;
+
+    if(sucessor == NULL) {
+        return NULL;
+    }
+
+    return obtem_maximo(sucessor);
+}
+
+PNo obtem_sucessor_dir(PNo no) {
+    PNo sucessor = no->dir;
+
+    if(sucessor == NULL) {
+        return NULL;
+    }
+
+    return obtem_minimo(sucessor);
+}
+
 PNo remove_no_recursivo(PNo no, void *dado, int (*compara)(void *, void *)) {
+    PNo temp;
+
     if(no == NULL) {
         return NULL;
     }
 
     if((*compara)(dado, no->dado) == -1) {
         no->esq = remove_no_recursivo(no->esq, dado, compara);
-        return no;
     } else if((*compara)(dado, no->dado) == 1) {
         no->dir = remove_no_recursivo(no->dir, dado, compara);
-        return no;
     } else {
-        if(no->esq == NULL && no->dir != NULL) {
+        if(no->esq == NULL && no->dir == NULL) {
+            temp = no;
+            destroi_no(temp);
+            no = NULL;
+            return no;
+        } else if(no->esq == NULL && no->dir != NULL) {
+            temp = no;
             no = no->dir;
+            destroi_no(temp);
             return no;
         } else if(no->dir == NULL && no->esq != NULL) {
+            temp = no;
             no = no->esq;
+            destroi_no(temp);
             return no;
         } else {
-            return remove_sucessor(no);
+            temp = remove_sucessor(no);
+            destroi_no(temp);
+            return no;
         }
     }
-}
-
-PNo remove_no(Arvore av, void *dado, int (*compara)(void *, void *)) {
-    PNo no;
-
-    no = remove_no_recursivo(av.raiz, dado, compara);
 
     return no;
 }
 
+Arvore remove_no(Arvore av, void *dado, int (*compara)(void *, void *)) {
+    av.raiz = remove_no_recursivo(av.raiz, dado, compara);
+
+    return av;
+}
+
 PNo busca_no(PNo no, void *dado, int (*compara)(void *, void *)) {
+    PNo temp;
+
     if(no == NULL) {
         return no;
     }
@@ -128,7 +202,9 @@ PNo busca_no(PNo no, void *dado, int (*compara)(void *, void *)) {
     } else if((*compara)(dado, no->dado) == 1) {
         return busca_no(no->dir, dado, compara);
     } else {
-        return no;
+        temp = cria_no(NULL);
+        temp = copia_dado(temp, no);
+        return temp;
     }
 }
 
