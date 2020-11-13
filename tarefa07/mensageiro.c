@@ -12,7 +12,7 @@ void le_string_entre_aspas(char *str) {
     int i;
     int contador = 0;
 
-    for(i = 0; contador < 2 && i < TAM_STR - 1; i++) {
+    for(i = 0; contador < 2 && i <= TAM_TEXTO; i++) {
         scanf("%c", &ch);
         if(ch != '"') {
             str[i] = ch;
@@ -92,16 +92,21 @@ int soma(void *a, void *b) {
     return num + c.numero;
 }
 
+void destroi_cartao(void *cartao) {
+    Cartao *c = (Cartao *) cartao;
+
+    free(c->texto);
+}
+
 int main() {
     int num_cartoes;
     int num_autoridades;
     int n;
     Cartao *cartao;
-    Autoridade *autoridade;
     Arvore pares;
-    Arvore autoridades;
-    int num_cartao_a_remover;
-    PNo cartao_encontrado;
+    int autoridade_numero;
+    /* int num_cartao_a_remover; */
+    /* PNo cartao_encontrado; */
 
     n = 1;
     while(n > -1) {
@@ -112,39 +117,34 @@ int main() {
             pares = cria_arvore();
             for(int i = 0; i < num_cartoes; i++) {
                 cartao = malloc(sizeof(Cartao));
+                cartao->texto = malloc(sizeof(char *));
                 le_int(&cartao->numero);
                 le_string_entre_aspas(cartao->texto);
                 pares = insere(pares, cartao, compara_cartao_numero);
             }
 
-            autoridades = cria_arvore();
             for(int i = 0; i < num_autoridades; i++) {
-                autoridade = malloc(sizeof(Autoridade));
-                le_int(&autoridade->numero);
-                autoridades = insere(autoridades, autoridade, compara_autoridade_numero);
-                conta_triade(pares, autoridade->numero, soma);
+                le_int(&autoridade_numero);
+
+                conta_triade(pares, autoridade_numero, soma);
             }
 
-            num_cartao_a_remover = 65;
-            cartao_encontrado = NULL;
-
-            cartao_encontrado = busca(pares, &num_cartao_a_remover, compara_cartao_numero);
-            pares = remove_no(pares, &num_cartao_a_remover, compara_cartao_numero);
+            /* cartao_encontrado = busca(pares, &num_cartao_a_remover, compara_cartao_numero); */
+            /* pares = remove_no(pares, &num_cartao_a_remover, compara_cartao_numero); */
 
             printf("%d %d\n", num_cartoes, num_autoridades);
+
 
             if(pares.raiz != NULL && pares.raiz->dado != NULL) {
                 percorre(pares, pre_ordem, imprime_cartao);
             }
-            percorre(autoridades, in_ordem, imprime_autoridade);
 
             percorre(pares, pre_ordem, concatena_cartao);
 
             if(pares.raiz != NULL) {
-                destroi_arvore(pares);
+                destroi_arvore(pares, destroi_cartao);
             }
-            destroi_arvore(autoridades);
-            destroi_no(cartao_encontrado);
+            /* destroi_no(cartao_encontrado); */
         }
     }
 

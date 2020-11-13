@@ -48,16 +48,17 @@ void destroi_no(PNo no) {
     }
 }
 
-void destroi_arvore_recursivo(PNo no) {
+void destroi_arvore_recursivo(PNo no, void (*destroi)(void *)) {
     if(no != NULL) {
-        destroi_arvore_recursivo(no->esq);
-        destroi_arvore_recursivo(no->dir);
+        destroi_arvore_recursivo(no->esq, destroi);
+        destroi_arvore_recursivo(no->dir, destroi);
+        destroi(no->dado);
         destroi_no(no);
     }
 }
 
-void destroi_arvore(Arvore av) {
-    destroi_arvore_recursivo(av.raiz);
+void destroi_arvore(Arvore av, void (*destroi)(void *)) {
+    destroi_arvore_recursivo(av.raiz, destroi);
 }
 
 PNo insere_no(PNo no, void *dado, int (*compara)(void *, void *)) {
@@ -280,6 +281,32 @@ void conta_triade(Arvore av, int autoridade, int (*soma)(void *, void *)) {
     contagem->contador = 0;
 
     *contagem = conta_triade_no(av.raiz, autoridade, contagem, soma);
+
+    free(contagem);
+}
+
+Contagem devolve_cartao_no(PNo no, int autoridade, Contagem *contagem, int (*soma)(void *, void *)) {
+    if(no != NULL) {
+        devolve_cartao_no(no->esq, autoridade, contagem, soma);
+        devolve_cartao_no(no->dir, autoridade, contagem, soma);
+        if(contagem->contador < 3 && (*soma)(contagem, no->dado) <= autoridade) {
+            contagem->soma = (*soma)(contagem, no->dado);
+            contagem->contador++;
+        }
+    }
+
+    return *contagem;
+}
+
+void devolve_cartao(Arvore av, int autoridade, int (*soma)(void *, void *)) {
+    Contagem *contagem;
+
+    contagem = malloc(sizeof(Contagem));
+    contagem->soma = 0;
+    contagem->contador = 0;
+
+    *contagem = devolve_cartao_no(av.raiz, autoridade, contagem, soma);
+
 
     free(contagem);
 }

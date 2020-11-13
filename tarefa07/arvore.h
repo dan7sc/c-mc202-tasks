@@ -1,7 +1,7 @@
 #ifndef ARVORE_H
 #define ARVORE_H
 
-#define TAM_STR 7
+#define TAM_TEXTO 5
 
 typedef enum percurso {
     pre_ordem = 0,
@@ -16,7 +16,7 @@ typedef struct contagem {
 
 typedef struct cartao {
     int numero;
-    char texto[TAM_STR];
+    char *texto;
 } Cartao;
 
 typedef struct autoridade {
@@ -42,9 +42,9 @@ Arvore cria_arvore();
 
 void destroi_no(PNo no);
 
-void destroi_arvore_recursivo(PNo no);
+void destroi_arvore_recursivo(PNo no, void (*destroi)(void *));
 
-void destroi_arvore(Arvore av);
+void destroi_arvore(Arvore av, void (*destroi)(void *));
 
 PNo insere_no(PNo no, void *dado, int (*compara)(void *, void *));
 
