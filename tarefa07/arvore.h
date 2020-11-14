@@ -23,6 +23,12 @@ typedef struct autoridade {
     int numero;
 } Autoridade;
 
+typedef struct triade {
+    void *cartao1;
+    void *cartao2;
+    void *cartao3;
+} Triade;
+
 typedef struct no {
     void *dado;
     struct no *esq;
@@ -45,6 +51,8 @@ void destroi_no(PNo no);
 void destroi_arvore_recursivo(PNo no, void (*destroi)(void *));
 
 void destroi_arvore(Arvore av, void (*destroi)(void *));
+
+void destroi_triade(Triade *t);
 
 PNo insere_no(PNo no, void *dado, int (*compara)(void *, void *));
 
@@ -76,8 +84,8 @@ void percorre_pos_ordem(PNo no, void (*imprime)(void *));
 
 void percorre(Arvore av, EPercurso percurso, void (*imprime)(void *));
 
-Contagem conta_triade_no(PNo no, int numero, Contagem *contagem, int (*soma)(void *, void *));
+void busca_triade_recursivo(PNo no, int numero, Triade *t, Contagem *contagem, int (*soma)(void *, void *), int (*compara)(void *, void *));
 
-void conta_triade(Arvore av, int numero, int (*soma)(void *, void *));
+Triade *busca_triade(Arvore av, int numero, int (*soma)(void *, void *), int (*compara)(void *, void *));
 
 #endif

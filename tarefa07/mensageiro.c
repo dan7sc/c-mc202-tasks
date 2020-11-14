@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "arvore.h"
 
 int le_int(int *num) {
@@ -85,6 +86,26 @@ void concatena_cartao(void *cartao) {
     }
 }
 
+void concatena(char *string_a, void *dado) {
+    Cartao c = *(Cartao *) dado;
+    char *str_copia = malloc(sizeof(char *));
+    int i = 0;
+
+    while(string_a[i] != '\0') {
+        i++;
+    }
+
+    printf("CONCATENA1 %s\n", string_a);
+
+    strcpy(str_copia, c.texto);
+    for(int j = 0; c.texto[j] != '\0'; j++) {
+        string_a[i++] = c.texto[j];
+    }
+    printf("CONCATENA2 %s\n", string_a);
+
+    string_a[i] = '\0';
+}
+
 int soma(void *a, void *b) {
     int num = *(int *) a;
     Cartao c = *(Cartao *) b;
@@ -104,9 +125,8 @@ int main() {
     int n;
     Cartao *cartao;
     Arvore pares;
+    Triade *triade;
     int autoridade_numero;
-    /* int num_cartao_a_remover; */
-    /* PNo cartao_encontrado; */
 
     n = 1;
     while(n > -1) {
@@ -126,25 +146,19 @@ int main() {
             for(int i = 0; i < num_autoridades; i++) {
                 le_int(&autoridade_numero);
 
-                conta_triade(pares, autoridade_numero, soma);
+                triade = busca_triade(pares, autoridade_numero, soma, compara_cartao_numero);
+
+                destroi_triade(triade);
             }
 
-            /* cartao_encontrado = busca(pares, &num_cartao_a_remover, compara_cartao_numero); */
-            /* pares = remove_no(pares, &num_cartao_a_remover, compara_cartao_numero); */
-
             printf("%d %d\n", num_cartoes, num_autoridades);
-
-
             if(pares.raiz != NULL && pares.raiz->dado != NULL) {
                 percorre(pares, pre_ordem, imprime_cartao);
             }
 
-            percorre(pares, pre_ordem, concatena_cartao);
-
             if(pares.raiz != NULL) {
                 destroi_arvore(pares, destroi_cartao);
             }
-            /* destroi_no(cartao_encontrado); */
         }
     }
 
