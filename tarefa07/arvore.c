@@ -26,9 +26,20 @@ void *copia_cartao(void *cartao_a, void *cartao_b) {
     int tamanho = sizeof(Cartao);
 
     cartao_a = malloc(tamanho);
-    memcpy(cartao_a, cartao_b, tamanho);
+    ((Cartao *)cartao_a)->texto = malloc(sizeof(char *));
+
+    ((Cartao *)cartao_a)->numero = ((Cartao *)cartao_b)->numero;
+    strcpy(((Cartao *)cartao_a)->texto, ((Cartao *)cartao_b)->texto);
+
+    /* memcpy(cartao_a, cartao_b, tamanho); */
 
     return cartao_a;
+}
+
+int obtem_autoridade(void *dado) {
+    Cartao c = *(Cartao *)dado;
+
+    return c.numero;
 }
 
 PNo cria_no(void *dado) {
@@ -70,13 +81,6 @@ void destroi_arvore(Arvore av, void (*destroi)(void *)) {
     destroi_arvore_recursivo(av.raiz, destroi);
 }
 
-void destroi_triade(Triade *t) {
-    free(t->cartao1);
-    free(t->cartao2);
-    free(t->cartao3);
-    free(t);
-}
-
 PNo insere_no(PNo no, void *dado, int (*compara)(void *, void *)) {
     PNo novo_no;
 
@@ -86,11 +90,11 @@ PNo insere_no(PNo no, void *dado, int (*compara)(void *, void *)) {
         return no;
     }
 
-    if((*compara)(dado, no->dado) == -1) {
+    if((*compara)(dado, no->dado) < 0) {
         novo_no = insere_no(no->esq, dado, compara);
         no->esq = novo_no;
         /* novo_no->pai = no; */
-    } else if((*compara)(dado, no->dado) == 1) {
+    } else {
         novo_no = insere_no(no->dir, dado, compara);
         no->dir = novo_no;
         /* novo_no->pai = no; */
@@ -280,11 +284,11 @@ void busca_triade_recursivo(PNo no, int numero, Triade *t, Contagem *contagem, i
         busca_triade_recursivo(no->dir, numero, t, contagem, soma, compara);
         if(contagem->contador < 3 && (*soma)(contagem, no->dado) <= numero) {
             if(contagem->contador == 0) {
-                t->cartao1 = copia_cartao(t->cartao1, no->dado);
+                t->num_cartao1 = obtem_autoridade(no->dado);
             } else if(contagem->contador == 1) {
-                t->cartao2 = copia_cartao(t->cartao2, no->dado);
+                t->num_cartao2 = obtem_autoridade(no->dado);
             } else {
-                t->cartao3 = copia_cartao(t->cartao3, no->dado);
+                t->num_cartao3 = obtem_autoridade(no->dado);
             }
             contagem->soma = (*soma)(contagem, no->dado);
             contagem->contador++;
@@ -292,11 +296,8 @@ void busca_triade_recursivo(PNo no, int numero, Triade *t, Contagem *contagem, i
     }
 }
 
-Triade *busca_triade(Arvore av, int numero, int (*soma)(void *, void *), int (*compara)(void *, void *)) {
+Triade *busca_triade(Arvore av, Triade *t, int numero, int (*soma)(void *, void *), int (*compara)(void *, void *)) {
     Contagem *contagem;
-    Triade *t;
-
-    t = malloc(sizeof(Triade));
 
     contagem = malloc(sizeof(Contagem));
     contagem->soma = 0;

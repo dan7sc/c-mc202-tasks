@@ -24,9 +24,9 @@ typedef struct autoridade {
 } Autoridade;
 
 typedef struct triade {
-    void *cartao1;
-    void *cartao2;
-    void *cartao3;
+    int num_cartao1;
+    int num_cartao2;
+    int num_cartao3;
 } Triade;
 
 typedef struct no {
@@ -86,6 +86,6 @@ void percorre(Arvore av, EPercurso percurso, void (*imprime)(void *));
 
 void busca_triade_recursivo(PNo no, int numero, Triade *t, Contagem *contagem, int (*soma)(void *, void *), int (*compara)(void *, void *));
 
-Triade *busca_triade(Arvore av, int numero, int (*soma)(void *, void *), int (*compara)(void *, void *));
+Triade *busca_triade(Arvore av, Triade *t, int numero, int (*soma)(void *, void *), int (*compara)(void *, void *));
 
 #endif

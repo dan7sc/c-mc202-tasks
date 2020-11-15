@@ -40,13 +40,27 @@ void le_string_entre_aspas(char *str) {
 /*     str[i] = '\0'; */
 /* } */
 
-int compara_cartao_numero(void *numero, void *cartao) {
-    int *num = (int *) numero;
-    Cartao *c = (Cartao *) cartao;
+int compara_numero_cartao(void *numero, void *cartao) {
+    int num = *(int *) numero;
+    Cartao c = *(Cartao *) cartao;
 
-    if(*num < c->numero) {
+    if(num < c.numero) {
         return -1;
-    } else if(*num > c->numero) {
+    } else if(num > c.numero) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+int compara_cartao(void *t_cartao, void *cartao) {
+    /* int numero = (int)(((Cartao *) t_cartao)->numero); */
+    Cartao t = *(Cartao *) t_cartao;
+    Cartao c = *(Cartao *) cartao;
+
+    if(t.numero < c.numero) {
+        return -1;
+    } else if(t.numero > c.numero) {
         return 1;
     } else {
         return 0;
@@ -123,9 +137,9 @@ int main() {
     int num_cartoes;
     int num_autoridades;
     int n;
-    Cartao *cartao;
+    Cartao *cartao = NULL;
     Arvore pares;
-    Triade *triade;
+    Triade *triade = NULL;
     int autoridade_numero;
 
     n = 1;
@@ -140,15 +154,24 @@ int main() {
                 cartao->texto = malloc(sizeof(char *));
                 le_int(&cartao->numero);
                 le_string_entre_aspas(cartao->texto);
-                pares = insere(pares, cartao, compara_cartao_numero);
+                pares = insere(pares, cartao, compara_numero_cartao);
             }
 
             for(int i = 0; i < num_autoridades; i++) {
                 le_int(&autoridade_numero);
 
-                triade = busca_triade(pares, autoridade_numero, soma, compara_cartao_numero);
+                triade = malloc(sizeof(Triade));
+                triade->num_cartao1 = 0;
+                triade->num_cartao2 = 0;
+                triade->num_cartao3 = 0;
 
-                destroi_triade(triade);
+                triade = busca_triade(pares, triade, autoridade_numero, soma, compara_numero_cartao);
+
+                pares = remove_no(pares, &triade->num_cartao1, compara_numero_cartao);
+                pares = remove_no(pares, &triade->num_cartao2, compara_numero_cartao);
+                pares = remove_no(pares, &triade->num_cartao3, compara_numero_cartao);
+
+                free(triade);
             }
 
             printf("%d %d\n", num_cartoes, num_autoridades);
