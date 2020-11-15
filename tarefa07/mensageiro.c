@@ -139,6 +139,10 @@ int main() {
     int n;
     Cartao *cartao = NULL;
     Arvore pares;
+    Arvore av_triade;
+    PNo temp1 = NULL;
+    PNo temp2 = NULL;
+    PNo temp3 = NULL;
     Triade *triade = NULL;
     int autoridade_numero;
 
@@ -167,11 +171,29 @@ int main() {
 
                 triade = busca_triade(pares, triade, autoridade_numero, soma, compara_numero_cartao);
 
-                pares = remove_no(pares, &triade->num_cartao1, compara_numero_cartao);
-                pares = remove_no(pares, &triade->num_cartao2, compara_numero_cartao);
-                pares = remove_no(pares, &triade->num_cartao3, compara_numero_cartao);
+                av_triade = cria_arvore();
+                if(triade->num_cartao1 > 0 && triade->num_cartao2 > 0 && triade->num_cartao3 > 0) {
+                    temp1 = busca(pares, &triade->num_cartao1, compara_numero_cartao);
+                    temp2 = busca(pares, &triade->num_cartao2, compara_numero_cartao);
+                    temp3 = busca(pares, &triade->num_cartao3, compara_numero_cartao);
+
+                    av_triade = insere(av_triade, temp1->dado, compara_numero_cartao);
+                    av_triade = insere(av_triade, temp2->dado, compara_numero_cartao);
+                    av_triade = insere(av_triade, temp3->dado, compara_numero_cartao);
+
+                    pares = remove_no(pares, &triade->num_cartao1, compara_numero_cartao);
+                    pares = remove_no(pares, &triade->num_cartao2, compara_numero_cartao);
+                    pares = remove_no(pares, &triade->num_cartao3, compara_numero_cartao);
+
+                    if(temp1 != NULL && temp2 != NULL && temp3 != NULL) {
+                        free(temp1);
+                        free(temp2);
+                        free(temp3);
+                    }
+                }
 
                 free(triade);
+                destroi_arvore(av_triade, destroi_cartao);
             }
 
             printf("%d %d\n", num_cartoes, num_autoridades);
