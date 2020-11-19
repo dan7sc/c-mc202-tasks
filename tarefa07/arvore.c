@@ -309,3 +309,22 @@ Triade *busca_triade(Arvore av, Triade *t, int numero, int (*soma)(void *, void 
 
     return t;
 }
+
+Cartao *cria_cartao_recursivo(PNo no, Cartao *cartao, Cartao (*concatena)(Cartao *cartao, void *dado)) {
+    if(no != NULL) {
+        cria_cartao_recursivo(no->esq, cartao, concatena);
+        /* printf(".... %s %s\n", cartao->texto, ((Cartao *)(no->dado))->texto); */
+        *cartao = (*concatena)(cartao, no->dado);
+        cria_cartao_recursivo(no->dir, cartao, concatena);
+    }
+
+    return cartao;
+}
+
+Cartao *cria_cartao(Arvore av, Cartao *cartao, Cartao (*concatena)(Cartao *cartao, void *dado)) {
+
+    cartao = cria_cartao_recursivo(av.raiz, cartao, concatena);
+    printf("concatena fn: .... %d %s\n", cartao->numero, cartao->texto);
+
+    return cartao;
+}
