@@ -13,6 +13,7 @@ void le_string_entre_aspas(char *str) {
     int i;
     int contador = 0;
 
+    getchar();
     for(i = 0; contador < 2 && i <= TAM_TEXTO; i++) {
         scanf("%c", &ch);
         if(ch != '"') {
@@ -120,47 +121,20 @@ void concatena(char *string_a, void *dado) {
     string_a[i] = '\0';
 }
 
-Cartao concatena_dados(Cartao *cartao, void *dado) {
+Cartao concatena_string(Cartao *cartao, void *dado) {
     Cartao c = *(Cartao *) dado;
-    /* Cartao novo = *(Cartao *) cartao; */
     char *str_copia = malloc(sizeof(char *));
-    /* char *str_copia = NULL; */
-    int i = 1;
 
     if(cartao->texto == NULL) {
-        /* printf("####\n"); */
         cartao->texto = malloc(sizeof(char *));
         cartao->numero = 0;
         strcpy(cartao->texto, c.texto);
     } else {
-        while(cartao->texto != NULL && cartao->texto[i] != '\0') {
-            i++;
-        }
-        /* printf("CONCATENA0 %s %d %s %d\n", cartao->texto, cartao->numero, c.texto, i); */
-        /* str_copia = malloc(sizeof(char *)); */
-        strcpy(str_copia, cartao->texto);
-        strcpy(cartao->texto, str_copia);
-        /* printf("####\n"); */
+        str_copia = malloc(sizeof(char *));
+        strcpy(str_copia, c.texto);
+        strcat(cartao->texto, str_copia);
+        cartao->numero += c.numero;
     }
-
-    /* printf("CONCATENA1 %s %d i:%d\n", cartao->texto, cartao->numero, i); */
-
-    /* cartao->texto = malloc(sizeof(char *)); */
-    /* cartao->numero = 0; */
-    /* strcpy(cartao->texto, str_copia); */
-    /* strcpy(str_copia, c.texto); */
-    for(int j = 1; c.texto[j] != '\0'; j++) {
-        /* printf("____  %s\n", cartao->texto); */
-        cartao->texto[i++] = c.texto[j];
-        /* str_copia[i++] = c.texto[j]; */
-    }
-
-    /* strcpy(cartao->texto, str_copia); */
-    cartao->texto[i] = '\0';
-
-    cartao->numero += c.numero;
-
-    /* printf("CONCATENA2 %s %d\n\n", cartao->texto, cartao->numero); */
 
     return *cartao;
 }
@@ -201,9 +175,7 @@ int main() {
             pares = cria_arvore();
             for(int i = 0; i < num_cartoes; i++) {
                 cartao = malloc(sizeof(Cartao));
-                /* printf("*...***\n"); */
                 cartao->texto = malloc(6 * sizeof(char));
-                /* printf("**--**\n"); */
                 le_int(&cartao->numero);
                 le_string_entre_aspas(cartao->texto);
                 pares = insere(pares, cartao, compara_numero_cartao);
@@ -229,9 +201,6 @@ int main() {
                     av_triade = insere(av_triade, temp2->dado, compara_numero_cartao);
                     av_triade = insere(av_triade, temp3->dado, compara_numero_cartao);
 
-                    /* percorre(av_triade, in_ordem, imprime_cartao); */
-                    /* percorre(av_triade, in_ordem, concatena_cartao); */
-
                     pares = remove_no(pares, &triade->num_cartao1, compara_numero_cartao);
                     pares = remove_no(pares, &triade->num_cartao2, compara_numero_cartao);
                     pares = remove_no(pares, &triade->num_cartao3, compara_numero_cartao);
@@ -240,18 +209,13 @@ int main() {
                     novo_cartao->texto = malloc(sizeof(char *));
                     novo_cartao->texto[0] = '\0';
                     novo_cartao->numero = 0;
-                    novo_cartao = cria_cartao(av_triade, cartao, concatena_dados);
-                    /* printf("--....---  %d %s\n", novo_cartao->numero, novo_cartao->texto); */
+                    novo_cartao = cria_cartao(av_triade, cartao, concatena_string);
 
                     av_triade = remove_no(av_triade, &triade->num_cartao1, compara_numero_cartao);
                     av_triade = remove_no(av_triade, &triade->num_cartao2, compara_numero_cartao);
                     av_triade = remove_no(av_triade, &triade->num_cartao3, compara_numero_cartao);
 
-                    /* percorre(av_triade, in_ordem, imprime_cartao); */
-
                     pares = insere(pares, novo_cartao, compara_numero_cartao);
-                    /* novo_cartao = NULL; */
-                    /* novo_cartao->texto = NULL; */
 
                     if(temp1 != NULL && temp2 != NULL && temp3 != NULL) {
                         free(temp1);
@@ -261,12 +225,12 @@ int main() {
                 }
 
                 /* free(triade); */
-                /* destroi_arvore(av_triade, destroi_cartao); */
+                destroi_arvore(av_triade, destroi_cartao);
 
 
-                /* if(av_triade.raiz != NULL) { */
-                /*     destroi_arvore(av_triade, destroi_cartao); */
-                /* } */
+                if(av_triade.raiz != NULL) {
+                    destroi_arvore(av_triade, destroi_cartao);
+                }
             }
 
             printf("%d %d\n", num_cartoes, num_autoridades);
@@ -274,13 +238,13 @@ int main() {
                 percorre(pares, pre_ordem, imprime_cartao);
             }
 
-            /* if(pares.raiz != NULL) { */
-            /*     destroi_arvore(pares, destroi_cartao); */
-            /* } */
+            if(pares.raiz != NULL) {
+                destroi_arvore(pares, destroi_cartao);
+            }
 
-            /* if(av_triade.raiz != NULL) { */
-            /*     destroi_arvore(av_triade, destroi_cartao); */
-            /* } */
+            if(av_triade.raiz != NULL) {
+                destroi_arvore(av_triade, destroi_cartao);
+            }
         }
     }
 
