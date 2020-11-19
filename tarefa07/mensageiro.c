@@ -87,6 +87,12 @@ void imprime_cartao(void *cartao) {
     printf("%d %s ", c.numero, c.texto);
 }
 
+void imprime_mensagem(void *cartao) {
+    Cartao c = *(Cartao *) cartao;
+
+    printf("%s", c.texto);
+}
+
 void imprime_autoridade(void *autoridade) {
     Autoridade aut = *(Autoridade *) autoridade;
 
@@ -218,10 +224,7 @@ int main() {
                 }
             }
 
-            printf("%d %d\n", num_cartoes, num_autoridades);
-            if(pares.raiz != NULL && pares.raiz->dado != NULL) {
-                percorre(pares, pre_ordem, imprime_cartao);
-            }
+            percorre(pares, in_ordem, imprime_mensagem);
 
             if(pares.raiz != NULL) {
                 destroi_arvore(pares, destroi_cartao);
