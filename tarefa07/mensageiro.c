@@ -101,26 +101,6 @@ void concatena_cartao(void *cartao) {
     }
 }
 
-void concatena(char *string_a, void *dado) {
-    Cartao c = *(Cartao *) dado;
-    char *str_copia = malloc(sizeof(char *));
-    int i = 0;
-
-    while(string_a[i] != '\0') {
-        i++;
-    }
-
-    printf("CONCATENA1 %s\n", string_a);
-
-    strcpy(str_copia, c.texto);
-    for(int j = 1; c.texto[j] != '\0'; j++) {
-        string_a[i++] = c.texto[j];
-    }
-    printf("CONCATENA2 %s\n", string_a);
-
-    string_a[i] = '\0';
-}
-
 Cartao *concatena_string(Cartao *cartao, void *dado) {
     Cartao c = *(Cartao *) dado;
     char *copia = NULL;
