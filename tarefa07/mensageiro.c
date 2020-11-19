@@ -103,7 +103,6 @@ void concatena_cartao(void *cartao) {
 
 Cartao *concatena_string(Cartao *cartao, void *dado) {
     Cartao c = *(Cartao *) dado;
-    char *copia = NULL;
     char *temp = NULL;
     int tam_cartao = 0;
     int tam_dado = 0;
@@ -111,26 +110,18 @@ Cartao *concatena_string(Cartao *cartao, void *dado) {
     tam_dado = 1 + strlen(c.texto);
 
     if(cartao->texto == NULL) {
-        copia = malloc(tam_dado * sizeof(char));
-        cartao->numero = 0;
-        strcpy(copia, c.texto);
-        cartao->texto = copia;
-        copia = NULL;
+        cartao->texto = malloc(tam_dado * sizeof(char));
+        cartao->numero += c.numero;
+        strcpy(cartao->texto, c.texto);
     } else {
         tam_cartao = 1 + strlen(cartao->texto);
-        copia = malloc(tam_cartao * sizeof(char));
         temp = malloc((tam_cartao + tam_dado) * sizeof(char));
-
-        strcpy(copia, cartao->texto);
-        strcpy(temp, copia);
+        strcpy(temp, cartao->texto);
         strcat(temp, c.texto);
-
         free(cartao->texto);
         cartao->texto = temp;
         cartao->numero += c.numero;
     }
-
-    free(copia);
 
     return cartao;
 }
