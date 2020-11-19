@@ -128,29 +128,28 @@ Cartao *concatena_string(Cartao *cartao, void *dado) {
     int tam_cartao = 0;
     int tam_dado = 0;
 
-    tam_dado = strlen(c.texto);
+    tam_dado = 1 + strlen(c.texto);
 
     if(cartao->texto == NULL) {
-        cartao->texto = malloc(tam_dado * sizeof(char));
+        copia = malloc(tam_dado * sizeof(char));
         cartao->numero = 0;
-        strcpy(cartao->texto, c.texto);
-    } else {
-        tam_cartao = strlen(cartao->texto);
-
-        copia = malloc((tam_dado + 1) * sizeof(char));
         strcpy(copia, c.texto);
-        temp = malloc((tam_cartao + 1) * sizeof(char));
-        strcpy(temp, cartao->texto);
+        cartao->texto = copia;
+        copia = NULL;
+    } else {
+        tam_cartao = 1 + strlen(cartao->texto);
+        copia = malloc(tam_cartao * sizeof(char));
+        temp = malloc((tam_cartao + tam_dado) * sizeof(char));
+
+        strcpy(copia, cartao->texto);
+        strcpy(temp, copia);
+        strcat(temp, c.texto);
 
         free(cartao->texto);
-        cartao->texto = malloc((tam_cartao + tam_dado + 1) * sizeof(char));
-        strcpy(cartao->texto, temp);
-        strcat(cartao->texto, copia);
-
+        cartao->texto = temp;
         cartao->numero += c.numero;
     }
 
-    free(temp);
     free(copia);
 
     return cartao;
@@ -223,7 +222,8 @@ int main() {
                     pares = remove_no(pares, &triade->num_cartao3, compara_numero_cartao);
 
                     novo_cartao = malloc(sizeof(Cartao));
-                    /* novo_cartao->texto = malloc(sizeof(char *)); */
+                    novo_cartao->texto = NULL;
+                    novo_cartao->numero = 0;
                     novo_cartao = cria_cartao(av_triade, novo_cartao, concatena_string);
 
                     av_triade = remove_no(av_triade, &triade->num_cartao1, compara_numero_cartao);
@@ -239,9 +239,8 @@ int main() {
                     }
                 }
 
-                /* free(triade); */
+                free(triade);
                 destroi_arvore(av_triade, destroi_cartao);
-
 
                 if(av_triade.raiz != NULL) {
                     destroi_arvore(av_triade, destroi_cartao);
