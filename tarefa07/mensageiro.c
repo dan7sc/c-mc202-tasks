@@ -121,22 +121,39 @@ void concatena(char *string_a, void *dado) {
     string_a[i] = '\0';
 }
 
-Cartao concatena_string(Cartao *cartao, void *dado) {
+Cartao *concatena_string(Cartao *cartao, void *dado) {
     Cartao c = *(Cartao *) dado;
-    char *str_copia = malloc(sizeof(char *));
+    char *copia = NULL;
+    char *temp = NULL;
+    int tam_cartao = 0;
+    int tam_dado = 0;
+
+    tam_dado = strlen(c.texto);
 
     if(cartao->texto == NULL) {
-        cartao->texto = malloc(sizeof(char *));
+        cartao->texto = malloc(tam_dado * sizeof(char));
         cartao->numero = 0;
         strcpy(cartao->texto, c.texto);
     } else {
-        str_copia = malloc(sizeof(char *));
-        strcpy(str_copia, c.texto);
-        strcat(cartao->texto, str_copia);
+        tam_cartao = strlen(cartao->texto);
+
+        copia = malloc((tam_dado + 1) * sizeof(char));
+        strcpy(copia, c.texto);
+        temp = malloc((tam_cartao + 1) * sizeof(char));
+        strcpy(temp, cartao->texto);
+
+        free(cartao->texto);
+        cartao->texto = malloc((tam_cartao + tam_dado + 1) * sizeof(char));
+        strcpy(cartao->texto, temp);
+        strcat(cartao->texto, copia);
+
         cartao->numero += c.numero;
     }
 
-    return *cartao;
+    free(temp);
+    free(copia);
+
+    return cartao;
 }
 
 int soma(void *a, void *b) {
@@ -206,10 +223,8 @@ int main() {
                     pares = remove_no(pares, &triade->num_cartao3, compara_numero_cartao);
 
                     novo_cartao = malloc(sizeof(Cartao));
-                    novo_cartao->texto = malloc(sizeof(char *));
-                    novo_cartao->texto[0] = '\0';
-                    novo_cartao->numero = 0;
-                    novo_cartao = cria_cartao(av_triade, cartao, concatena_string);
+                    /* novo_cartao->texto = malloc(sizeof(char *)); */
+                    novo_cartao = cria_cartao(av_triade, novo_cartao, concatena_string);
 
                     av_triade = remove_no(av_triade, &triade->num_cartao1, compara_numero_cartao);
                     av_triade = remove_no(av_triade, &triade->num_cartao2, compara_numero_cartao);

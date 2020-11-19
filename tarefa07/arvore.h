@@ -88,8 +88,8 @@ void busca_triade_recursivo(PNo no, int numero, Triade *t, Contagem *contagem, i
 
 Triade *busca_triade(Arvore av, Triade *t, int numero, int (*soma)(void *, void *), int (*compara)(void *, void *));
 
-Cartao *cria_cartao_recursivo(PNo no, Cartao *cartao, Cartao (*concatena)(Cartao *cartao, void *dado));
+Cartao *cria_cartao_recursivo(PNo no, Cartao *cartao, Cartao *(*concatena)(Cartao *cartao, void *dado));
 
-Cartao *cria_cartao(Arvore av, Cartao *cartao, Cartao (*concatena)(Cartao *cartao, void *dado));
+Cartao *cria_cartao(Arvore av, Cartao *cartao, Cartao *(*concatena)(Cartao *cartao, void *dado));
 
 #endif
