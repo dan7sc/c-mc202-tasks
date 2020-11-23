@@ -261,6 +261,35 @@ void percorre_pos_ordem(PNo no, void (*imprime)(void *)) {
     }
 }
 
+void percorre_in_ordem_iterativo(PNo no, void (*imprime)(void *)) {
+    PNo current;
+    PNo pre;
+
+    if (no != NULL) {
+        current = no;
+        while (current != NULL) {
+            if (current->esq == NULL) {
+                (*imprime)(current->dado);
+                current = current->dir;
+            } else {
+                pre = current->esq;
+                while (pre->dir != NULL && pre->dir != current) {
+                    pre = pre->dir;
+                }
+
+                if (pre->dir == NULL) {
+                    pre->dir = current;
+                    current = current->esq;
+                } else {
+                    pre->dir = NULL;
+                    (*imprime)(current->dado);
+                    current = current->dir;
+                }
+            }
+        }
+    }
+}
+
 void percorre(Arvore av, EPercurso percurso, void (*imprime)(void *)) {
     switch(percurso) {
     case 0:
