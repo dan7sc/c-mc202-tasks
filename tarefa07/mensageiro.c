@@ -55,7 +55,6 @@ int compara_numero_cartao(void *numero, void *cartao) {
 }
 
 int compara_cartao(void *t_cartao, void *cartao) {
-    /* int numero = (int)(((Cartao *) t_cartao)->numero); */
     Cartao t = *(Cartao *) t_cartao;
     Cartao c = *(Cartao *) cartao;
 
@@ -185,7 +184,7 @@ int main() {
                 triade = busca_triade(pares, triade, autoridade_numero, soma, compara_numero_cartao);
 
                 av_triade = cria_arvore();
-                if(triade->num_cartao1 > 0 && triade->num_cartao2 > 0 && triade->num_cartao3 > 0) {
+                if(triade != NULL && triade->num_cartao1 > 0 && triade->num_cartao2 > 0 && triade->num_cartao3 > 0) {
                     temp1 = busca(pares, &triade->num_cartao1, compara_numero_cartao);
                     temp2 = busca(pares, &triade->num_cartao2, compara_numero_cartao);
                     temp3 = busca(pares, &triade->num_cartao3, compara_numero_cartao);

@@ -307,34 +307,35 @@ void percorre(Arvore av, EPercurso percurso, void (*imprime)(void *)) {
     printf("\n");
 }
 
-void busca_triade_recursivo(PNo no, int numero, Triade *t, Contagem *contagem, int (*soma)(void *, void *), int (*compara)(void *, void *)) {
-    if(no != NULL) {
-        busca_triade_recursivo(no->esq, numero, t, contagem, soma, compara);
-        busca_triade_recursivo(no->dir, numero, t, contagem, soma, compara);
-        if(contagem->contador < 3 && (*soma)(contagem, no->dado) <= numero) {
-            if(contagem->contador == 0) {
-                t->num_cartao1 = obtem_autoridade(no->dado);
-            } else if(contagem->contador == 1) {
-                t->num_cartao2 = obtem_autoridade(no->dado);
-            } else {
-                t->num_cartao3 = obtem_autoridade(no->dado);
-            }
-            contagem->soma = (*soma)(contagem, no->dado);
-            contagem->contador++;
+void soma_triade_recursivo(Arvore av, PNo no, PNo no_b, int numero, Triade *t, int (*soma)(void *, void *), int (*compara)(void *, void *)) {
+    int n = 0;
+    int sn = 0;
+    PNo r = NULL;
+
+    if(no_b != NULL && compara(no->dado, no_b->dado) != 0) {
+        soma_triade_recursivo(av, no, no_b->esq, numero, t, soma, compara);
+        n = (*soma)(no->dado, no_b->dado);
+        sn = numero - n;
+        r = busca(av, &sn, compara);
+        if(r != NULL && compara(no->dado, r->dado) != 0 && compara(no_b->dado, r->dado) != 0  && sn + n == numero) {
+            t->num_cartao1 = obtem_autoridade(no->dado);
+            t->num_cartao2 = obtem_autoridade(no_b->dado);
+            t->num_cartao3 = obtem_autoridade(r->dado);
         }
+        soma_triade_recursivo(av, no, no_b->dir, numero, t, soma, compara);
+    }
+}
+
+void busca_triade_recursivo(Arvore av, PNo no, PNo no_b, int numero, Triade *t, int (*soma)(void *, void *), int (*compara)(void *, void *)) {
+    if(no != NULL) {
+        busca_triade_recursivo(av, no->esq, no_b, numero, t, soma, compara);
+        soma_triade_recursivo(av, no, no_b, numero, t, soma, compara);
+        busca_triade_recursivo(av, no->dir, no_b, numero, t, soma, compara);
     }
 }
 
 Triade *busca_triade(Arvore av, Triade *t, int numero, int (*soma)(void *, void *), int (*compara)(void *, void *)) {
-    Contagem *contagem;
-
-    contagem = malloc(sizeof(Contagem));
-    contagem->soma = 0;
-    contagem->contador = 0;
-
-    busca_triade_recursivo(av.raiz, numero, t, contagem, soma, compara);
-
-    free(contagem);
+    busca_triade_recursivo(av, av.raiz, av.raiz, numero, t, soma, compara);
 
     return t;
 }

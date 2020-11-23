@@ -84,7 +84,11 @@ void percorre_pos_ordem(PNo no, void (*imprime)(void *));
 
 void percorre(Arvore av, EPercurso percurso, void (*imprime)(void *));
 
-void busca_triade_recursivo(PNo no, int numero, Triade *t, Contagem *contagem, int (*soma)(void *, void *), int (*compara)(void *, void *));
+void percorre_in_ordem_iterativo(PNo no, void (*imprime)(void *));
+
+void soma_triade_recursivo(Arvore av, PNo no, PNo no_b, int numero, Triade *t, int (*soma)(void *, void *), int (*compara)(void *, void *));
+
+void busca_triade_recursivo(Arvore av, PNo no, PNo no_b, int numero, Triade *t, int (*soma)(void *, void *), int (*compara)(void *, void *));
 
 Triade *busca_triade(Arvore av, Triade *t, int numero, int (*soma)(void *, void *), int (*compara)(void *, void *));
 
