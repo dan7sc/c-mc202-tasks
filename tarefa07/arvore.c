@@ -230,7 +230,7 @@ PNo busca_no(PNo no, void *dado, int (*compara)(void *, void *)) {
 }
 
 PNo busca(Arvore av, void *dado, int (*compara)(void *, void *)) {
-    PNo no;
+    PNo no = NULL;
 
     no = busca_no(av.raiz, dado, compara);
 
@@ -322,6 +322,7 @@ void soma_triade_recursivo(Arvore av, PNo no, PNo no_b, int numero, Triade *t, i
             t->num_cartao2 = obtem_autoridade(no_b->dado);
             t->num_cartao3 = obtem_autoridade(r->dado);
         }
+        destroi_no(r);
         soma_triade_recursivo(av, no, no_b->dir, numero, t, soma, compara);
     }
 }
