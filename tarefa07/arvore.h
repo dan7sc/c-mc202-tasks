@@ -9,11 +9,6 @@ typedef enum percurso {
     pos_ordem = 2
 } EPercurso;
 
-typedef struct contagem {
-    int soma;
-    int contador;
-} Contagem;
-
 typedef struct cartao {
     int numero;
     char *texto;
