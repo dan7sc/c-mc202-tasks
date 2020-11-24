@@ -28,7 +28,6 @@ typedef struct no {
     void *dado;
     struct no *esq;
     struct no *dir;
-    struct no *pai;
 } No;
 typedef struct no * PNo;
 

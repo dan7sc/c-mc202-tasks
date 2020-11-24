@@ -48,7 +48,6 @@ PNo cria_no(void *dado) {
     raiz->dado = dado;
     raiz->esq = NULL;
     raiz->dir = NULL;
-    raiz->pai = NULL;
 
     return raiz;
 }
@@ -93,11 +92,9 @@ PNo insere_no(PNo no, void *dado, int (*compara)(void *, void *)) {
     if((*compara)(dado, no->dado) < 0) {
         novo_no = insere_no(no->esq, dado, compara);
         no->esq = novo_no;
-        /* novo_no->pai = no; */
     } else {
         novo_no = insere_no(no->dir, dado, compara);
         no->dir = novo_no;
-        /* novo_no->pai = no; */
     }
 
     return no;
