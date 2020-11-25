@@ -21,13 +21,13 @@ int main() {
     n = 1;
     while(n > -1) {
         n = le_int(&num_cartoes);
-        if(n > -1) {
+        if(n > 0) {
             le_int(&num_autoridades);
 
             pares = cria_arvore();
             for(int i = 0; i < num_cartoes; i++) {
                 cartao = malloc(sizeof(Cartao));
-                cartao->texto = malloc(6 * sizeof(char));
+                cartao->texto = malloc(5 * sizeof(char));
                 le_int(&cartao->numero);
                 le_string_entre_aspas(cartao->texto);
                 pares = insere(pares, cartao, compara_numero_cartao);

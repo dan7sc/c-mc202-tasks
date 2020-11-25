@@ -26,21 +26,6 @@ void le_string_entre_aspas(char *str) {
     str[i] = '\0';
 }
 
-/* void le_string_entre_aspas(char *str) { */
-/*     char ch; */
-/*     int i; */
-/*     int contador = 0; */
-
-/*     for(i = 0; contador < 2 && i < TAM_STR; i++) { */
-/*         scanf("%c", &ch); */
-/*         if(ch == '"') { */
-/*             contador++; */
-/*         } */
-/*         str[i] = ch; */
-/*     } */
-/*     str[i] = '\0'; */
-/* } */
-
 int compara_numero_cartao(void *numero, void *cartao) {
     int num = *(int *) numero;
     Cartao c = *(Cartao *) cartao;
@@ -54,56 +39,10 @@ int compara_numero_cartao(void *numero, void *cartao) {
     }
 }
 
-int compara_cartao(void *t_cartao, void *cartao) {
-    Cartao t = *(Cartao *) t_cartao;
-    Cartao c = *(Cartao *) cartao;
-
-    if(t.numero < c.numero) {
-        return -1;
-    } else if(t.numero > c.numero) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
-int compara_autoridade_numero(void *numero, void *autoridade) {
-    int *num = (int *) numero;
-    Autoridade *aut = (Autoridade *) autoridade;
-
-    if(*num < aut->numero) {
-        return -1;
-    } else if(*num > aut->numero) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
-void imprime_cartao(void *cartao) {
-    Cartao c = *(Cartao *) cartao;
-
-    printf("%d %s ", c.numero, c.texto);
-}
-
 void imprime_mensagem(void *cartao) {
     Cartao c = *(Cartao *) cartao;
 
     printf("%s", c.texto);
-}
-
-void imprime_autoridade(void *autoridade) {
-    Autoridade aut = *(Autoridade *) autoridade;
-
-    printf("%d ", aut.numero);
-}
-
-void concatena_cartao(void *cartao) {
-    Cartao c = *(Cartao *) cartao;
-
-    for(int i = 1; c.texto[i] != '\0'; i++) {
-        printf("%c", c.texto[i]);
-    }
 }
 
 Cartao *concatena_string(Cartao *cartao, void *dado) {

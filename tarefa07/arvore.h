@@ -14,10 +14,6 @@ typedef struct cartao {
     char *texto;
 } Cartao;
 
-typedef struct autoridade {
-    int numero;
-} Autoridade;
-
 typedef struct triade {
     int num_cartao1;
     int num_cartao2;
@@ -54,14 +50,6 @@ Arvore insere(Arvore av, void *dado, int (*compara)(void *, void *));
 
 PNo remove_sucessor(PNo no);
 
-PNo obtem_sucessor_esq(PNo no);
-
-PNo obtem_sucessor_dir(PNo no);
-
-PNo obtem_minimo(PNo no);
-
-PNo obtem_maximo(PNo no);
-
 PNo remove_no_recursivo(PNo no, void *dado, int (*compara)(void *, void *));
 
 Arvore remove_no(Arvore av, void *dado, int (*compara)(void *, void *));
@@ -77,8 +65,6 @@ void percorre_in_ordem(PNo no, void (*imprime)(void *));
 void percorre_pos_ordem(PNo no, void (*imprime)(void *));
 
 void percorre(Arvore av, EPercurso percurso, void (*imprime)(void *));
-
-void percorre_in_ordem_iterativo(PNo no, void (*imprime)(void *));
 
 void soma_triade_recursivo(Arvore av, PNo no, PNo no_b, int numero, Triade *t, int (*soma)(void *, void *), int (*compara)(void *, void *));
 

@@ -131,40 +131,6 @@ PNo remove_sucessor(PNo no) {
     return max;
 }
 
-PNo obtem_minimo(PNo no) {
-    if(no == NULL || no->esq == NULL) {
-        return no;
-    }
-    return obtem_minimo(no->esq);
-}
-
-PNo obtem_maximo(PNo no) {
-    if(no == NULL || no->dir == NULL) {
-        return no;
-    }
-    return obtem_maximo(no->dir);
-}
-
-PNo obtem_sucessor_esq(PNo no) {
-    PNo sucessor = no->esq;
-
-    if(sucessor == NULL) {
-        return NULL;
-    }
-
-    return obtem_maximo(sucessor);
-}
-
-PNo obtem_sucessor_dir(PNo no) {
-    PNo sucessor = no->dir;
-
-    if(sucessor == NULL) {
-        return NULL;
-    }
-
-    return obtem_minimo(sucessor);
-}
-
 PNo remove_no_recursivo(PNo no, void *dado, int (*compara)(void *, void *)) {
     PNo temp;
 
@@ -255,35 +221,6 @@ void percorre_pos_ordem(PNo no, void (*imprime)(void *)) {
         percorre_pos_ordem(no->esq, imprime);
         percorre_pos_ordem(no->dir, imprime);
         (*imprime)(no->dado);
-    }
-}
-
-void percorre_in_ordem_iterativo(PNo no, void (*imprime)(void *)) {
-    PNo current;
-    PNo pre;
-
-    if (no != NULL) {
-        current = no;
-        while (current != NULL) {
-            if (current->esq == NULL) {
-                (*imprime)(current->dado);
-                current = current->dir;
-            } else {
-                pre = current->esq;
-                while (pre->dir != NULL && pre->dir != current) {
-                    pre = pre->dir;
-                }
-
-                if (pre->dir == NULL) {
-                    pre->dir = current;
-                    current = current->esq;
-                } else {
-                    pre->dir = NULL;
-                    (*imprime)(current->dado);
-                    current = current->dir;
-                }
-            }
-        }
     }
 }
 
