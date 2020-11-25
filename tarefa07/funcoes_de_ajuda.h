@@ -13,8 +13,8 @@ void imprime_mensagem(void *cartao);
 
 Cartao *concatena_string(Cartao *cartao, void *dado);
 
-int soma(void *a, void *b);
+int soma(void *numero, void *cartao);
 
-void destroi_cartao(void *cartao);
+void destroi_texto(void *cartao);
 
 #endif
