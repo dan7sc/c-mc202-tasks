@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "arvore.h"
-#include "funcoes_de_ajuda.h"
 
 int main() {
     int num_cartoes; // numero total de cartoes
