@@ -98,3 +98,97 @@ void destroi_texto(void *cartao) {
 
     free(c->texto);
 }
+
+void troca_dados(PNo no_a, PNo no_b) {
+    PNo aux = malloc(sizeof(No));
+
+    aux->dado = no_a->dado;
+    no_a->dado = no_b->dado;
+    no_b->dado = aux->dado;
+
+    free(aux);
+}
+
+// copia dados do no_b para o no_a
+PNo copia_dado(PNo no_a, PNo no_b) {
+    int tamanho = sizeof(Cartao);
+
+    no_a->dado = malloc(tamanho);
+    memcpy(no_a->dado, no_b->dado, tamanho);
+
+    return no_a;
+}
+
+// obtem numero do cartao
+int obtem_numero(void *dado) {
+    Cartao c = *(Cartao *)dado;
+
+    return c.numero;
+}
+
+void soma_triade_recursivo(Arvore av, PNo no, PNo no_b,
+                           int numero, Triade *t,
+                           int (*soma)(void *, void *),
+                           int (*compara)(void *, void *)) {
+    int n = 0; // soma do numero de dois cartoes
+    int sn = 0; // diferenca entre o numero que se quer buscar e a soma do numero de dois cartoes
+    PNo r = NULL; // no que guarda o retorno da funcao busca
+
+    if(no_b != NULL && compara(no->dado, no_b->dado) != 0) {
+        // soma um no no com no no_b do lado esquerdo
+        soma_triade_recursivo(av, no, no_b->esq, numero, t, soma, compara);
+        n = (*soma)(no->dado, no_b->dado);
+        sn = numero - n;
+        r = busca(av, &sn, compara);
+        // se soma do numero dos tres nos (no, no_b e r) é igual a numero da autoridade (numero) então armazena a triade em t
+        if(r != NULL && compara(no->dado, r->dado) != 0 && compara(no_b->dado, r->dado) != 0  && sn + n == numero) {
+            t->num_cartao1 = obtem_numero(no->dado);
+            t->num_cartao2 = obtem_numero(no_b->dado);
+            t->num_cartao3 = obtem_numero(r->dado);
+        }
+        destroi_no(r);
+        // soma um no no com no no_b do lado direito
+        soma_triade_recursivo(av, no, no_b->dir, numero, t, soma, compara);
+    }
+}
+
+void busca_triade_recursivo(Arvore av, PNo no, PNo no_b,
+                            int numero, Triade *t,
+                            int (*soma)(void *, void *),
+                            int (*compara)(void *, void *)) {
+    if(no != NULL) {
+        // para um no no_b fixo percorre a arvore do lado esquerdo
+        busca_triade_recursivo(av, no->esq, no_b, numero, t, soma, compara);
+        soma_triade_recursivo(av, no, no_b, numero, t, soma, compara);
+        // para um no no_b fixo percorre a arvore do lado direito
+        busca_triade_recursivo(av, no->dir, no_b, numero, t, soma, compara);
+    }
+}
+
+Triade *busca_triade(Arvore av, Triade *t, int numero,
+                     int (*soma)(void *, void *),
+                     int (*compara)(void *, void *)) {
+    busca_triade_recursivo(av, av.raiz, av.raiz, numero, t, soma, compara);
+
+    return t;
+}
+
+// concatena texto de cada no da arvore do menor para o maior numero do no
+Cartao *cria_cartao_recursivo(PNo no, Cartao *cartao,
+                              Cartao *(*concatena)(Cartao *cartao, void *dado)) {
+    if(no != NULL) {
+        cria_cartao_recursivo(no->esq, cartao, concatena);
+        cartao = (*concatena)(cartao, no->dado);
+        cria_cartao_recursivo(no->dir, cartao, concatena);
+    }
+
+    return cartao;
+}
+
+Cartao *cria_cartao(Arvore av, Cartao *cartao,
+                    Cartao *(*concatena)(Cartao *cartao, void *dado)) {
+
+    cartao = cria_cartao_recursivo(av.raiz, cartao, concatena);
+
+    return cartao;
+}
