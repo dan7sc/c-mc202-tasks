@@ -5,19 +5,26 @@
 #define N 16
 
 int main() {
-    Arvore av;
-    /* int v[N] = { 25, 14, 13, 11, 28, 29, 27, 26}; */
-    int v[N] = { 11, 7, 15, 5, 3, 9, 8, 10, 13, 12, 14, 20, 18, 25, 25, 3 };
+    int qtde_inicial_lista = 0;
+    int num_operacoes = 0;
+    int numero = 0;
+    Arvore lista;
 
-    av = cria_arvore();
+    lista = cria_arvore();
 
-    for(int i = 0; i < N; i++) {
-        av = insere(av, v[i]);
+    le_int(&qtde_inicial_lista);
+    le_int(&num_operacoes);
+
+    for(int i = 0; i < qtde_inicial_lista; i++) {
+        le_int(&numero);
+        lista = insere(lista, numero);
     }
 
-    percorre(av, pre_ordem);
-    percorre(av, in_ordem);
-    percorre(av, pos_ordem);
+    printf("\n%d %d\n", qtde_inicial_lista, num_operacoes);
+
+    percorre(lista, pre_ordem);
+    percorre(lista, in_ordem);
+    percorre(lista, pos_ordem);
 
     return 0;
 }
