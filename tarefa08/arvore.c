@@ -99,13 +99,13 @@ PNo insere_no(PNo no, int dado) {
 
     if (obtem_balanceamento(no) < -1) {
         if (obtem_balanceamento(no->dir) > 0) {
-            no = rotacao_simples_esquerda(no);
+            no = rotacao_dupla_esquerda(no);
         } else {
             no = rotacao_simples_esquerda(no);
         }
     } else if (obtem_balanceamento(no) > 1) {
         if (obtem_balanceamento(no->esq) < 0) {
-            no = rotacao_simples_direita(no);
+            no = rotacao_dupla_direita(no);
         } else {
             no = rotacao_simples_direita(no);
         }
@@ -116,85 +116,6 @@ PNo insere_no(PNo no, int dado) {
 
 Arvore insere(Arvore av, int dado) {
     av.raiz = insere_no(av.raiz, dado);
-
-    return av;
-}
-
-PNo remove_sucessor(PNo no) {
-    PNo max = no->esq;
-    PNo pai = no;
-
-    if(no->esq == NULL) {
-        return NULL;
-    }
-
-    // procura maximo na subarvore direita
-    while(max->dir != NULL) {
-        pai = max;
-        max = max->dir;
-    }
-
-    if(pai->dir == max) {
-        // max é filho direito do pai entao
-        // filho esquerdo de max passa a ser filho direito do pai
-        pai->dir = max->esq;
-    } else {
-        // max é filho esquerdo do pai entao
-        // filho esquerdo de max passa a ser filho esquerdo do pai
-        pai->esq = max->esq;
-    }
-
-    troca_dados(no, max);
-
-    // retorna o sucessor
-    return max;
-}
-
-PNo remove_no_recursivo(PNo no, int dado) {
-    PNo temp;
-
-    if(no == NULL) {
-        return NULL;
-    }
-
-    if(dado < no->dado) {
-        // procura no a ser removido no lado esquerdo
-        no->esq = remove_no_recursivo(no->esq, dado);
-    } else if(dado > no->dado) {
-        // procura no a ser removido no lado direito
-        no->dir = remove_no_recursivo(no->dir, dado);
-    } else {
-        if(no->esq == NULL && no->dir == NULL) {
-            // no nao tem filhos entao remove
-            temp = no;
-            free(temp);
-            no = NULL;
-            return no;
-        } else if(no->esq == NULL && no->dir != NULL) {
-            // no tem filho direito entao retorna o no direito
-            temp = no;
-            no = no->dir;
-            free(temp);
-            return no;
-        } else if(no->dir == NULL && no->esq != NULL) {
-            // no tem filho esquerdo entao retorna o no esquerdo
-            temp = no;
-            no = no->esq;
-            free(temp);
-            return no;
-        } else {
-            // no tem filho esquerdo e direito entao remove o sucessor
-            temp = remove_sucessor(no);
-            free(temp);
-            return no;
-        }
-    }
-
-    return no;
-}
-
-Arvore remove_no(Arvore av, int dado) {
-    av.raiz = remove_no_recursivo(av.raiz, dado);
 
     return av;
 }
@@ -228,49 +149,6 @@ PNo busca(Arvore av, int dado) {
     return no;
 }
 
-void percorre_pre_ordem(PNo no) {
-    if(no != NULL) {
-        printf("%d-%d-%d, ", no->dado, obtem_altura(no), no->quantidade);
-        percorre_pre_ordem(no->esq);
-        percorre_pre_ordem(no->dir);
-    }
-}
-
-void percorre_in_ordem(PNo no) {
-    if(no != NULL) {
-        percorre_in_ordem(no->esq);
-        printf("%d-%d-%d, ", no->dado, obtem_altura(no), no->quantidade);
-        percorre_in_ordem(no->dir);
-    }
-}
-
-void percorre_pos_ordem(PNo no) {
-    if(no != NULL) {
-        percorre_pos_ordem(no->esq);
-        percorre_pos_ordem(no->dir);
-        printf("%d-%d-%d, ", no->dado, obtem_altura(no), no->quantidade);
-    }
-}
-
-// percorre arvore segundo o tipo de percurso dado:
-// 0 -> pre-ordem, 1 -> in-ordem, 2 -> pos-ordem
-void percorre(Arvore av, EPercurso percurso) {
-    switch(percurso) {
-    case 0:
-        percorre_pre_ordem(av.raiz);
-        break;
-    case 1:
-        percorre_in_ordem(av.raiz);
-        break;
-    case 2:
-        percorre_pos_ordem(av.raiz);
-        break;
-    default:
-        break;
-    }
-    printf("\n");
-}
-
 int obtem_maximo(int a, int b) {
     if(a > b) {
         return a;
@@ -297,16 +175,6 @@ int obtem_balanceamento(PNo no) {
 // le numero inteiro
 int le_int(int *num) {
     return scanf("%d", num);
-}
-
-void troca_dados(PNo no_a, PNo no_b) {
-    PNo aux = malloc(sizeof(No));
-
-    aux->dado = no_a->dado;
-    no_a->dado = no_b->dado;
-    no_b->dado = aux->dado;
-
-    free(aux);
 }
 
 // copia dados do no_b para o no_a
@@ -350,26 +218,4 @@ int obtem_lista_legal(Arvore av) {
     free(contador);
 
     return removidos;
-}
-
-void imprime_avl_recursivo(PNo no, int h, int altura) {
-    int i;
-
-    if (no != NULL) {
-        imprime_avl_recursivo(no->dir, h+1, altura);
-        for (i=0; i < h; i++)
-            printf("   ");
-        if (obtem_balanceamento(no) < 0)
-            printf("%02d(%d)",no->dado, obtem_altura(no));
-        else
-            printf("%02d( %d)",no->dado, obtem_altura(no));
-        for (i=0; i < altura-h; i++)
-            printf("---");
-        printf("\n");
-        imprime_avl_recursivo(no->esq, h+1,altura);
-    }
-}
-
-void imprime_avl(Arvore av, int h, int altura) {
-    imprime_avl_recursivo(av.raiz, h, altura);
 }
