@@ -75,4 +75,8 @@ int obtem_lista_legal_recursivo(PNo no, int *contador);
 
 int obtem_lista_legal(Arvore av);
 
+void imprime_avl_recursivo(PNo no, int h, int altura);
+
+void imprime_avl(Arvore av, int h, int altura);
+
 #endif

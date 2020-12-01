@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include "arvore.h"
 
-#define N 16
-
 int main() {
     int qtde_inicial_lista = 0;
     int num_operacoes = 0;
@@ -32,7 +30,11 @@ int main() {
         case 2:
             le_int(&numero);
             temp = busca(lista, numero);
-            printf("%d\n", temp->quantidade);
+            if(temp != NULL) {
+                printf("%d\n", temp->quantidade);
+            } else {
+                printf("0\n");
+            }
             free(temp);
             break;
         case 3:
@@ -47,6 +49,8 @@ int main() {
     /* percorre(lista, pre_ordem); */
     /* percorre(lista, in_ordem); */
     /* percorre(lista, pos_ordem); */
+
+    /* imprime_avl(lista, 0, obtem_altura(lista.raiz)); */
 
     destroi_arvore(lista);
 
