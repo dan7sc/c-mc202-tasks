@@ -9,8 +9,8 @@ PNo cria_no(int dado) {
     raiz->dado = dado;
     raiz->esq = NULL;
     raiz->dir = NULL;
-    raiz->quantidade = 1;
-    raiz->altura = 1;
+    raiz->frequencia = 1;
+    raiz->altura = 0;
 
     return raiz;
 }
@@ -91,7 +91,7 @@ PNo insere_no(PNo no, int dado) {
         // então insere a direita
         no->dir = insere_no(no->dir, dado);
     } else {
-        no->quantidade++;
+        no->frequencia++;
         return no;
     }
 
@@ -124,7 +124,9 @@ PNo busca_no(PNo no, int dado) {
     PNo temp;
 
     if(no == NULL) {
-        return no;
+        temp = cria_no(0);
+        temp->frequencia = 0;
+        return temp;
     }
 
     if(dado < no->dado) {
@@ -181,7 +183,8 @@ int le_int(int *num) {
 PNo copia_dado(PNo no_a, PNo no_b) {
 
     no_a->dado = no_b->dado;
-    no_a->quantidade = no_b->quantidade;
+    no_a->frequencia = no_b->frequencia;
+    no_a->altura = no_b->altura;
 
     return no_a;
 }
@@ -191,11 +194,11 @@ int obtem_lista_legal_recursivo(PNo no, int *contador) {
 
     if(no != NULL) {
         obtem_lista_legal_recursivo(no->esq, contador);
-        if(no->dado != no->quantidade) {
-            if(no->quantidade < no->dado) {
-                *contador += no->quantidade;
+        if(no->dado != no->frequencia) {
+            if(no->frequencia < no->dado) {
+                *contador += no->frequencia;
             } else {
-                qtde = no->quantidade;
+                qtde = no->frequencia;
                 while(no->dado != qtde) {
                     *contador += 1;
                     qtde--;

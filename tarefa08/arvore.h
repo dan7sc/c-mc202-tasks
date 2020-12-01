@@ -6,7 +6,7 @@ typedef struct no {
     struct no *esq;
     struct no *dir;
     int altura;
-    int quantidade;
+    int frequencia;
 } No;
 typedef struct no * PNo;
 

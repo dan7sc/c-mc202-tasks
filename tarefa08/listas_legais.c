@@ -30,11 +30,7 @@ int main() {
         case 2:
             le_int(&numero);
             temp = busca(lista, numero);
-            if(temp != NULL) {
-                printf("%d\n", temp->quantidade);
-            } else {
-                printf("0\n");
-            }
+            printf("%d\n", temp->frequencia);
             free(temp);
             break;
         case 3:
@@ -45,12 +41,6 @@ int main() {
             break;
         }
     }
-
-    /* percorre(lista, pre_ordem); */
-    /* percorre(lista, in_ordem); */
-    /* percorre(lista, pos_ordem); */
-
-    /* imprime_avl(lista, 0, obtem_altura(lista.raiz)); */
 
     destroi_arvore(lista);
 
