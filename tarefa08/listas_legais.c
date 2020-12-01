@@ -33,6 +33,7 @@ int main() {
             le_int(&numero);
             temp = busca(lista, numero);
             printf("%d\n", temp->quantidade);
+            free(temp);
             break;
         case 3:
             numero = obtem_lista_legal(lista);
@@ -46,6 +47,8 @@ int main() {
     /* percorre(lista, pre_ordem); */
     /* percorre(lista, in_ordem); */
     /* percorre(lista, pos_ordem); */
+
+    destroi_arvore(lista);
 
     return 0;
 }

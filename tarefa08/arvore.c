@@ -321,10 +321,20 @@ PNo copia_dado(PNo no_a, PNo no_b) {
 }
 
 int obtem_lista_legal_recursivo(PNo no, int *contador) {
+    int qtde = 0;
+
     if(no != NULL) {
         obtem_lista_legal_recursivo(no->esq, contador);
         if(no->dado != no->quantidade) {
-            *contador += 1;
+            if(no->quantidade < no->dado) {
+                *contador += no->quantidade;
+            } else {
+                qtde = no->quantidade;
+                while(no->dado != qtde) {
+                    *contador += 1;
+                    qtde--;
+                }
+            }
         }
         obtem_lista_legal_recursivo(no->dir, contador);
     }
@@ -333,8 +343,13 @@ int obtem_lista_legal_recursivo(PNo no, int *contador) {
 }
 
 int obtem_lista_legal(Arvore av) {
+    int removidos = 0;
     int *contador = malloc(sizeof(int));
     *contador = 0;
 
-    return obtem_lista_legal_recursivo(av.raiz, contador);
+    *contador = obtem_lista_legal_recursivo(av.raiz, contador);
+    removidos = *contador;
+    free(contador);
+
+    return removidos;
 }
