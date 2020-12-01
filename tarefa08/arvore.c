@@ -23,17 +23,11 @@ Arvore cria_arvore() {
     return av;
 }
 
-void destroi_no(PNo no) {
-    if(no != NULL) {
-        free(no);
-    }
-}
-
 void destroi_arvore_recursivo(PNo no) {
     if(no != NULL) {
         destroi_arvore_recursivo(no->esq);
         destroi_arvore_recursivo(no->dir);
-        destroi_no(no);
+        free(no);
     }
 }
 
@@ -42,7 +36,6 @@ void destroi_arvore(Arvore av) {
 }
 
 PNo rotacao_simples_esquerda(PNo no) {
-    /* printf("**  E  **\n"); */
     PNo temp = no->dir;
 
     no->dir = temp->esq;
@@ -51,14 +44,10 @@ PNo rotacao_simples_esquerda(PNo no) {
     no->altura = 1 + obtem_maximo(obtem_altura(no->esq), obtem_altura(no->dir));
     temp->altura = 1 + obtem_maximo(obtem_altura(temp->esq), obtem_altura(temp->dir));
 
-    /* printf("%d %d\n", no->dado, no->quantidade); */
-    /* imprime_avl_recursivo(no, 0, obtem_altura(no)); */
-
     return temp;
 }
 
 PNo rotacao_simples_direita(PNo no) {
-    /* printf("**  D  **\n"); */
     PNo temp = no->esq;
 
     no->esq = temp->dir;
@@ -71,16 +60,16 @@ PNo rotacao_simples_direita(PNo no) {
 }
 
 PNo rotacao_dupla_esquerda(PNo no) {
-    /* printf("**  EE  **\n"); */
     no->dir = rotacao_simples_direita(no->dir);
     no = rotacao_simples_esquerda(no);
+
     return no;
 }
 
 PNo rotacao_dupla_direita(PNo no) {
-    /* printf("**  DD  **\n"); */
     no->esq = rotacao_simples_esquerda(no->esq);
     no = rotacao_simples_direita(no);
+
     return no;
 }
 
@@ -110,14 +99,16 @@ PNo insere_no(PNo no, int dado) {
 
     if (obtem_balanceamento(no) < -1) {
         if (obtem_balanceamento(no->dir) > 0) {
-            no->dir = rotacao_simples_direita(no->dir);
+            no = rotacao_simples_esquerda(no);
+        } else {
+            no = rotacao_simples_esquerda(no);
         }
-        no = rotacao_simples_esquerda(no);
     } else if (obtem_balanceamento(no) > 1) {
         if (obtem_balanceamento(no->esq) < 0) {
-            no->esq = rotacao_simples_esquerda(no->esq);
+            no = rotacao_simples_direita(no);
+        } else {
+            no = rotacao_simples_direita(no);
         }
-        no = rotacao_simples_direita(no);
     }
 
     return no;
@@ -176,25 +167,25 @@ PNo remove_no_recursivo(PNo no, int dado) {
         if(no->esq == NULL && no->dir == NULL) {
             // no nao tem filhos entao remove
             temp = no;
-            destroi_no(temp);
+            free(temp);
             no = NULL;
             return no;
         } else if(no->esq == NULL && no->dir != NULL) {
             // no tem filho direito entao retorna o no direito
             temp = no;
             no = no->dir;
-            destroi_no(temp);
+            free(temp);
             return no;
         } else if(no->dir == NULL && no->esq != NULL) {
             // no tem filho esquerdo entao retorna o no esquerdo
             temp = no;
             no = no->esq;
-            destroi_no(temp);
+            free(temp);
             return no;
         } else {
             // no tem filho esquerdo e direito entao remove o sucessor
             temp = remove_sucessor(no);
-            destroi_no(temp);
+            free(temp);
             return no;
         }
     }
@@ -288,13 +279,6 @@ int obtem_maximo(int a, int b) {
     }
 }
 
-/* int obtem_altura(PNo no) { */
-/*     if (no != NULL) */
-/*         return 1 + obtem_maximo(obtem_altura(no->esq), obtem_altura(no->dir)); */
-/*     else */
-/*         return 0; */
-/* } */
-
 int obtem_altura(PNo no) {
     if(no == NULL) {
         return 0;
@@ -377,10 +361,8 @@ void imprime_avl_recursivo(PNo no, int h, int altura) {
             printf("   ");
         if (obtem_balanceamento(no) < 0)
             printf("%02d(%d)",no->dado, obtem_altura(no));
-        /* printf("%02d(%d)",no->dado, obtem_balanceamento(no)); */
         else
             printf("%02d( %d)",no->dado, obtem_altura(no));
-        /* printf("%02d(%d)",no->dado, obtem_balanceamento(no)); */
         for (i=0; i < altura-h; i++)
             printf("---");
         printf("\n");
