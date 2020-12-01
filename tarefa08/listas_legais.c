@@ -22,8 +22,6 @@ int main() {
         lista = insere(lista, numero);
     }
 
-    printf("%d %d\n", qtde_inicial_lista, num_operacoes);
-
     for(int i = 0; i < num_operacoes; i++) {
         le_int(&operacao);
         switch(operacao) {
@@ -37,6 +35,8 @@ int main() {
             printf("%d\n", temp->quantidade);
             break;
         case 3:
+            numero = obtem_lista_legal(lista);
+            printf("%d\n", numero);
             break;
         default:
             break;

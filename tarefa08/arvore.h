@@ -71,4 +71,8 @@ void troca_dados(PNo no_a, PNo no_b);
 
 PNo copia_dado(PNo no_a, PNo no_b);
 
+int obtem_lista_legal_recursivo(PNo no, int *contador);
+
+int obtem_lista_legal(Arvore av);
+
 #endif

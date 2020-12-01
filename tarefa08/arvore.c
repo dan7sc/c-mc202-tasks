@@ -41,7 +41,7 @@ void destroi_arvore(Arvore av) {
 }
 
 PNo rotacao_simples_esquerda(PNo no) {
-    printf("**  E  **\n");
+    /* printf("**  E  **\n"); */
     PNo temp = no->dir;
 
     no->dir = temp->esq;
@@ -51,7 +51,7 @@ PNo rotacao_simples_esquerda(PNo no) {
 }
 
 PNo rotacao_simples_direita(PNo no) {
-    printf("**  D  **\n");
+    /* printf("**  D  **\n"); */
     PNo temp = no->esq;
 
     no->esq = temp->dir;
@@ -61,13 +61,13 @@ PNo rotacao_simples_direita(PNo no) {
 }
 
 PNo rotacao_dupla_esquerda(PNo no) {
-    printf("**  EE  **\n");
+    /* printf("**  EE  **\n"); */
     no->dir = rotacao_simples_direita(no->dir);
     return rotacao_simples_esquerda(no);
 }
 
 PNo rotacao_dupla_direita(PNo no) {
-    printf("**  DD  **\n");
+    /* printf("**  DD  **\n"); */
     no->esq = rotacao_simples_esquerda(no->esq);
     return rotacao_simples_direita(no);
 }
@@ -315,6 +315,26 @@ void troca_dados(PNo no_a, PNo no_b) {
 PNo copia_dado(PNo no_a, PNo no_b) {
 
     no_a->dado = no_b->dado;
+    no_a->quantidade = no_b->quantidade;
 
     return no_a;
+}
+
+int obtem_lista_legal_recursivo(PNo no, int *contador) {
+    if(no != NULL) {
+        obtem_lista_legal_recursivo(no->esq, contador);
+        if(no->dado != no->quantidade) {
+            *contador += 1;
+        }
+        obtem_lista_legal_recursivo(no->dir, contador);
+    }
+
+    return *contador;
+}
+
+int obtem_lista_legal(Arvore av) {
+    int *contador = malloc(sizeof(int));
+    *contador = 0;
+
+    return obtem_lista_legal_recursivo(av.raiz, contador);
 }
