@@ -53,8 +53,8 @@ PNo rotacao_simples_esquerda(PNo no) {
 
     // atualiza a altura dos nós que foram rotacionados
     // nó é atualizado primeiro pois o cálculo da altura de temp depende dele
-    no->altura = 1 + obtem_maximo(obtem_altura(no->esq), obtem_altura(no->dir));
-    temp->altura = 1 + obtem_maximo(obtem_altura(temp->esq), obtem_altura(temp->dir));
+    no->altura = atualiza_altura(no);
+    temp->altura = atualiza_altura(temp);
 
     return temp;
 }
@@ -77,8 +77,8 @@ PNo rotacao_simples_direita(PNo no) {
 
     // atualiza a altura dos nós que foram rotacionados
     // nó é atualizado primeiro pois o cálculo da altura de temp depende dele
-    no->altura = 1 + obtem_maximo(obtem_altura(no->esq), obtem_altura(no->dir));
-    temp->altura = 1 + obtem_maximo(obtem_altura(temp->esq), obtem_altura(temp->dir));
+    no->altura = atualiza_altura(no);
+    temp->altura = atualiza_altura(temp);
 
     return temp;
 }
@@ -163,7 +163,7 @@ PNo insere_no(PNo no, int dado) {
     }
 
     // atualiza a altura do nó no
-    no->altura = 1 + obtem_maximo(obtem_altura(no->esq), obtem_altura(no->dir));
+    no->altura = atualiza_altura(no);
 
     return no;
 }
@@ -232,6 +232,11 @@ int obtem_balanceamento(PNo no) {
     }
 
     return (obtem_altura(no->dir) - obtem_altura(no->esq));
+}
+
+// obtem nova altura do nó e retorna a nova altura
+int atualiza_altura(PNo no) {
+    return (1 + obtem_maximo(obtem_altura(no->esq), obtem_altura(no->dir)));
 }
 
 // le numero inteiro

@@ -45,6 +45,8 @@ int obtem_altura(PNo no);
 
 int obtem_balanceamento(PNo no);
 
+int atualiza_altura(PNo no);
+
 int le_int(int *num);
 
 PNo copia_dado(PNo no_a, PNo no_b);
