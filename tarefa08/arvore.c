@@ -35,30 +35,65 @@ void destroi_arvore(Arvore av) {
     destroi_arvore_recursivo(av.raiz);
 }
 
+/* na rotação simples a esquerda cada nó move uma posição
+// a esquerda da posicao em que estava anteriormente
+// exemplo:
+//         no                 b
+//       /    \             /   \
+//      a      b   ==>>    no     y
+//           /   \       /    \
+//          x     y     a      x
+*/
 PNo rotacao_simples_esquerda(PNo no) {
-    PNo temp = no->dir;
+    PNo temp = no->dir; // b na representação acima
 
+    // rotação esquerda
     no->dir = temp->esq;
     temp->esq = no;
 
+    // atualiza a altura dos nós que foram rotacionados
+    // nó é atualizado primeiro pois o cálculo da altura de temp depende dele
     no->altura = 1 + obtem_maximo(obtem_altura(no->esq), obtem_altura(no->dir));
     temp->altura = 1 + obtem_maximo(obtem_altura(temp->esq), obtem_altura(temp->dir));
 
     return temp;
 }
 
+/* na rotação simples a direita cada nó move uma posição
+// a direita da posicao em que estava anteriormente
+// exemplo:
+//         no               a
+//       /    \           /   \
+//      a      b   ==>>  x     no
+//    /   \                  /    \
+//   x     y                y      b
+*/
 PNo rotacao_simples_direita(PNo no) {
-    PNo temp = no->esq;
+    PNo temp = no->esq;  // a na representação acima
 
+    // rotação para direita
     no->esq = temp->dir;
     temp->dir = no;
 
+    // atualiza a altura dos nós que foram rotacionados
+    // nó é atualizado primeiro pois o cálculo da altura de temp depende dele
     no->altura = 1 + obtem_maximo(obtem_altura(no->esq), obtem_altura(no->dir));
     temp->altura = 1 + obtem_maximo(obtem_altura(temp->esq), obtem_altura(temp->dir));
 
     return temp;
 }
 
+/* na rotação dupla a esquerda é realizada uma rotação simples
+// a direita e depois uma rotação simples a esquerda
+// exemplo:
+//         no                no                       c
+//       /    \            /    \                   /    \
+//      a      b   ==>>   a      c       ==>>      no      b
+//           /   \             /   \              /  \    /  \
+//          c     z           x     b            a    x  y    z
+//        /   \                   /   \
+//       x     y                 y     z
+*/
 PNo rotacao_dupla_esquerda(PNo no) {
     no->dir = rotacao_simples_direita(no->dir);
     no = rotacao_simples_esquerda(no);
@@ -66,6 +101,17 @@ PNo rotacao_dupla_esquerda(PNo no) {
     return no;
 }
 
+/* na rotação dupla a direita é realizada uma rotação simples
+// a esquerda e depois uma rotação simples a direita
+// exemplo:
+//         no                     no                   c
+//       /    \                 /    \               /    \
+//      a      b   ==>>        c      b    ==>>     a      no
+//    /   \                  /   \                /  \    /   \
+//   x     c                a     z              x    y   z    b
+//       /   \            /   \
+//      y     z          x     y
+*/
 PNo rotacao_dupla_direita(PNo no) {
     no->esq = rotacao_simples_esquerda(no->esq);
     no = rotacao_simples_direita(no);
@@ -73,6 +119,10 @@ PNo rotacao_dupla_direita(PNo no) {
     return no;
 }
 
+// cria novo nó caso dado não exista na árvore
+// ou incrementa a frequencia do nó que possui o dado
+// a inserir caso o este já esteja na árvore
+// retornando a raiz
 PNo insere_no(PNo no, int dado) {
     PNo novo_no;
 
@@ -91,25 +141,29 @@ PNo insere_no(PNo no, int dado) {
         // então insere a direita
         no->dir = insere_no(no->dir, dado);
     } else {
+        // incrementa a frequencia pois o dado ja está na árvore
         no->frequencia++;
         return no;
     }
 
-    no->altura = 1 + obtem_maximo(obtem_altura(no->esq), obtem_altura(no->dir));
-
-    if (obtem_balanceamento(no) < -1) {
-        if (obtem_balanceamento(no->dir) > 0) {
+    // verifica o balanceamento da arvore e
+    // realiza rotações caso necessario
+    if (obtem_balanceamento(no) > 1) {
+        if (obtem_balanceamento(no->dir) < 0) {
             no = rotacao_dupla_esquerda(no);
         } else {
             no = rotacao_simples_esquerda(no);
         }
-    } else if (obtem_balanceamento(no) > 1) {
-        if (obtem_balanceamento(no->esq) < 0) {
+    } else if (obtem_balanceamento(no) < -1) {
+        if (obtem_balanceamento(no->esq) > 0) {
             no = rotacao_dupla_direita(no);
         } else {
             no = rotacao_simples_direita(no);
         }
     }
+
+    // atualiza a altura do nó no
+    no->altura = 1 + obtem_maximo(obtem_altura(no->esq), obtem_altura(no->dir));
 
     return no;
 }
@@ -120,9 +174,11 @@ Arvore insere(Arvore av, int dado) {
     return av;
 }
 
+// busca por nó com valor dado
 PNo busca_no(PNo no, int dado) {
     PNo temp;
 
+    // não há nó com valor dado
     if(no == NULL) {
         temp = cria_no(0);
         temp->frequencia = 0;
@@ -151,6 +207,8 @@ PNo busca(Arvore av, int dado) {
     return no;
 }
 
+// obtem máximo entre dois números
+// retornando o maior
 int obtem_maximo(int a, int b) {
     if(a > b) {
         return a;
@@ -159,6 +217,7 @@ int obtem_maximo(int a, int b) {
     }
 }
 
+// obtem e retorna altura do nó
 int obtem_altura(PNo no) {
     if(no == NULL) {
         return 0;
@@ -166,12 +225,13 @@ int obtem_altura(PNo no) {
     return no->altura;
 }
 
+// obtem e retorna balanceamento do nó
 int obtem_balanceamento(PNo no) {
     if(no == NULL) {
         return 0;
     }
 
-    return (obtem_altura(no->esq) - obtem_altura(no->dir));
+    return (obtem_altura(no->dir) - obtem_altura(no->esq));
 }
 
 // le numero inteiro
@@ -189,36 +249,45 @@ PNo copia_dado(PNo no_a, PNo no_b) {
     return no_a;
 }
 
-int obtem_lista_legal_recursivo(PNo no, int *contador) {
-    int qtde = 0;
+// obtem a quantidade de numeros que precisam ser removidos
+// para tornar a lista legal retornando a quantidade de números removidos
+int obtem_numeros_removidos_lista_legal_recursivo(PNo no, int *num_removidos) {
+    int frequencia_num_removido = 0; // quantas vezes o numero a ser removido foi inserido na arvore
 
     if(no != NULL) {
-        obtem_lista_legal_recursivo(no->esq, contador);
+        obtem_numeros_removidos_lista_legal_recursivo(no->esq, num_removidos);
+        // verifica se o numero é diferente da sua frequencia na lista/arvore
         if(no->dado != no->frequencia) {
+            // se a frequencia é menor que o número ...
             if(no->frequencia < no->dado) {
-                *contador += no->frequencia;
+                // ... o numero tem que ser removido da lista legal
+                // o numero de vezes que ele aparece na lista/arvore
+                *num_removidos += no->frequencia;
+            // se a frequencia do número é maior que o número ...
             } else {
-                qtde = no->frequencia;
-                while(no->dado != qtde) {
-                    *contador += 1;
-                    qtde--;
+                // ... o numero em excesso tem que ser removido da lista legal
+                // numero em excesso: frequecia do numero - numero
+                // variavel temporaria para armazenar a frequencia do numero corrente
+                frequencia_num_removido = no->frequencia;
+                // remove numero em excesso
+                // adicionando o excesso aos numeros que tem que ser removidos
+                while(no->dado != frequencia_num_removido) {
+                    *num_removidos += 1;
+                    frequencia_num_removido--;
                 }
             }
         }
-        obtem_lista_legal_recursivo(no->dir, contador);
+        obtem_numeros_removidos_lista_legal_recursivo(no->dir, num_removidos);
     }
 
-    return *contador;
+    return *num_removidos;
 }
 
-int obtem_lista_legal(Arvore av) {
-    int removidos = 0;
-    int *contador = malloc(sizeof(int));
-    *contador = 0;
+int obtem_numeros_removidos_lista_legal(Arvore av) {
+    int num_removidos = 0;  // conta o numero de elementos removidos para lista se tornar legal
 
-    *contador = obtem_lista_legal_recursivo(av.raiz, contador);
-    removidos = *contador;
-    free(contador);
+    // chama percurso in-ordem para obter os numeros a ser removidos
+    num_removidos = obtem_numeros_removidos_lista_legal_recursivo(av.raiz, &num_removidos);
 
-    return removidos;
+    return num_removidos;
 }

@@ -34,7 +34,7 @@ int main() {
             free(temp);
             break;
         case 3:
-            numero = obtem_lista_legal(lista);
+            numero = obtem_numeros_removidos_lista_legal(lista);
             printf("%d\n", numero);
             break;
         default:

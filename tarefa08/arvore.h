@@ -49,8 +49,8 @@ int le_int(int *num);
 
 PNo copia_dado(PNo no_a, PNo no_b);
 
-int obtem_lista_legal_recursivo(PNo no, int *contador);
+int obtem_numeros_removidos_lista_legal_recursivo(PNo no, int *contador);
 
-int obtem_lista_legal(Arvore av);
+int obtem_numeros_removidos_lista_legal(Arvore av);
 
 #endif
