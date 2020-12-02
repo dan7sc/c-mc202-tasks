@@ -86,13 +86,13 @@ PNo rotacao_simples_direita(PNo no) {
 /* na rotação dupla a esquerda é realizada uma rotação simples
 // a direita e depois uma rotação simples a esquerda
 // exemplo:
-//         no                no                       c
-//       /    \            /    \                   /    \
-//      a      b   ==>>   a      c       ==>>      no      b
-//           /   \             /   \              /  \    /  \
-//          c     z           x     b            a    x  y    z
-//        /   \                   /   \
-//       x     y                 y     z
+//         no                 no                       c
+//       /    \             /    \                   /    \
+//      a      b    ==>>   a      c       ==>>      no      b
+//           /   \              /   \              /  \    /  \
+//          c     z            x     b            a    x  y    z
+//        /   \                    /   \
+//       x     y                  y     z
 */
 PNo rotacao_dupla_esquerda(PNo no) {
     no->dir = rotacao_simples_direita(no->dir);
@@ -250,32 +250,21 @@ PNo copia_dado(PNo no_a, PNo no_b) {
 }
 
 // obtem a quantidade de numeros que precisam ser removidos
-// para tornar a lista legal retornando a quantidade de números removidos
+// para tornar a lista legal  e retorna a quantidade de números removidos
 int obtem_numeros_removidos_lista_legal_recursivo(PNo no, int *num_removidos) {
-    int frequencia_num_removido = 0; // quantas vezes o numero a ser removido foi inserido na arvore
-
     if(no != NULL) {
         obtem_numeros_removidos_lista_legal_recursivo(no->esq, num_removidos);
-        // verifica se o numero é diferente da sua frequencia na lista/arvore
-        if(no->dado != no->frequencia) {
-            // se a frequencia é menor que o número ...
-            if(no->frequencia < no->dado) {
-                // ... o numero tem que ser removido da lista legal
-                // o numero de vezes que ele aparece na lista/arvore
-                *num_removidos += no->frequencia;
-            // se a frequencia do número é maior que o número ...
-            } else {
-                // ... o numero em excesso tem que ser removido da lista legal
-                // numero em excesso: frequecia do numero - numero
-                // variavel temporaria para armazenar a frequencia do numero corrente
-                frequencia_num_removido = no->frequencia;
-                // remove numero em excesso
-                // adicionando o excesso aos numeros que tem que ser removidos
-                while(no->dado != frequencia_num_removido) {
-                    *num_removidos += 1;
-                    frequencia_num_removido--;
-                }
-            }
+        // verifica se a frequencia do numero é menor
+        // que o proprio numero na lista/arvore ...
+        if(no->frequencia < no->dado) {
+            // ... caso seja o numero tem que ser removido da lista legal
+            // o numero de vezes que ele aparece na lista/arvore
+            *num_removidos += no->frequencia;
+        // se a frequencia do número é maior que o número ...
+        } else if(no->frequencia > no->dado) {
+            // ... o numero em excesso tem que ser removido da lista legal
+            // numero em excesso: frequecia do numero - numero
+            *num_removidos += no->frequencia - no->dado;
         }
         obtem_numeros_removidos_lista_legal_recursivo(no->dir, num_removidos);
     }
@@ -286,7 +275,7 @@ int obtem_numeros_removidos_lista_legal_recursivo(PNo no, int *num_removidos) {
 int obtem_numeros_removidos_lista_legal(Arvore av) {
     int num_removidos = 0;  // conta o numero de elementos removidos para lista se tornar legal
 
-    // chama percurso in-ordem para obter os numeros a ser removidos
+    // chama percurso in-ordem para obter os numeros a serem removidos
     num_removidos = obtem_numeros_removidos_lista_legal_recursivo(av.raiz, &num_removidos);
 
     return num_removidos;
