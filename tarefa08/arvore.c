@@ -257,9 +257,9 @@ PNo copia_dado(PNo no_a, PNo no_b) {
 
 // obtem a quantidade de numeros que precisam ser removidos
 // para tornar a lista legal  e retorna a quantidade de números removidos
-int obtem_numeros_removidos_lista_legal_recursivo(PNo no, int *num_removidos) {
+int obtem_numeros_a_retirar_da_lista_recursivo(PNo no, int *num_removidos) {
     if(no != NULL) {
-        obtem_numeros_removidos_lista_legal_recursivo(no->esq, num_removidos);
+        obtem_numeros_a_retirar_da_lista_recursivo(no->esq, num_removidos);
         // verifica se a frequencia do numero é menor
         // que o proprio numero na lista/arvore ...
         if(no->frequencia < no->dado) {
@@ -272,17 +272,17 @@ int obtem_numeros_removidos_lista_legal_recursivo(PNo no, int *num_removidos) {
             // numero em excesso: frequecia do numero - numero
             *num_removidos += no->frequencia - no->dado;
         }
-        obtem_numeros_removidos_lista_legal_recursivo(no->dir, num_removidos);
+        obtem_numeros_a_retirar_da_lista_recursivo(no->dir, num_removidos);
     }
 
     return *num_removidos;
 }
 
-int obtem_numeros_removidos_lista_legal(Arvore av) {
+int obtem_numeros_a_retirar_da_lista(Arvore av) {
     int num_removidos = 0;  // conta o numero de elementos removidos para lista se tornar legal
 
     // chama percurso in-ordem para obter os numeros a serem removidos
-    num_removidos = obtem_numeros_removidos_lista_legal_recursivo(av.raiz, &num_removidos);
+    num_removidos = obtem_numeros_a_retirar_da_lista_recursivo(av.raiz, &num_removidos);
 
     return num_removidos;
 }

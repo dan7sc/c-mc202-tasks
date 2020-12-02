@@ -40,7 +40,7 @@ int main() {
         case 3:
             // mostra a menor quantidade de números que devem ser retirados
             // da lista atual para que ela se torne legal
-            numero = obtem_numeros_removidos_lista_legal(lista);
+            numero = obtem_numeros_a_retirar_da_lista(lista);
             printf("%d\n", numero);
             break;
         default:
