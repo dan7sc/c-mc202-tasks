@@ -1,19 +1,24 @@
 #ifndef ARVORE_H
 #define ARVORE_H
 
+enum balanceamento {
+    NEGATIVO = -1, // altura do lado esquerdo da arvore é maior que lado direito por uma unidade
+    ZERO = 0,  // arvore tem lado esquerdo e direito de mesma altura
+    POSITIVO = 1 // altura do lado esquerdo da arvore é maior que lado direito por uma unidade
+};
+
 typedef struct no {
-    int dado;
-    struct no *esq;
-    struct no *dir;
-    int altura;
-    int frequencia;
+    int dado; // guarda dado inserido na arvore
+    struct no *esq; // ponteiro para filho esquerdo
+    struct no *dir; // ponteiro para filho direito
+    int altura; // altura do nó da arvore (altura da arvore com um nó é 1 e sem nó é zero )
+    int frequencia; // número de vezes que o dado foi inserido na arvore
 } No;
 typedef struct no * PNo;
 
 typedef struct arvore {
-    PNo raiz;
+    PNo raiz; // raiz da arvore
 } Arvore;
-typedef struct arvore * PArvore;
 
 PNo cria_no(int dado);
 

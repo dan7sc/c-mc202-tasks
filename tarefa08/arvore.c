@@ -10,7 +10,7 @@ PNo cria_no(int dado) {
     raiz->esq = NULL;
     raiz->dir = NULL;
     raiz->frequencia = 1;
-    raiz->altura = 0;
+    raiz->altura = 1;
 
     return raiz;
 }
@@ -148,14 +148,14 @@ PNo insere_no(PNo no, int dado) {
 
     // verifica o balanceamento da arvore e
     // realiza rotações caso necessario
-    if (obtem_balanceamento(no) > 1) {
-        if (obtem_balanceamento(no->dir) < 0) {
+    if (obtem_balanceamento(no) > POSITIVO) { // desbalanceamento à direita
+        if (obtem_balanceamento(no->dir) < ZERO) { // altura do lado esquerdo do filho direito é maior
             no = rotacao_dupla_esquerda(no);
         } else {
             no = rotacao_simples_esquerda(no);
         }
-    } else if (obtem_balanceamento(no) < -1) {
-        if (obtem_balanceamento(no->esq) > 0) {
+    } else if (obtem_balanceamento(no) < NEGATIVO) { // desbalanceamento à esquerda
+        if (obtem_balanceamento(no->esq) > ZERO) { // altura do lado direito do filho esquerdo é maior
             no = rotacao_dupla_direita(no);
         } else {
             no = rotacao_simples_direita(no);
@@ -182,6 +182,7 @@ PNo busca_no(PNo no, int dado) {
     if(no == NULL) {
         temp = cria_no(0);
         temp->frequencia = 0;
+        temp->altura = 0;
         return temp;
     }
 
