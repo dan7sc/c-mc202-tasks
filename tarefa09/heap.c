@@ -18,7 +18,7 @@ PHeap cria_heap(int tam_max) {
 
     heap->tam_max = tam_max;
     heap->n_elementos = 0;
-    heap->v_dados = malloc(tam_max * sizeof(int));
+    heap->v_dados = malloc(tam_max * sizeof(Cliente));
 
     return heap;
 }
@@ -28,8 +28,8 @@ void destroi_heap(PHeap heap) {
     free(heap);
 }
 
-void troca(int *x, int *y) {
-    int aux;
+void troca(Cliente *x, Cliente *y) {
+    Cliente aux;
 
     aux = *x;
     *x = *y;
@@ -40,7 +40,7 @@ void sobe_heap(PHeap heap, int indice) {
     int pai;
 
     pai = obtem_pai(indice);
-    if( (pai >= 0) && (heap->v_dados[pai] < heap->v_dados[indice]) ) {
+    if( (pai >= 0) && (heap->v_dados[pai].avaliacao < heap->v_dados[indice].avaliacao) ) {
         troca(&heap->v_dados[indice], &heap->v_dados[pai]);
         pai = obtem_pai(indice);
         sobe_heap(heap, pai);
@@ -53,13 +53,13 @@ void desce_heap (PHeap heap, int indice) {
     esq = obtem_fesq(indice);
     dir = obtem_fdir(indice);
 
-    if ((esq < heap->n_elementos) && (heap->v_dados[esq] > heap->v_dados[indice])) {
+    if ((esq < heap->n_elementos) && (heap->v_dados[esq].avaliacao > heap->v_dados[indice].avaliacao)) {
         maior = esq;
     } else {
         maior = indice;
     }
 
-    if ((dir < heap->n_elementos) && (heap->v_dados[dir] > heap->v_dados[maior])) {
+    if ((dir < heap->n_elementos) && (heap->v_dados[dir].avaliacao > heap->v_dados[maior].avaliacao)) {
         maior = dir;
     }
 
@@ -85,7 +85,7 @@ Boolean heap_vazio(PHeap heap) {
     }
 }
 
-PHeap insere(PHeap heap, int dado) {
+PHeap insere(PHeap heap, Cliente dado) {
     if (!heap_cheio(heap)) {
         heap->n_elementos++;
         heap->v_dados[heap->n_elementos - 1] = dado;
@@ -95,8 +95,8 @@ PHeap insere(PHeap heap, int dado) {
     return heap;
 }
 
-int remove_max(PHeap heap) {
-    int dado;
+Cliente remove_max(PHeap heap) {
+    Cliente dado;
 
     if (!heap_vazio(heap)) {
         dado = heap->v_dados[0];
@@ -106,6 +106,16 @@ int remove_max(PHeap heap) {
     }
 
     return dado;
+}
+
+void muda_prioridade(PHeap heap, int indice, int valor) {
+    if (heap->v_dados[indice].avaliacao < valor) {
+        heap->v_dados[indice].avaliacao = valor;
+        sobe_heap(heap, indice);
+    } else {
+        heap->v_dados[indice].avaliacao = valor;
+        desce_heap(heap, indice);
+    }
 }
 
 PHeap heap_sort(PHeap heap) {
@@ -124,7 +134,7 @@ PHeap heap_sort(PHeap heap) {
 
 void imprime_sequencia(PHeap heap) {
     for (int i = 0; i < heap->n_elementos; i++) {
-        printf("%d ", heap->v_dados[i]);
+        printf("%.16lf ", heap->v_dados[i].avaliacao);
     }
     printf("\n");
 
@@ -136,7 +146,7 @@ void imprime_heap(PHeap heap, int indice, int nivel) {
         for (int i = 0; i < nivel; i++) {
             printf("   ");
         }
-        printf("%03d", heap->v_dados[indice]);
+        printf("%03.16lf", heap->v_dados[indice].avaliacao);
         for (int i = 0; i <= log2(heap->n_elementos) - nivel; i++) {
             printf("---");
         }

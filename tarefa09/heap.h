@@ -4,14 +4,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define N_CHAR 15
+
 // enum para definir boolean: { FALSE = 0, TRUE = 1 }
 typedef enum {
     FALSE,
     TRUE
 } Boolean;
 
+typedef struct posicao {
+    int x;
+    int y;
+} Posicao;
+
+typedef struct cliente {
+    char nome[N_CHAR];
+    double avaliacao;
+    Posicao origem;
+    Posicao destino;
+} Cliente;
+
 typedef struct heap {
-    int *v_dados; // vetor de dados do tipo int
+    Cliente *v_dados; // vetor de dados do tipo int
     int  n_elementos; // numero de elementos no vetor
     int tam_max; // numero maximo de elementos no vetor
 } Heap;
@@ -27,7 +41,7 @@ PHeap cria_heap(int tam_max);
 
 void destroi_heap(PHeap heap);
 
-void troca(int *x, int *y);
+void troca(Cliente *x, Cliente *y);
 
 void sobe_heap(PHeap heap, int indice);
 
@@ -37,9 +51,9 @@ Boolean heap_cheio(PHeap heap);
 
 Boolean heap_vazio(PHeap heap);
 
-PHeap insere(PHeap h, int dado);
+PHeap insere(PHeap h, Cliente dado);
 
-int remove_max(PHeap heap);
+Cliente remove_max(PHeap heap);
 
 PHeap heap_sort(PHeap heap);
 
