@@ -6,7 +6,9 @@ LDFLAGS = -lm
 all: diadeuber
 
 diadeuber: *.c
-	gcc $(CFLAGS) *.c -o diadeuber $(LDFLAGS)
+	gcc $(CFLAGS) -c heap.c $(LDFLAGS)
+	gcc $(CFLAGS) -c diadeuber.c $(LDFLAGS)
+	gcc $(CFLAGS) -o diadeuber diadeuber.o heap.o $(LDFLAGS)
 
 clean:
 	rm -f diadeuber
