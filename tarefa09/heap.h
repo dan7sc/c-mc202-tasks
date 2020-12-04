@@ -55,6 +55,8 @@ PHeap insere(PHeap h, Cliente dado);
 
 Cliente *remove_max(PHeap heap);
 
+void maximiza_prioridade(PHeap heap, char *str);
+
 PHeap heap_sort(PHeap heap);
 
 void imprime_sequencia(PHeap heap);

@@ -112,7 +112,7 @@ Cliente *remove_max(PHeap heap) {
     return dado;
 }
 
-void muda_prioridade(PHeap heap, char *str) {
+void maximiza_prioridade(PHeap heap, char *str) {
     for (int i = 0; i < heap->n_elementos; i++) {
         if(strcmp(str, heap->v_dados[i].nome) == 0) {
             heap->v_dados[i].avaliacao = 6;

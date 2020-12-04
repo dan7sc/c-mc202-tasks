@@ -16,6 +16,7 @@ int main() {
     char acao;
     Cliente cliente;
     Cliente *cliente_em_atendimento = NULL;
+    Cliente *cliente_cancelado = NULL;
 
     fila = cria_heap(N_ACAO);
 
@@ -40,7 +41,10 @@ int main() {
             cliente_em_atendimento = remove_max(fila);
             break;
         case 'C':
-            printf("%s cancelou a corrida\n", cliente.nome);
+            scanf("%s", cliente.nome);
+            maximiza_prioridade(fila, cliente.nome);
+            cliente_cancelado = remove_max(fila);
+            printf("%s cancelou a corrida\n", cliente_cancelado->nome);
             break;
         case 'T':
             printf("\nJornada finalizada. Aqui esta o seu rendimento de hoje\n");
