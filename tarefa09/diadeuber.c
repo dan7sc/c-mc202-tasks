@@ -38,6 +38,7 @@ int main() {
             break;
         case 'F':
             printf("A corrida de %s foi finalizada\n", cliente_em_atendimento->nome);
+            free(cliente_em_atendimento);
             cliente_em_atendimento = remove_max(fila);
             break;
         case 'C':
@@ -45,6 +46,7 @@ int main() {
             maximiza_prioridade(fila, cliente.nome);
             cliente_cancelado = remove_max(fila);
             printf("%s cancelou a corrida\n", cliente_cancelado->nome);
+            free(cliente_cancelado);
             break;
         case 'T':
             printf("\nJornada finalizada. Aqui esta o seu rendimento de hoje\n");
