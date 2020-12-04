@@ -1,4 +1,5 @@
 #include "heap.h"
+#include <string.h>
 #include <math.h>
 
 int obtem_pai(int indice) {
@@ -95,26 +96,28 @@ PHeap insere(PHeap heap, Cliente dado) {
     return heap;
 }
 
-Cliente remove_max(PHeap heap) {
-    Cliente dado;
+Cliente *remove_max(PHeap heap) {
+    Cliente *dado = NULL;
 
-    if (!heap_vazio(heap)) {
-        dado = heap->v_dados[0];
-        heap->v_dados[0]  = heap->v_dados[heap->n_elementos - 1];
-        heap->n_elementos--;
-        desce_heap(heap, 0);
+    if (heap_vazio(heap)) {
+        return NULL;
     }
+
+    dado = malloc(sizeof(Cliente));
+    *dado = heap->v_dados[0];
+    heap->v_dados[0]  = heap->v_dados[heap->n_elementos - 1];
+    heap->n_elementos--;
+    desce_heap(heap, 0);
 
     return dado;
 }
 
-void muda_prioridade(PHeap heap, int indice, int valor) {
-    if (heap->v_dados[indice].avaliacao < valor) {
-        heap->v_dados[indice].avaliacao = valor;
-        sobe_heap(heap, indice);
-    } else {
-        heap->v_dados[indice].avaliacao = valor;
-        desce_heap(heap, indice);
+void muda_prioridade(PHeap heap, char *str) {
+    for (int i = 0; i < heap->n_elementos; i++) {
+        if(strcmp(str, heap->v_dados[i].nome) == 0) {
+            heap->v_dados[i].avaliacao = 6;
+            sobe_heap(heap, i);
+        }
     }
 }
 

@@ -53,7 +53,7 @@ Boolean heap_vazio(PHeap heap);
 
 PHeap insere(PHeap h, Cliente dado);
 
-Cliente remove_max(PHeap heap);
+Cliente *remove_max(PHeap heap);
 
 PHeap heap_sort(PHeap heap);
 
