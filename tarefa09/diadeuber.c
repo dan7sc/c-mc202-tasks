@@ -54,9 +54,6 @@ int main() {
         }
     } while(acao != 'T');
 
-    imprime_sequencia(fila);
-    imprime_heap(fila, 0, 1);
-
     destroi_heap(fila);
 
     return 0;
