@@ -6,7 +6,9 @@ LDFLAGS = -lm
 all: corretor
 
 corretor: corretor.c
-	gcc $(CFLAGS) corretor.c -o corretor $(LDFLAGS)
+	gcc $(CFLAGS) -c hash.c $(LDFLAGS)
+	gcc $(CFLAGS) -c corretor.c $(LDFLAGS)
+	gcc $(CFLAGS) -o corretor corretor.o hash.o $(LDFLAGS)
 
 clean:
 	rm -f corretor
