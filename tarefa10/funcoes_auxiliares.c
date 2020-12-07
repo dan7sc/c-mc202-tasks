@@ -23,13 +23,13 @@ void gera_substring(char *string, int inicio, char *substring, int tamanho) {
 }
 
 Boolean eh_substring(char *string, int inicio, char *substring) {
-    int igual = 0;
+    int eh_igual = 0;
     int contador = 0;
     int tam_substring = strlen(substring);
 
     for(int i = inicio, j = 0; string[i] != '\0' && substring[j] != '\0'; i++, j++) {
-        igual = compara_caracteres(string[i], substring[j]);
-        if(igual == TRUE) {
+        eh_igual = compara_caracteres(string[i], substring[j]);
+        if(eh_igual) {
             contador++;
         }
     }
@@ -40,8 +40,8 @@ Boolean eh_substring(char *string, int inicio, char *substring) {
     return FALSE;
 }
 
-Boolean contem_string_substring(char *string, char *substring) {
-    int igual = 0;
+Boolean contem_substring(char *string, char *substring) {
+    int eh_igual = 0;
     int contador = 0;
     int tam_str = 0;
     int tam_sub = 0;
@@ -52,8 +52,8 @@ Boolean contem_string_substring(char *string, char *substring) {
 
     for(k = 0; k < (tam_str - tam_sub); k++) {
         for(int i = k, j = 0; string[i] != '\0' && substring[j] != '\0'; i++, j++) {
-            igual = compara_caracteres(string[i], substring[j]);
-            if(igual == TRUE) {
+            eh_igual = compara_caracteres(string[i], substring[j]);
+            if(eh_igual) {
                 contador++;
             } else {
                 contador = 0;
@@ -67,24 +67,6 @@ Boolean contem_string_substring(char *string, char *substring) {
     return FALSE;
 }
 
-int conta_substrings_B_em_A(char *string_a, char *string_b) {
-    int contador;
-    int tam_sub_b = strlen(string_b) / 3;
-    int tam_str_a = strlen(string_a);
-
-    for(int k = 0; string_b[k] != '\0'; k += 3) {
-        contador = 0;
-        for(int i = 0; string_a[i] != '\0' && i < tam_str_a - tam_sub_b; i++) {
-            if(eh_substring(string_a, i, string_b) == TRUE) {
-                contador++;
-                break;
-            }
-        }
-    }
-
-    return contador;
-}
-
 Boolean verifica_verossimilhanca(char *string_a, char *string_b) {
     int contador = 0;
     int total = 0;
@@ -96,7 +78,7 @@ Boolean verifica_verossimilhanca(char *string_a, char *string_b) {
         for(int k = 0; string_a[k] != '\0' && k < (tam_str_a - tam_sub + 1); k++) {
             inicializa_string(substring, tam_sub);
             gera_substring(string_b, k, substring, tam_sub);
-            if(contem_string_substring(string_a, substring) == TRUE) {
+            if(contem_substring(string_a, substring)) {
                 contador++;
             }
             total++;
@@ -110,16 +92,16 @@ Boolean verifica_verossimilhanca(char *string_a, char *string_b) {
     return FALSE;
 }
 
-int verifica_remocao_caractere(char *valor, char *palavra) {
+int verifica_caracteres_faltantes(char *valor, char *palavra) {
     int contador = 0;
-    int igual = 0;
+    int eh_igual = 0;
     int dif = 0;
     char palavra_gerada[N_CHAR];
     int i, j;
 
     for(i = 0, j = 0; valor[i] != '\0' && i >= 0; i++, j++) {
-        igual = compara_caracteres(valor[i], palavra[j]);
-        if(igual == TRUE) {
+        eh_igual = compara_caracteres(valor[i], palavra[j]);
+        if(eh_igual) {
             contador++;
             palavra_gerada[i] = palavra[j];
         } else {
@@ -137,16 +119,16 @@ int verifica_remocao_caractere(char *valor, char *palavra) {
     return dif > 1 ? 0 : 1;
 }
 
-int verifica_insercao_caractere(char *valor, char *palavra) {
+int verifica_caracteres_excedentes(char *valor, char *palavra) {
     int contador = 0;
-    int igual = 0;
+    int eh_igual = 0;
     int dif = 0;
     char palavra_gerada[N_CHAR];
     int i, j;
 
     for(i = 0, j = 0; valor[i] != '\0'; i++, j++) {
-        igual = compara_caracteres(valor[i], palavra[j]);
-        if(igual == TRUE) {
+        eh_igual = compara_caracteres(valor[i], palavra[j]);
+        if(eh_igual) {
             contador++;
             palavra_gerada[i] = palavra[j];
         } else {
@@ -164,16 +146,16 @@ int verifica_insercao_caractere(char *valor, char *palavra) {
     return dif > 1 ? 0 : 1;
 }
 
-int verifica_troca_caracteres(char *valor, char *palavra) {
+int verifica_caracteres_trocados(char *valor, char *palavra) {
     int contador = 0;
-    int igual = 0;
+    int eh_igual = 0;
     int dif = 0;
     char palavra_gerada[N_CHAR];
     int i, j;
 
     for(i = 0, j = 0; valor[i] != '\0'; i++, j++) {
-        igual = compara_caracteres(valor[i], palavra[j]);
-        if(igual == TRUE) {
+        eh_igual = compara_caracteres(valor[i], palavra[j]);
+        if(eh_igual) {
             contador++;
             palavra_gerada[i] = palavra[i];
         } else {
@@ -190,7 +172,7 @@ int verifica_troca_caracteres(char *valor, char *palavra) {
     return dif > 1 ? 0 : 1;
 }
 
-void verifica_palavra_dicionario(PHash hash, char *palavra) {
+void verifica_palavra_no_dicionario(PHash hash, char *palavra) {
     int cor = -1;
     char *temp = NULL;
     int tamanho_palavra = 0;
@@ -210,11 +192,11 @@ void verifica_palavra_dicionario(PHash hash, char *palavra) {
             eh_verossimel = verifica_verossimilhanca(*hash->tabela[i].valor, palavra);
             if(eh_verossimel && abs(tamanho_palavra - tamanho_valor) < 2 ) {
                 if(tamanho_valor > tamanho_palavra) {
-                    cor = verifica_remocao_caractere(*hash->tabela[i].valor, palavra);
+                    cor = verifica_caracteres_faltantes(*hash->tabela[i].valor, palavra);
                 } else if(tamanho_valor < tamanho_palavra) {
-                    cor = verifica_insercao_caractere(*hash->tabela[i].valor, palavra);
+                    cor = verifica_caracteres_excedentes(*hash->tabela[i].valor, palavra);
                 } else {
-                    cor = verifica_troca_caracteres(*hash->tabela[i].valor, palavra);
+                    cor = verifica_caracteres_trocados(*hash->tabela[i].valor, palavra);
                 }
             }
         }

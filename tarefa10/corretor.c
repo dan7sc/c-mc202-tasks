@@ -20,7 +20,7 @@ int main() {
     palavra_texto = calloc(N_CHAR, sizeof(char));
     for(int i = 0; i < num_palavras_texto; i++) {
         scanf("%s", palavra_texto);
-        verifica_palavra_dicionario(h, palavra_texto);
+        verifica_palavra_no_dicionario(h, palavra_texto);
     }
 
     free(palavra_texto);
