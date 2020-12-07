@@ -24,6 +24,12 @@ typedef struct hash {
 } Hash;
 typedef struct hash * PHash;
 
+int busca_potencia2_maior_N(int n);
+
+Boolean eh_primo(int num);
+
+int busca_primo(int tamanho);
+
 PHash cria_tabela_hash(int tamanho);
 
 void destroi_tabela_hash(PHash hash);
