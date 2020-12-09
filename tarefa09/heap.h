@@ -3,8 +3,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <math.h>
 
-#define N_CHAR 15
+#define N_CHAR 15 // numero maximo de caracteres no nome do cliente
+#define N_ACAO 500 // numero maximo de ações realizadas pelo motorista
 
 // enum para definir boolean: { FALSE = 0, TRUE = 1 }
 typedef enum {
@@ -13,15 +16,15 @@ typedef enum {
 } Boolean;
 
 typedef struct posicao {
-    int x;
-    int y;
+    int x; // coordenada cartesiana x
+    int y; // coordenada cartesiana y
 } Posicao;
 
 typedef struct cliente {
-    char nome[N_CHAR];
-    double avaliacao;
-    Posicao origem;
-    Posicao destino;
+    char nome[N_CHAR]; // nome do cliente
+    double avaliacao; // avalicação do cliente
+    Posicao origem; // posicao de origem do cliente
+    Posicao destino; // posicao do destino do cliente
 } Cliente;
 
 typedef struct heap {
