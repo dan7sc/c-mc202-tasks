@@ -16,15 +16,24 @@ int calcula_distancia(Posicao origem, Posicao destino) {
 
 // calcula o rendimento bruto do motorista
 double calcula_rendimento_bruto(int n_cancelamentos, int km_rodados) {
-    return (7*n_cancelamentos + 1.4*km_rodados);
+    int taxa_cancelamento = 7;
+    float pagamento_por_km = 1.4;
+
+    return (taxa_cancelamento * n_cancelamentos + pagamento_por_km * km_rodados);
 }
 
 // calcula despesas do motorista
 double calcula_despesas(int km_rodados) {
-    return (57 + (4.104*km_rodados)/10);
+    int custo_aluguel_por_dia = 57;
+    float custo_gasolina_por_litro = 4.104;
+    int consumo_km_por_litro = 10;
+
+    return (custo_aluguel_por_dia + (custo_gasolina_por_litro * km_rodados) / consumo_km_por_litro);
 }
 
 // calcula o rendimento liquido do motorista
 double calcula_rendimento_liquido(double rbruto, double despesas) {
-    return (0.75*rbruto - despesas);
+    float taxa_uber = 0.25;
+
+    return ((1 - taxa_uber) * rbruto - despesas);
 }

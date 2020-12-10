@@ -7,7 +7,7 @@ int main() {
     Cliente cliente;
     Cliente *cliente_em_atendimento = NULL; // cliente sendo levado pelo motorista
     Cliente *cliente_cancelado = NULL; // cliente que cancelou a corrida
-    int km_rodados = 0; // kilometros rodados pelo motorista
+    int km_rodados_nao_pagos = 0; // kilometros rodados pelo motorista sem o cliente
     int km_rodados_pagos = 0; // kilometros rodados pelo motorista junto com o cliente
     int n_cancelamentos = 0; // numero do cancelamentos feitos pelos clientes
     Posicao atual; // posicao atual do motorista em coordenadas cartesianas
@@ -44,11 +44,9 @@ int main() {
         // o motorista finalizou a corrida atual
         case 'F':
             // soma kilometros percorridos da posicao atual do motorista até a posicao do cliente
-            km_rodados += calcula_distancia(atual, cliente_em_atendimento->origem);
+            km_rodados_nao_pagos += calcula_distancia(atual, cliente_em_atendimento->origem);
             // atualiza posicao atual do motorista
             atual = cliente_em_atendimento->origem;
-            // soma kilometros percorridos até a posicao de destino do cliente
-            km_rodados += calcula_distancia(atual, cliente_em_atendimento->destino);
             // soma kilometros em que o motorista está levando o cliente ate o destino deste
             km_rodados_pagos += calcula_distancia(atual, cliente_em_atendimento->destino);
             // atualiza posicao atual do motorista
@@ -75,12 +73,12 @@ int main() {
         case 'T':
             // imprime relatorio
             printf("\nJornada finalizada. Aqui esta o seu rendimento de hoje\n");
-            printf("Km total: %d\n", km_rodados);
+            printf("Km total: %d\n", km_rodados_nao_pagos + km_rodados_pagos);
             printf("Rendimento bruto: %.2lf\n", calcula_rendimento_bruto(n_cancelamentos, km_rodados_pagos));
-            printf("Despesas: %.2lf\n", calcula_despesas(km_rodados));
+            printf("Despesas: %.2lf\n", calcula_despesas(km_rodados_nao_pagos + km_rodados_pagos));
             printf("Rendimento liquido: %.2lf\n", calcula_rendimento_liquido(
                        calcula_rendimento_bruto(n_cancelamentos, km_rodados_pagos),
-                       calcula_despesas(km_rodados)));
+                       calcula_despesas(km_rodados_nao_pagos + km_rodados_pagos)));
             break;
         }
     } while(acao != 'T');
