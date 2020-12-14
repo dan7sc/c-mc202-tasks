@@ -13,3 +13,4 @@ corretor: corretor.c
 
 clean:
 	rm -f corretor
+	rm -f *.o

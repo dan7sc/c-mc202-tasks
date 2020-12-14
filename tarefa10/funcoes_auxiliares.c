@@ -105,7 +105,7 @@ int verifica_caracteres_excedentes(char *valor, char *palavra) {
     char palavra_gerada[N_CHAR];
     int i, j;
 
-    for(i = 0, j = 0; palavra[i] != '\0'; i++, j++) {
+    for(i = 0, j = 0; palavra[j] != '\0'; i++, j++) {
         eh_igual = compara_caracteres(valor[i], palavra[j]);
         if(eh_igual) {
             contador++;
