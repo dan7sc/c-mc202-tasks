@@ -6,7 +6,7 @@
 #include <string.h>
 #include <math.h>
 
-#define N_CHAR 25
+#define N_CHAR 25 // numero maximo de caracteres das palavras
 
 // enum para definir boolean: { FALSE = 0, TRUE = 1 }
 typedef enum {
@@ -15,12 +15,12 @@ typedef enum {
 } Boolean;
 
 typedef struct tabela {
-    char **valor;
+    char **valor; // valor guardado no hash
 } Tabela;
 
 typedef struct hash {
-    Tabela *tabela;
-    int tamanho;
+    Tabela *tabela; // tabela de hashing
+    int tamanho; // tamanho da tabela de hashing
 } Hash;
 typedef struct hash * PHash;
 
