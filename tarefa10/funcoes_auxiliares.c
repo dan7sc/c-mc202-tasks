@@ -1,11 +1,5 @@
 #include "funcoes_auxiliares.h"
 
-void inicializa_string(char *str, int tamanho) {
-    for(int i = 0; i < tamanho; i++) {
-        str[i] = '\0';
-    }
-}
-
 /* compara caracteres dados na entrada
    retorna TRUE se forem iguais
    e FALSE caso contrario
@@ -14,60 +8,6 @@ Boolean compara_caracteres(char a, char b) {
     if(a == b) {
         return TRUE;
     }
-    return FALSE;
-}
-
-void gera_substring(char *string, int inicio, char *substring, int tamanho) {
-    int tam = inicio + tamanho;
-
-    inicializa_string(substring, N_CHAR);
-    for(int i = inicio, j = 0; i < tam && string[i] != '\0'; i++, j++) {
-        substring[j] = string[i];
-    }
-}
-
-Boolean eh_substring(char *string, int inicio, char *substring) {
-    int eh_igual = 0;
-    int contador = 0;
-    int tam_substring = strlen(substring);
-
-    for(int i = inicio, j = 0; string[i] != '\0' && substring[j] != '\0'; i++, j++) {
-        eh_igual = compara_caracteres(string[i], substring[j]);
-        if(eh_igual) {
-            contador++;
-        }
-    }
-    if(contador == tam_substring) {
-        return TRUE;
-    }
-
-    return FALSE;
-}
-
-Boolean contem_substring(char *string, char *substring) {
-    int eh_igual = 0;
-    int contador = 0;
-    int tam_str = 0;
-    int tam_sub = 0;
-    int k = 0;
-
-    tam_str = strlen(string);
-    tam_sub = strlen(substring);
-
-    for(k = 0; k < (tam_str - tam_sub); k++) {
-        for(int i = k, j = 0; string[i] != '\0' && substring[j] != '\0'; i++, j++) {
-            eh_igual = compara_caracteres(string[i], substring[j]);
-            if(eh_igual) {
-                contador++;
-            } else {
-                contador = 0;
-            }
-            if(contador == tam_sub) {
-                return TRUE;
-            }
-        }
-    }
-
     return FALSE;
 }
 
