@@ -1,15 +1,11 @@
 #ifndef GRAFO_H
 #define GRAFO_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "lista.h"
 
 typedef enum ponto {
-    Red = 0,
-    pokestop = 1,
-    Lugia = 2
+    pokestop = 0,
+    Lugia = 1
 } Ponto;
 
 typedef struct posicao {
@@ -49,7 +45,14 @@ void adiciona_arestas(PGrafo grafo, PVertice v);
 
 void insere_aresta(PVertice u, PVertice v);
 
+PVertice busca_vertice(PGrafo grafo, int id);
+
 int tem_aresta(PVertice u, PVertice v);
+
+int distancia_aresta(PVertice u, PVertice v);
+
+int bfs(PGrafo grafo, PVertice origem, PVertice destino);
+/* void bfs(PGrafo grafo, PVertice origem); */
 
 void imprime_vertices(PGrafo grafo, void (*imprime)(void *));
 
