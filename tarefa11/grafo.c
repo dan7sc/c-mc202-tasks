@@ -469,7 +469,7 @@ int bfs(PGrafo grafo, PVertice origem, PVertice destino) {
     predecessor = origem;
     alvo = destino;
 
-    maior_aresta = 1;
+    maior_aresta = 0;
     atual = 0;
     while(!fila_vazia(fila)) {
         for(int i = 0; i < grafo->n; i++) {
