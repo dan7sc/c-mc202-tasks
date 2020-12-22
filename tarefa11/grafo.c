@@ -549,7 +549,7 @@ int bfs(PGrafo grafo, PVertice origem, PVertice destino) {
     /* printf("%d\n", id); */
 
     maior_aresta = 0;
-    for(int i = grafo->n; i > 0; i--) {
+    for(int i = grafo->n - 1; i > 0; i--) {
         if(pai[i] > 0) {
             if(maior_aresta < m[pai[i]][i]) {
                 maior_aresta = m[pai[i]][i];
@@ -560,6 +560,10 @@ int bfs(PGrafo grafo, PVertice origem, PVertice destino) {
     destroi_fila(fila);
     free(visitado);
     free(pai);
+    for(int i = 0; i < grafo->n; i++) {
+        free(m[i]);
+    }
+    free(m);
 
     return maior_aresta;
 }
