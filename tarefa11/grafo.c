@@ -443,12 +443,12 @@ int bfs(PGrafo grafo, PVertice origem, PVertice destino) {
     int aresta_predecessor, aresta_alvo;
     int *pai = malloc(grafo->n * sizeof(int));
     int *visitado = malloc(grafo->n * sizeof(int));
-    PFila fila = cria_fila();
+    /* PFila fila = cria_fila(); */
     int maior_aresta;
     int **m = cria_matriz_quadrada(grafo->n);
     int n_vertices;
-    int aresta;
-    int atual;
+    /* int aresta; */
+    /* int atual; */
 
     grafo_em_matriz(m, grafo);
     /* imprime_matriz_quadrada(m, grafo->n); */
@@ -458,32 +458,24 @@ int bfs(PGrafo grafo, PVertice origem, PVertice destino) {
         visitado[i] = 0;
     }
 
-    fila = enfileira(fila, origem);
+    /* fila = enfileira(fila, origem); */
 
-    /* pai[origem->id] = origem->id; */
-    /* pai[destino->id] = origem->id; */
+    pai[origem->id] = origem->id;
+    pai[destino->id] = origem->id;
 
-    /* visitado[origem->id] = 1; */
-    /* visitado[destino->id] = 1; */
+    visitado[origem->id] = 1;
+    visitado[destino->id] = 1;
 
     predecessor = origem;
     alvo = destino;
 
     maior_aresta = 0;
-    atual = 0;
-    while(!fila_vazia(fila)) {
-        for(int i = 0; i < grafo->n; i++) {
-            pai[i] = -1;
-            visitado[i] = 0;
-        }
-        pai[origem->id] = origem->id;
-        pai[destino->id] = origem->id;
-        visitado[origem->id] = 1;
-        visitado[destino->id] = 1;
-
-        aresta = 0;
+    /* atual = 0; */
+    while(predecessor->id == origem->id) {
+    /* while(!fila_vazia(fila)) { */
+        /* aresta = 0; */
         maior_aresta++;
-        predecessor = desenfileira(fila);
+        /* predecessor = desenfileira(fila); */
         if(distancia_aresta(origem, destino) <= maior_aresta) {
             maior_aresta = distancia_aresta(origem, destino);
             /* return maior_aresta; */
@@ -491,6 +483,14 @@ int bfs(PGrafo grafo, PVertice origem, PVertice destino) {
         /* printf("#### pred_id: %2d   alvo_id: %2d\n", predecessor->id, alvo->id); */
         /* printf("**** LOOP ****\n"); */
         /* printf("** maior aresta: %d\n", maior_aresta); */
+
+        /* for(int i = 0; i < grafo->n; i++) { */
+        /*     if(origem->id != i && alvo->id != i) { */
+        /*         pai[i] = -1; */
+        /*         visitado[i] = 0; */
+        /*     } */
+        /* } */
+
         for(n_vertices = 3; n_vertices < grafo->n; n_vertices++) {
             for(int i = 0; i < grafo->n; i++) {
                 aresta_predecessor = m[predecessor->id][i];
@@ -498,39 +498,50 @@ int bfs(PGrafo grafo, PVertice origem, PVertice destino) {
                 if(!visitado[i] && aresta_predecessor <= maior_aresta && aresta_alvo <= maior_aresta) {
                     /* printf("** i: %2d  --  visitado: %2d\n", i, visitado[i]); */
                     /* printf("** predecessor: %2d  --  alvo: %2d\n", aresta_predecessor, aresta_alvo); */
-                    if(atual < aresta_predecessor || atual < aresta_alvo) {
-                        atual = aresta_predecessor > aresta_alvo ? aresta_predecessor : aresta_alvo;
-                    }
+                    /* if(atual < aresta_predecessor || atual < aresta_alvo) { */
+                    /*     atual = aresta_predecessor > aresta_alvo ? aresta_predecessor : aresta_alvo; */
+                    /* } */
 
                     visitado[i] = 1;
                     pai[i] = predecessor->id;
                     pai[alvo->id] = i;
 
                     predecessor = busca_vertice(grafo, i);
-                    fila = enfileira(fila, predecessor);
-                    aresta += 1;
+                    /* fila = enfileira(fila, predecessor); */
+                    /* aresta += 1; */
                 }
             }
+            /* int id = destino->id; */
+            /* int nv = 0; */
+            /* while(id != origem->id && nv < grafo->n) { */
+            /*     printf("%d <-( %d )- ", id , m[pai[id]][id]); */
+            /*     id = pai[id]; */
+            /*     nv++; */
+            /* } */
+            /* printf("%d\n", id); */
+
         }
         /* printf("....\n"); */
         /* int id = destino->id; */
-        /* while(id != origem->id) { */
-        /*     printf("%d <-(%d)- ", id , m[pai[id]][id]); */
+        /* n_vertices = 0; */
+        /* while(id != origem->id && n_vertices < grafo->n) { */
+        /*     printf("%d <-( %d )- ", id , m[pai[id]][id]); */
         /*     id = pai[id]; */
+        /*     n_vertices++; */
         /* } */
         /* printf("%d\n", id); */
 
 
         /* printf("** atual: %d\n", atual); */
         /* printf("** aresta: %d\n", aresta); */
-        if(aresta > 0) {
-            /* printf("............ BREAK ............\n"); */
-            break;
-        }
+        /* if(aresta > 0) { */
+        /*     /\* printf("............ BREAK ............\n"); *\/ */
+        /*     break; */
+        /* } */
 
-        if(predecessor->id == origem->id) {
-            fila = enfileira(fila, origem);
-        }
+        /* if(predecessor->id == origem->id) { */
+        /*     fila = enfileira(fila, origem); */
+        /* } */
     }
 
     /* for(int i = 0; i < grafo->n; i++) { */
@@ -557,7 +568,7 @@ int bfs(PGrafo grafo, PVertice origem, PVertice destino) {
         }
     }
 
-    destroi_fila(fila);
+    /* destroi_fila(fila); */
     free(visitado);
     free(pai);
     for(int i = 0; i < grafo->n; i++) {
