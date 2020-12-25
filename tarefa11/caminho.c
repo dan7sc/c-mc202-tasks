@@ -75,7 +75,7 @@ int main() {
     }
 
     /* maior_aresta = bfs(g, raiz, destino); */
-    printf("%d\n", maior_aresta);
+    printf("====>>>>  maior aresta: %d\n", maior_aresta);
 
     /* imprime_vertices(g, imprime_adjacencia); */
     /* calcula_distancias_vertice_adjacencia(g->vertice); */
