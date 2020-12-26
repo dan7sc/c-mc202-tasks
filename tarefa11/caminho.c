@@ -67,6 +67,7 @@ int main() {
         if(destino->info.ponto == Lugia) {
             /* printf("%d\n", destino->id); */
             aresta = bfs(g, raiz, destino);
+            /* bfs(g, raiz); */
             /* printf("%d\n", aresta); */
             if(aresta < maior_aresta) {
                 maior_aresta = aresta;
@@ -75,7 +76,8 @@ int main() {
     }
 
     /* maior_aresta = bfs(g, raiz, destino); */
-    printf("====>>>>  maior aresta: %d\n", maior_aresta);
+    /* printf("====>>>>  maior aresta: %d\n", maior_aresta); */
+    printf("%d\n", maior_aresta);
 
     /* imprime_vertices(g, imprime_adjacencia); */
     /* calcula_distancias_vertice_adjacencia(g->vertice); */
