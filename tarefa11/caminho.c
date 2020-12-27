@@ -48,7 +48,7 @@ int main() {
     char ponto[8];
     Posicao origem;
     int maior_aresta = (int)INFINITY;
-    int aresta = 0;
+    int aresta, encontrou;
 
     scanf("%f %f", &origem.x, &origem.y);
     para_de_ler_entrada = scanf("%f %f %s", &v.info.posicao.x, &v.info.posicao.y, ponto);
@@ -66,7 +66,13 @@ int main() {
     for(destino = g->vertice; destino != NULL; destino = destino->proximo) {
         if(destino->info.ponto == Lugia) {
             /* printf("%d\n", destino->id); */
-            aresta = bfs(g, raiz, destino);
+            encontrou = 0;
+            aresta = 1;
+            while(!encontrou) {
+                /* printf("****\n"); */
+                aresta++;
+                encontrou = bfs(g, raiz, destino, aresta);
+            }
             /* bfs(g, raiz); */
             /* printf("%d\n", aresta); */
             if(aresta < maior_aresta) {

@@ -51,7 +51,7 @@ int tem_aresta(PVertice u, PVertice v);
 
 int distancia_aresta(PVertice u, PVertice v);
 
-int bfs(PGrafo grafo, PVertice origem, PVertice destino);
+int bfs(PGrafo grafo, PVertice origem, PVertice destino, int aresta);
 /* void bfs(PGrafo grafo, PVertice origem); */
 
 void imprime_vertices(PGrafo grafo, void (*imprime)(void *));
