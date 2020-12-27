@@ -44,8 +44,9 @@ void calcula_distancias_vertice_adjacencia(PVertice v) {
 int main() {
     PGrafo g = cria_grafo();
     Vertice v;
-    PVertice raiz, destino;
+    PVertice raiz;
     PVertice u, w;
+    PVertice *lugias;
     int para_de_ler_entrada;
     char ponto[8];
     Posicao origem;
@@ -63,19 +64,29 @@ int main() {
         para_de_ler_entrada = scanf("%f %f %s", &v.info.posicao.x, &v.info.posicao.y, ponto);
     }
 
-    raiz = g->vertice;
-    while(raiz->info.posicao.x != origem.x && raiz->info.posicao.y != origem.y) {
-        raiz = raiz->proximo;
-    }
-
+    indice = 0;
+    lugias = calloc(g->n, sizeof(PVertice));
     heap = cria_heap(g->n);
     for(int i = 0; i < g->n; i++) {
+        u = busca_vertice(g, i);
+        if(origem.x == u->info.posicao.x && origem.y == u->info.posicao.y) {
+            raiz = u;
+        }
+        if(u->info.ponto == Lugia) {
+            lugias[indice] = u;
+            indice++;
+        }
         for(int j = i+1; j < g->n; j++) {
-            u = busca_vertice(g, i);
             w = busca_vertice(g, j);
             heap = insere(heap, distancia_aresta(u, w));
         }
     }
+
+    /* for(int i = 0; lugias[i] != 0 ; i++) { */
+    /*     w = lugias[i]; */
+    /*     printf("%d ", w->id); */
+    /* } */
+    /* printf("\n"); */
 
     /* imprime_sequencia(heap); */
 
@@ -93,29 +104,19 @@ int main() {
     /* } */
     /* printf("\n"); */
 
-    for(destino = g->vertice; destino != NULL; destino = destino->proximo) {
-        if(destino->info.ponto == Lugia) {
-            /* printf("%d\n", destino->id); */
-            for(indice = 0; indice < tam_heap; indice++) {
-                encontrou = bfs(g, raiz, destino, arestas[indice]);
-                /* printf("%d\n", encontrou); */
-                if(encontrou) break;
-            }
-            /* bfs(g, raiz); */
-            /* printf("%d\n", aresta); */
-            if(arestas[indice] < maior_aresta) {
-                maior_aresta = arestas[indice];
-            }
+    for(int i = 0; lugias[i] != 0; i++) {
+        for(indice = 0; indice < tam_heap; indice++) {
+            encontrou = bfs(g, raiz, lugias[i], arestas[indice]);
+            if(encontrou) break;
+        }
+        if(arestas[indice] < maior_aresta) {
+            maior_aresta = arestas[indice];
         }
     }
 
-    /* maior_aresta = bfs(g, raiz, destino); */
-    /* printf("====>>>>  maior aresta: %d\n", maior_aresta); */
     printf("%d\n", maior_aresta);
 
-    /* imprime_vertices(g, imprime_adjacencia); */
-    /* calcula_distancias_vertice_adjacencia(g->vertice); */
-
+    free(lugias);
     free(arestas);
     destroi_grafo(g);
     destroi_heap(heap);
