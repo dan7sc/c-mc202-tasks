@@ -4,14 +4,14 @@
 typedef struct fno * PFNo;
 
 typedef struct fno {
-    void *dado;
-    PFNo proximo;
+    void *dado; // ponteiro para o dado do nó
+    PFNo proximo; // ponteiro para o proximo nó da fila
 } FNo;
 
 typedef struct fila {
-    int tamanho;
-    PFNo inicio;
-    PFNo fim;
+    int tamanho; // tamanho da fila
+    PFNo inicio; // ponteiro para o inicio da fila
+    PFNo fim; // ponteiro para o fim da fila
 } Fila;
 typedef Fila * PFila;
 

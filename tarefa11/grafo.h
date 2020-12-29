@@ -9,27 +9,27 @@ typedef enum ponto {
 } Ponto;
 
 typedef struct posicao {
-    float x;
-    float y;
+    float x; // posição na coordenada x
+    float y; // posição na coordenada y
 } Posicao;
 
 typedef struct info {
-    Posicao posicao;
-    Ponto ponto;
+    Posicao posicao; // tipo para posicao
+    Ponto ponto; // tipo enum para o ponto de interesse que pode ser pokestop = 0 ou Lugia = 1
 } Info;
 
 typedef struct vertice {
-    int id;
-    Info info;
-    PNo adjacencia;
-    struct vertice * proximo;
+    int id; // id de identifição do vertice
+    Info info; // tipo para armazenar informação do vertice
+    PNo adjacencia; // lista de adjacencia do vertice
+    struct vertice * proximo; // ponteiro para proximo vertice
 } Vertice;
 typedef Vertice * PVertice;
 
 
 typedef struct grafo {
-    PVertice vertice;
-    int n;
+    PVertice vertice; // inicio da lista de vertices
+    int n; // número de vértices do grafo
 } Grafo;
 typedef Grafo * PGrafo;
 
@@ -52,7 +52,6 @@ int tem_aresta(PVertice u, PVertice v);
 int distancia_aresta(PVertice u, PVertice v);
 
 int bfs(PGrafo grafo, PVertice origem, PVertice destino, int aresta);
-/* void bfs(PGrafo grafo, PVertice origem); */
 
 void imprime_vertices(PGrafo grafo, void (*imprime)(void *));
 

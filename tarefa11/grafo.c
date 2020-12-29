@@ -2,9 +2,12 @@
 #include <stdlib.h>
 #include <math.h>
 #include "fila.h"
-#include "pilha.h"
 #include "grafo.h"
 
+/* A funcao recebe o grafo e os dados do vertice
+   a ser criado, aloca vertice e armazena os dados
+   do vertice, retornando o vertice criado
+ */
 PVertice cria_vertice(PGrafo grafo, Vertice v) {
     PVertice vertice = calloc(1, sizeof(Vertice));
 
@@ -17,6 +20,10 @@ PVertice cria_vertice(PGrafo grafo, Vertice v) {
     return vertice;
 }
 
+/* A funcao aloca memoria para o tipo Grafo
+   e inicializa o grafo, retornando o
+   ponteiro para o grafo
+ */
 PGrafo cria_grafo() {
     PGrafo grafo = calloc(1, sizeof(Grafo));
 
@@ -26,6 +33,9 @@ PGrafo cria_grafo() {
     return grafo;
 }
 
+/* A funcao libera a memoria de cada vertice
+   do grafo e da lista de adjacencia de cada vertice
+*/
 void destroi_vertices(PVertice vertice) {
     if(vertice != NULL) {
         destroi_vertices(vertice->proximo);
@@ -34,11 +44,18 @@ void destroi_vertices(PVertice vertice) {
     }
 }
 
+/* A funcao recebe o grafo e
+   libera a memoria alocada para o grafo
+*/
 void destroi_grafo(PGrafo grafo) {
     destroi_vertices(grafo->vertice);
     free(grafo);
 }
 
+/* A funcao recebe o grafo e os dados do
+   vertice a ser inserido, retornando
+   o grafo com o vertice inserido
+*/
 PGrafo insere_vertice(PGrafo grafo, Vertice v) {
     PVertice novo_vertice = cria_vertice(grafo, v);
     PVertice atual = NULL;
@@ -61,6 +78,11 @@ PGrafo insere_vertice(PGrafo grafo, Vertice v) {
     return grafo;
 }
 
+/* A funcao recebe o grafo e o vertice
+   em cuja lista de adjacencia serão
+   inseridos os outro vertices do grafo
+   formando um grafo completo
+*/
 void adiciona_arestas(PGrafo grafo, PVertice v) {
     PVertice atual;
 
@@ -71,11 +93,20 @@ void adiciona_arestas(PGrafo grafo, PVertice v) {
     }
 }
 
+/* A funcao recebe o vertice u e o vertice v,
+   criando arestas entre estes dois vertices
+   e formando um grafo não orientado
+*/
 void insere_aresta(PVertice u, PVertice v) {
     u->adjacencia = adiciona_na_lista(u->adjacencia, v);
     v->adjacencia = adiciona_na_lista(v->adjacencia, u);
 }
 
+/* A funcao recebe o grafo e o id do vertice
+   que será usado para localizar o vertice no grafo,
+   retornando ponteiro para o vertice achado ou
+   zero caso não haja vertice com o id dado
+*/
 PVertice busca_vertice(PGrafo grafo, int id) {
     PVertice v = NULL;
     PVertice atual = grafo->vertice;
@@ -90,6 +121,10 @@ PVertice busca_vertice(PGrafo grafo, int id) {
     return 0;
 }
 
+/* A funcao recebe o vertice u e o vertice v
+   e verifica se eles possuem aresta,
+   retornando 1 se possuirem e zero caso não
+*/
 int tem_aresta(PVertice u, PVertice v) {
     PNo atual;
 
@@ -103,6 +138,10 @@ int tem_aresta(PVertice u, PVertice v) {
     return 0;
 }
 
+/* A funcao recebe o vertice u e o vertice v
+   e calcula a distancia entre os dois vertices,
+   retornando a distandia obtida
+*/
 int distancia_aresta(PVertice u, PVertice v) {
     float p1 = pow(u->info.posicao.x - v->info.posicao.x, 2);
     float p2 = pow(u->info.posicao.y - v->info.posicao.y, 2);
@@ -313,7 +352,10 @@ void imprime(void *v) {
 /*     free(menor_visitado); */
 /* } */
 
-
+/* A funcao recebe um inteiro para o
+   tamanho da matriz quadrada,
+   retornado a matriz criada
+*/
 int **cria_matriz_quadrada(int n) {
     int **m = calloc(1, n * sizeof(int *));
 
@@ -324,6 +366,10 @@ int **cria_matriz_quadrada(int n) {
     return m;
 }
 
+/* A funcao recebe matriz de inteiros e o grafo,
+   e armazena a distancia entre dois vertices do grafo
+   na matriz dada
+*/
 void grafo_em_matriz(int **m, PGrafo grafo) {
     PVertice w, v;
 
@@ -338,6 +384,10 @@ void grafo_em_matriz(int **m, PGrafo grafo) {
     }
 }
 
+/* A funcao recebe matriz de inteiros e o
+   tamanho da matriz, imprimindo o conteúdo
+   da matriz quadrada
+*/
 void imprime_matriz_quadrada(int **m, int n) {
     for(int i = -1; i < n; i++) {
         printf("[%02d]", i);
@@ -483,7 +533,14 @@ void imprime_matriz_quadrada(int **m, int n) {
 /*     free(pai); */
 /* } */
 
-
+/* A funcao recebe o grafo, o vertice de origem,
+   o vertice de destino e o tamanho da maior aresta
+   que o caminho entre a origem e o destino deverá conter,
+   retornando 1 case tenha encontrado um caminho e
+   zero caso não tenha encontrado;
+   esta funcao faz uso da busca em largura (breadth-first search)
+   para encontrar o caminho
+*/
 int bfs(PGrafo grafo, PVertice origem, PVertice destino, int maior_aresta) {
     PVertice predecessor, alvo;
     int *pai = malloc(grafo->n * sizeof(int));
@@ -692,7 +749,8 @@ int bfsx(PGrafo grafo, PVertice origem, PVertice destino) {
     return maior_aresta;
 }
 
-
+/* A funcao recebe o grafo e funcao imprime
+*/
 void imprime_vertices(PGrafo grafo, void (*imprime)(void *)) {
     PVertice atual = grafo->vertice;
 
