@@ -5,8 +5,11 @@
 #include "grafo.h"
 #include "heap.h"
 
+#define N_CHAR 8
+
 /* A funcao recebe cadeia de caracteres,
-   retornando enum que identifica essa string
+   retornando tipo enum que identifica essa string:
+   pokestop = 0, Lugia = 1
 */
 Ponto converte_string_para_enum(char *str) {
     char *strings[] = { "pokestop", "Lugia" };
@@ -24,7 +27,7 @@ int main() {
     PVertice u, w; // vertices genericos
     PVertice *lugias; // vetor dinamico de vertices onde estão localizados os Lugias
     int para_de_ler_entrada; // inteiro para parar laço de leitura da entrada
-    char ponto[8]; // string para guardar o ponto de interesse
+    char ponto[N_CHAR]; // string para guardar o ponto de interesse
     Posicao origem; // posicao da origem de Red
     int maior_aresta = (int)INFINITY; // guarda maior aresta de um caminho
     int *aresta; // ponteiro para guardar endereço devolvido pelo heap na remoção
@@ -44,12 +47,12 @@ int main() {
         para_de_ler_entrada = scanf("%f %f %s", &v.info.posicao.x, &v.info.posicao.y, ponto);
     }
 
-    indice = 0;
+    indice = 0; // posicao inicial no vetor lugias
     lugias = calloc(g->n, sizeof(PVertice));
     heap = cria_heap(g->n);
     /*  percorre "matriz superior" do grafo
-        onde linhas são os vertice do grafo e
-        as colunas são elementos da lista de adjacencia
+        onde linhas são os vertice do grafo (lista de vertices)
+        e as colunas são elementos da lista de adjacencia
      */
     for(int i = 0; i < g->n; i++) {
         u = busca_vertice(g, i); // busca vertice no grafo com id i
@@ -68,16 +71,8 @@ int main() {
         }
     }
 
-    /* for(int i = 0; lugias[i] != 0 ; i++) { */
-    /*     w = lugias[i]; */
-    /*     printf("%d ", w->id); */
-    /* } */
-    /* printf("\n"); */
-
-    /* imprime_sequencia(heap); */
-
     tam_heap = heap->n_elementos;
-    arestas = malloc(tam_heap * sizeof(int));
+    arestas = malloc(tam_heap * sizeof(int)); // vetor que guarda arestas em ordem crescente
     /* cria vetor ordenado com as distancias armazenadas no heap */
     for(int i = 0; i < tam_heap; i++) {
         aresta = remove_min(heap);
@@ -85,19 +80,13 @@ int main() {
         free(aresta);
     }
 
-    /* printf("tam heap: %d\n", tam_heap); */
-    /* for(int i = 0; i < tam_heap; i++) { */
-    /*     printf("%d ", arestas[i]); */
-    /* } */
-    /* printf("\n"); */
-
     /* para cada lugia no vetor lugias realiza o laço interno de busca */
     for(int i = 0; lugias[i] != 0; i++) {
         /* para cada distancia no vetor arestas faz uma busca por largura no grafo
            para encontrar um caminho em que a maior aresta seja maior_aresta
         */
         for(indice = 0; indice < tam_heap; indice++) {
-            encontrou = bfs(g, raiz, lugias[i], arestas[indice]);
+            encontrou = busca_caminho(g, raiz, lugias[i], arestas[indice]);
             if(encontrou) break;
         }
         /*  guarda a maior menor aresta entre todos os caminhos percorridos */

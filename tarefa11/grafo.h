@@ -37,6 +37,8 @@ PVertice cria_vertice(PGrafo grafo, Vertice v);
 
 PGrafo cria_grafo();
 
+void destroi_vertices(PVertice vertice);
+
 void destroi_grafo(PGrafo grafo);
 
 PGrafo insere_vertice(PGrafo grafo, Vertice v);
@@ -51,10 +53,8 @@ int tem_aresta(PVertice u, PVertice v);
 
 int distancia_aresta(PVertice u, PVertice v);
 
-int bfs(PGrafo grafo, PVertice origem, PVertice destino, int aresta);
+int busca_caminho(PGrafo grafo, PVertice origem, PVertice destino, int aresta);
 
 void imprime_vertices(PGrafo grafo, void (*imprime)(void *));
-
-void imprime_arestas(PGrafo grafo);
 
 #endif

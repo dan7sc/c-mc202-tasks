@@ -111,6 +111,8 @@ Boolean heap_vazio(PHeap heap) {
 // insere dado no heap se ele não estiver cheio
 // e retorna o heap com o novo dado inserido
 PHeap insere(PHeap heap, int dado) {
+    // verifica se elemento já não foi inserido no heap
+    // se já foi inserido retorna o heap
     for (int i = 0; i < heap->n_elementos; i++) {
         if(heap->v_dados[i] == dado) {
             return heap;

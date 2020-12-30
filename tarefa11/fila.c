@@ -21,7 +21,6 @@ PFila cria_fila() {
 void destroi_fila_recursivo(PFNo no) {
     if(no != NULL) {
         destroi_fila_recursivo(no->proximo);
-        /* free(no->dado); */
         free(no);
     }
 }

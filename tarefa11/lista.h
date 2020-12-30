@@ -4,8 +4,8 @@
 typedef struct No * PNo;
 
 typedef struct No {
-    void **dado;
-    struct No *proximo;
+    void **dado; // ponteiro para o ponteiro do dado do nó
+    struct No *proximo; // ponteiro para o próximo elemento do lista
 } No;
 
 PNo cria_lista();
