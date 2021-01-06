@@ -38,6 +38,7 @@ int main() {
     PPilha pav;
     /* int **m = NULL; */
     PANo atual = NULL;
+    int tam = 0;
     /* int aresta = -1; */
 
     /* le a posicao de origem do Red  */
@@ -83,7 +84,7 @@ int main() {
         /*     m[i][j] = distancia_aresta(u, w); */
         /* } */
     }
-    /* printf("****\n"); */
+    /* printf("**** %d %d\n", av.raiz->altura, (int)pow(2, av.raiz->altura) - 1); */
     /* percorre_pre_ordem(av.raiz); */
     /* printf("\n"); */
     /* percorre_in_ordem(av.raiz); */
@@ -93,7 +94,8 @@ int main() {
     /* percorre_in_ordem_it(av); */
     /* printf("\n"); */
 
-    arestas = calloc(100, sizeof(int));
+    tam = (int) pow(2, av.raiz->altura) - 1;
+    arestas = calloc(tam, sizeof(int));
     /* printf("****\n"); */
     pav = cria_pilha();
     atual = av.raiz;
@@ -104,13 +106,15 @@ int main() {
             atual = atual->esq;
         } else {
             atual = desempilha(pav);
-            arestas[indice++] = atual->dado;
+            arestas[indice] = atual->dado;
+            indice++;
             atual = atual->dir;
         }
     };
     /* printf("\n\n"); */
 
-    /* for(int i = 0; i < 100; i++) { */
+    /* for(int i = 0; i < tam; i++) { */
+    /* for(int i = 0; i < tam && arestas[i] != 0; i++) { */
     /*     printf("%d ", arestas[i]); */
     /* } */
 
@@ -142,7 +146,7 @@ int main() {
            para encontrar um caminho em que a maior aresta seja maior_aresta
         */
         /* pav = cria_pilha(); */
-        for(indice = 0; indice < g->n + g->n; indice++) {
+        for(indice = 0; indice < tam; indice++) {
             encontrou = busca_caminho(g, raiz, lugias[i], arestas[indice]);
             if(encontrou) {
                 break;
