@@ -72,7 +72,7 @@ PGrafo insere_vertice(PGrafo grafo, Vertice v) {
     }
 
     atual->proximo = novo_vertice;
-    adiciona_arestas(grafo, novo_vertice);
+    /* adiciona_arestas(grafo, novo_vertice); */
     grafo->n++;
 
     return grafo;
@@ -183,8 +183,10 @@ int busca_caminho(PGrafo grafo, PVertice origem, PVertice destino, int maior_are
         if(predecessor->id == destino->id) {
             break;
         }
-        for(PNo atual = predecessor->adjacencia; atual != NULL; atual = atual->proximo) {
-            alvo = (PVertice) atual->dado;
+        for(PVertice atual = grafo->vertice; atual != NULL; atual = atual->proximo) {
+        /* for(PNo atual = predecessor->adjacencia; atual != NULL; atual = atual->proximo) { */
+            /* alvo = (PVertice) atual->dado; */
+            alvo = atual;
             aresta = distancia_aresta(predecessor, alvo);
             if(!visitado[alvo->id] && aresta <= maior_aresta) {
                     if(distancia[alvo->id] + aresta < distancia[predecessor->id]) {
