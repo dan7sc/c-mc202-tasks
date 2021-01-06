@@ -184,6 +184,7 @@ int busca_caminho(PGrafo grafo, PVertice origem, PVertice destino, int maior_are
             break;
         }
         for(PVertice atual = grafo->vertice; atual != NULL; atual = atual->proximo) {
+        /* lista de adjacencia foi removida para reduzie tempo de execucao do programa  */
         /* for(PNo atual = predecessor->adjacencia; atual != NULL; atual = atual->proximo) { */
             /* alvo = (PVertice) atual->dado; */
             alvo = atual;
