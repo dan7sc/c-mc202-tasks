@@ -21,7 +21,7 @@ typedef struct info {
 typedef struct vertice {
     int id; // id de identifição do vertice
     Info info; // tipo para armazenar informação do vertice
-    PNo adjacencia; // lista de adjacencia do vertice
+    /* PNo adjacencia; // lista de adjacencia do vertice */
     struct vertice * proximo; // ponteiro para proximo vertice
 } Vertice;
 typedef Vertice * PVertice;
@@ -43,18 +43,18 @@ void destroi_grafo(PGrafo grafo);
 
 PGrafo insere_vertice(PGrafo grafo, Vertice v);
 
-void adiciona_arestas(PGrafo grafo, PVertice v);
+/* void adiciona_arestas(PGrafo grafo, PVertice v); */
 
-void insere_aresta(PVertice u, PVertice v);
+/* void insere_aresta(PVertice u, PVertice v); */
 
 PVertice busca_vertice(PGrafo grafo, int id);
 
-int tem_aresta(PVertice u, PVertice v);
+/* int tem_aresta(PVertice u, PVertice v); */
 
 int distancia_aresta(PVertice u, PVertice v);
 
 int busca_caminho(PGrafo grafo, PVertice origem, PVertice destino, int aresta);
 
-void imprime_vertices(PGrafo grafo, void (*imprime)(void *));
+/* void imprime_vertices(PGrafo grafo, void (*imprime)(void *)); */
 
 #endif

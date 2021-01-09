@@ -14,7 +14,7 @@ PVertice cria_vertice(PGrafo grafo, Vertice v) {
     vertice->info.posicao.x = v.info.posicao.x;
     vertice->info.posicao.y = v.info.posicao.y;
     vertice->info.ponto = v.info.ponto;;
-    vertice->adjacencia = cria_lista();
+    /* vertice->adjacencia = cria_lista(); */
     vertice->id = grafo->n;
 
     return vertice;
@@ -39,7 +39,7 @@ PGrafo cria_grafo() {
 void destroi_vertices(PVertice vertice) {
     if(vertice != NULL) {
         destroi_vertices(vertice->proximo);
-        destroi_lista(vertice->adjacencia);
+        /* destroi_lista(vertice->adjacencia); */
         free(vertice);
     }
 }
@@ -83,24 +83,24 @@ PGrafo insere_vertice(PGrafo grafo, Vertice v) {
    inseridos os outro vertices do grafo
    formando um grafo completo
 */
-void adiciona_arestas(PGrafo grafo, PVertice v) {
-    PVertice atual;
+/* void adiciona_arestas(PGrafo grafo, PVertice v) { */
+/*     PVertice atual; */
 
-    atual = grafo->vertice;
-    while(atual != NULL && atual->id != v->id) {
-        insere_aresta(atual, v);
-        atual = atual->proximo;
-    }
-}
+/*     atual = grafo->vertice; */
+/*     while(atual != NULL && atual->id != v->id) { */
+/*         insere_aresta(atual, v); */
+/*         atual = atual->proximo; */
+/*     } */
+/* } */
 
 /* A funcao recebe o vertice u e o vertice v,
    criando arestas entre estes dois vertices
    e formando um grafo não orientado
 */
-void insere_aresta(PVertice u, PVertice v) {
-    u->adjacencia = adiciona_na_lista(u->adjacencia, v);
-    v->adjacencia = adiciona_na_lista(v->adjacencia, u);
-}
+/* void insere_aresta(PVertice u, PVertice v) { */
+/*     u->adjacencia = adiciona_na_lista(u->adjacencia, v); */
+/*     v->adjacencia = adiciona_na_lista(v->adjacencia, u); */
+/* } */
 
 /* A funcao recebe o grafo e o id do vertice
    que será usado para localizar o vertice no grafo,
@@ -125,18 +125,18 @@ PVertice busca_vertice(PGrafo grafo, int id) {
    e verifica se eles possuem aresta,
    retornando 1 se possuirem e zero caso não
 */
-int tem_aresta(PVertice u, PVertice v) {
-    PNo atual;
+/* int tem_aresta(PVertice u, PVertice v) { */
+/*     PNo atual; */
 
-    atual = v->adjacencia;
-    while(atual != NULL) {
-        if(u == (PVertice)atual->dado) {
-            return 1;
-        }
-        atual = atual->proximo;
-    }
-    return 0;
-}
+/*     atual = v->adjacencia; */
+/*     while(atual != NULL) { */
+/*         if(u == (PVertice)atual->dado) { */
+/*             return 1; */
+/*         } */
+/*         atual = atual->proximo; */
+/*     } */
+/*     return 0; */
+/* } */
 
 /* A funcao recebe o vertice u e o vertice v
    e calcula a distancia entre os dois vertices,
@@ -189,13 +189,12 @@ int busca_caminho(PGrafo grafo, PVertice origem, PVertice destino, int maior_are
             /* alvo = (PVertice) atual->dado; */
             alvo = atual;
             aresta = distancia_aresta(predecessor, alvo);
-            if(!visitado[alvo->id] && aresta <= maior_aresta) {
-                    if(distancia[alvo->id] + aresta < distancia[predecessor->id]) {
-                    visitado[alvo->id] = 1;
-                    pai[alvo->id] = predecessor->id;
-                    distancia[alvo->id] = distancia[predecessor->id] + aresta;
-                    fila = enfileira(fila, alvo);
-                }
+            if(!visitado[alvo->id] && aresta <= maior_aresta &&
+               distancia[alvo->id] + aresta < distancia[predecessor->id]) {
+                visitado[alvo->id] = 1;
+                pai[alvo->id] = predecessor->id;
+                distancia[alvo->id] = distancia[predecessor->id] + aresta;
+                fila = enfileira(fila, alvo);
             }
         }
     }
@@ -214,13 +213,13 @@ int busca_caminho(PGrafo grafo, PVertice origem, PVertice destino, int maior_are
 
 /* A funcao recebe o grafo e funcao imprime
 */
-void imprime_vertices(PGrafo grafo, void (*imprime)(void *)) {
-    PVertice atual = grafo->vertice;
+/* void imprime_vertices(PGrafo grafo, void (*imprime)(void *)) { */
+/*     PVertice atual = grafo->vertice; */
 
-    printf("Tamanho do grafo: %d\n", grafo->n);
-    while(atual != NULL) {
-        printf("%d %f %f %d\n", atual->id, atual->info.posicao.x, atual->info.posicao.y, atual->info.ponto);
-        imprime_lista(atual->adjacencia, imprime);
-        atual = atual->proximo;
-    }
-}
+/*     printf("Tamanho do grafo: %d\n", grafo->n); */
+/*     while(atual != NULL) { */
+/*         printf("%d %f %f %d\n", atual->id, atual->info.posicao.x, atual->info.posicao.y, atual->info.ponto); */
+/*         imprime_lista(atual->adjacencia, imprime); */
+/*         atual = atual->proximo; */
+/*     } */
+/* } */
