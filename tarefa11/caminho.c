@@ -37,7 +37,6 @@ int main() {
     Arvore av; // arvore AVL com o peso das arestas (distancia entre vertices)
     PPilha p; // pilha para atravessar a arvore
     PANo atual = NULL; // no auxiliar para arvore
-    int tam = 0; // tamanho do vetor ordenado de arestas
 
     /* le a posicao de origem do Red  */
     scanf("%f %f", &origem.x, &origem.y);
@@ -72,41 +71,36 @@ int main() {
             av = insere_na_arvore(av, distancia_aresta(u, w));
         }
     }
-
-    /* cria vetor ordenado com as distancias armazenadas na arvore */
-    tam = (int) pow(2, av.raiz->altura) - 1; // tamanho do vetor de arestas
-    arestas = calloc(tam, sizeof(int));
-    p = cria_pilha();
-    atual = av.raiz;
-    indice = 0;
-    /* cria vetor ordenado 'arestas' com as distancias entre vertices (peso das arestas)
-       através do percurso in-ordem na arvore
+    /*  para cada lugia faz uma busca pelo caminho
+        com a maior menor aresta
      */
-    while(atual != NULL || !pilha_vazia(p)) {
-        if(atual != NULL) {
-            empilha(p, atual);
-            atual = atual->esq;
-        } else {
-            atual = desempilha(p);
-            arestas[indice] = atual->dado;
-            indice++;
-            atual = atual->dir;
-        }
-    };
-
     for(int i = 0; lugias[i] != 0; i++) {
-        /* para cada distancia no vetor arestas faz uma busca por largura no grafo
+        p = cria_pilha();
+        atual = av.raiz;
+        /* faz percurso in-ordem na arvore (ordem crescente de distancias);
+           para cada distancia na arvore faz uma busca por largura no grafo
            para encontrar um caminho em que a maior aresta seja maior_aresta
         */
-        for(indice = 0; indice < tam; indice++) {
-            encontrou = busca_caminho(g, raiz, lugias[i], arestas[indice]);
-            if(encontrou) {
-                break;
+        while(atual != NULL || !pilha_vazia(p)) {
+            if(atual != NULL) {
+                empilha(p, atual);
+                atual = atual->esq;
+            } else {
+                atual = desempilha(p);
+                encontrou = busca_caminho(g, raiz, lugias[i], atual->dado);
+                if(encontrou) {
+                    destroi_pilha(p);
+                    break;
+                }
+                atual = atual->dir;
             }
-        }
-
-        if(arestas[indice] < maior_aresta) {
-            maior_aresta = arestas[indice];
+        };
+        /*  verifica se é a aresta com maior peso
+            dentre os caminhos percorridos,
+            se for guarda na variavel maior_aresta
+         */
+        if(atual->dado < maior_aresta) {
+            maior_aresta = atual->dado;
         }
     }
     printf("%d\n", maior_aresta);
@@ -116,7 +110,6 @@ int main() {
     free(arestas);
     destroi_grafo(g);
     destroi_arvore(av);
-    destroi_pilha(p);
 
     return 0;
 }
