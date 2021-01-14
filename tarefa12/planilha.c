@@ -1,9 +1,26 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct celula {
+    int num;
+    char *formula;
+} Celula;
+
+void le_formula(FILE *arquivo, char *r) {
+    printf("s %s\n", r);
+    while(strcmp(r, ",")) {
+        fscanf(arquivo, " %ms ", &r);
+        printf(".%s ", r);
+    }
+    printf("\n");
+}
 
 int main() {
     char *nome_arquivo = NULL;
     FILE *arquivo = NULL;
-    int r;
+    char *r = NULL;
+    /* Celula c; */
     int ncol, nlin;
     int i = 0;
 
@@ -13,8 +30,8 @@ int main() {
 
     arquivo = fopen(nome_arquivo, "r");
 
-    while(fscanf(arquivo, " %d ,", &r) != EOF){
-        printf("%5d ", r);
+    while(fscanf(arquivo, " %m[^\n,],", &r) != EOF){
+        printf("%s ", r);
         if(i == ncol - 1)
             printf("\n");
         i++;
